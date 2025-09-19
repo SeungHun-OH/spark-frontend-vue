@@ -7,7 +7,6 @@
     </div>
 
     <div class = "d-flex align-items-center">
-      <!-- <ProfileIcon v-if></ProfileIcon> -->
 
     </div>
 
