@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { useStore } from 'vuex';
 
 const store = useStore();
@@ -12,7 +12,7 @@ const store = useStore();
 function logOut()
 {
   alert("로그아웃");
-  store.dispatch("logOut");
+  store.dispatch("/member/logOut");
 }
 
 </script>

@@ -1,3 +1,10 @@
+<script setup>
+import Logout from './Logout.vue';
+import Profile from './Profile.vue';
+import ProfileIcon from './ProfileIcon.vue';
+
+</script>
+
 <template>
   <header class="d-flex justify-content-between align-items-center p-3 border-bottom">
     <!-- 왼쪽: 로고 + 서비스명 -->
@@ -7,7 +14,8 @@
     </div>
 
     <div class = "d-flex align-items-center">
-
+      <ProfileIcon/>
+      <Logout/>
     </div>
 
   </header>

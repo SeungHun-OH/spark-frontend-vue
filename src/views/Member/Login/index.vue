@@ -1,69 +1,86 @@
 <template>
   <!-- 카드 -->
-  <div class="d-flex justify-content-center align-items-start min-vh-150">
-
-    <div class="card shadow-sm p-4" style="width: 380px;">
-      <h4 class="text-center mb-4">Welcome Back</h4>
+  <div class="d-flex justify-content-center align-items-start min-vh-100">
+    <div class="card shadow-sm p-4" style="width: 380px; border-radius: 12px;">
+      <h4 class="text-center mb-4 fw-bold">Login</h4>
 
       <form @submit.prevent="handleLogin">
-        <!-- Email -->
-        <div class="mb-3">
-          <label class="form-label">mid</label>
-          <div class="input-group">
-            <span class="input-group-text">
-              <i class="bi bi-envelope"></i>
-            </span>
-            <input type="text" class="form-control" v-model="member.mid" placeholder="Enter your id" required />
-          </div>
+        <!-- 아이디 -->
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="mid" v-model="member.m_id" placeholder="아이디" required />
+          <label for="mid"><i class="bi bi-person me-2"></i>아이디</label>
         </div>
 
-        <!-- Password -->
-        <div class="mb-3">
-          <label class="form-label">Password</label>
-          <div class="input-group">
-            <span class="input-group-text">
-              <i class="bi bi-lock"></i>
-            </span>
-            <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="member.mpassword" placeholder="Enter your password" required />
-            <button class="btn btn-outline-secondary" type="button" @click="showPassword = !showPassword">
-              <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-            </button>
-          </div>
+        <!-- 비밀번호 -->
+        <div class="form-floating mb-3">
+          <input :type="showPassword ? 'text' : 'password'" class="form-control" id="mpassword"
+                 v-model="member.m_password" placeholder="비밀번호" required />
+          <label for="mpassword"><i class="bi bi-lock me-2"></i>비밀번호</label>
+          <button class="btn btn-sm btn-outline-secondary mt-2" type="button"
+                  @click="showPassword = !showPassword">
+            <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+          </button>
         </div>
 
         <!-- 로그인 버튼 -->
-        <div class="d-grid mb-3">
-          <button type="submit" class="btn btn-danger">Sign In</button>
-        </div>
+        <button type="submit" class="btn btn-danger w-100 py-2 fw-bold">로그인</button>
       </form>
 
       <!-- 하단 링크 -->
-      <div class="text-center">
-        <a href="#" class="text-decoration-none me-3">Forgot password?</a>
-        <a href="#" class="text-decoration-none">Sign Up</a>
+      <div class="text-center mt-3">
+        <a href="#" class="text-decoration-none me-3">비밀번호 찾기</a>
+        <a href="/sign" class="text-decoration-none">회원가입</a>
       </div>
     </div>
-
   </div>
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
-
+import memberApi from "@/apis/memberApi";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 const store = useStore();
 const router = useRouter();
 
+const showPassword = ref(false);
+
 const member = ref({
-  mid: "user",
-  mpassword : "123456"
+  m_id: "user3",
+  m_password: "123456"
 });
 
-// async function handleLogin(){
-//   try{
-//     const data = structuredClone(member.value);
-//   }
-// }
+async function handleLogin() {
+  try {
+    const payload = { ...member.value };   // 순수 JSON으로 변환
+    const response = await memberApi.memberLogin(payload);
 
+    if (response.data.result === "success") {
+      alert(response.data.message);
+      console.log(response.data);
+
+      // vuex에 로그인 정보 저장
+      store.dispatch("member/saveAuth", {
+        m_id: response.data.m_id,
+        m_name: response.data.m_name,
+        jwt: response.data.jwt,
+
+        mattachdata: response.data.m_attachdata
+      });
+
+      await router.push("/");
+    } else {
+      alert(response.data.message);
+    }
+  } catch (error) {
+    alert("로그인 실패: " + error);
+  }
+}
 </script>
+
+<style scoped>
+body {
+  background-color: #f8f9fa;
+}
+</style>

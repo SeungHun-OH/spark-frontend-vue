@@ -1,9 +1,19 @@
+<script setup>
+import AppHeader from './components/member/AppHeader.vue';
+
+</script>
+
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div>
+    <AppHeader />
+    <nav>
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link> |
+      <router-link to="/Member/Login">Login</router-link> |
+      <router-link to="/Member/Sign"> Sign</router-link> |
+    </nav>
+    <router-view />
+  </div>
 </template>
 
 <style>
