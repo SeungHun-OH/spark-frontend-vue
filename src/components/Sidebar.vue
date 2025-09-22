@@ -1,40 +1,40 @@
+<!-- 컴포넌트의 UI -->
 <template>
-  <div class="d-flex flex-column bg-white border-end vh-100" style="width: 250px;">
-    <div class="p-3 text-center border-bottom">
-      <img src="#" alt="Logo" width="40" class="mb-2" />
-      <h5 class="fw-bold">스파크</h5>
-    </div>
-    <ul class="nav flex-column mt-3">
-      <li v-for="(item, i) in menu" :key="i" class="nav-item">
-        <router-link :to="item.link" class="nav-link text-dark d-flex align-items-center px-3 py-2"
-          active-class="active bg-dark text-white rounded">
-          <i :class="item.icon + ' me-2'"></i>{{ item.name }}
-        </router-link>
-      </li>
-    </ul>
-    <div class="mt-auto p-3 border-top">
-      <div class="d-flex align-items-center">
-        <img src="https://i.pravatar.cc/40" class="rounded-circle me-2" />
-        <div>
-          <strong>Alex Johnson</strong><br />
-          <small class="text-muted">ffd@naver.com</small>
-        </div>
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="../assets/logo.png" alt="logo" />
+        <div><h4 class="mb-0">Spark</h4></div>
       </div>
-      <button class="btn btn-sm btn-outline-danger mt-3 w-100">Logout</button>
-    </div>
-  </div>
+
+      <nav class="mt-3">
+        <router-link to="/" class="nav-link" :class="{active: $route.path === '/'}"><i class="bi bi-house"></i> Main</router-link>
+        <router-link to="/matching" class="nav-link" :class="{active: $route.path === '/matching'}"><i class="bi bi-people"></i> Matching</router-link>
+        <router-link to="/feed" class="nav-link" :class="{active: $route.path === '/feed'}"><i class="bi bi-camera"></i> My Feed</router-link>
+        <!-- Chats and Profile disabled per request -->
+        <a class="nav-link disabled" href="#" title="Chats disabled"><i class="bi bi-chat-dots"></i> Chats</a>
+        <router-link to="/hearts" class="nav-link" :class="{active: $route.path === '/hearts'}"><i class="bi bi-heart"></i> Hearts</router-link>
+        <a class="nav-link disabled" href="#" title="Profile disabled"><i class="bi bi-person"></i> Profile</a>
+      </nav>
+
+      <div class="footer">
+        <div class="d-flex align-items-center">
+          <img src="https://i.pravatar.cc/48" class="rounded-circle me-2" />
+          <div>
+            <div class="fw-bold">Alex Johnson</div>
+            <small class="text-muted">ffd@naver.com</small>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-danger mt-3 w-100">Logout</button>
+      </div>
+    </aside>
 </template>
 
+<!-- 컴포넌트의 초기화 또는 이벤트 처리 -->
 <script setup>
-import { ref } from 'vue';
-const menu = ref([
-  { name: "Main", icon: "bi bi-house", link: "/" },
-  { name: "Matching", icon: "bi bi-people", link: "/matching" },
-  { name: "My Feed", icon: "bi bi-camera", link: "/feed" },
-  { name: "Chats", icon: "bi bi-chat-dots", link: "/chats" },
-  { name: "Hearts", icon: "bi bi-heart", link: "/hearts" },
-  { name: "Profile", icon: "bi bi-person", link: "/profile" }
-]);
+    
 </script>
 
+<!-- 컴포넌트 스타일 정의 -->
+<style scoped>
 
+</style>
