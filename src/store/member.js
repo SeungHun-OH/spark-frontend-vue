@@ -76,7 +76,7 @@ const member = {
       localStorage.removeItem("m_id");
       localStorage.removeItem("m_name");
       localStorage.removeItem("jwt");
-      localStorage.removeItem(" m_attachdata");
+      localStorage.removeItem("m_attachdata");
     }
   }
 }

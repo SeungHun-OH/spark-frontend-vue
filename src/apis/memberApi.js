@@ -1,19 +1,19 @@
 import axios from "axios";
 
 function memberInsert(member) {
-  return axios.post("http://localhost:8040/Member", member)
+  return axios.post("http://localhost:8040/member", member)
 }
 
 function memberInsertPicture(formdata) {
-  return axios.post("http://localhost:8040/Member/picture", formdata)
+  return axios.post("http://localhost:8040/member/picture", formdata)
 }
 
 function memberLogin(member) {
-  return axios.post("http://localhost:8040/Member/login", member)
+  return axios.post("http://localhost:8040/member/login", member)
 }
 
 function memberGetPicture(m_no) {
-  return axios.get("http://localhost:8040/Member/picture", {
+  return axios.get("http://localhost:8040/member/picture", {
     params: {
       m_no: m_no
     }

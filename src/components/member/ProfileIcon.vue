@@ -4,8 +4,8 @@
     <img v-if="profileImage" :src="profileImage" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />
     <img v-else src="@/assets/profile.png" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />
     <div>
-      <div class="fw-bold"> {{ store.getters["member / getM_id"] }}</div>
-      <div class="fw-bold"> {{ store.getters["member / getM_name"] }}</div>
+      <div class="fw-bold"> id   {{ m_id }}</div>
+      <div class="fw-bold"> name {{ m_name }}</div>
     </div>
   </div>
 
@@ -15,6 +15,14 @@
 
 import { computed } from 'vue';
 import { useStore } from 'vuex';
+
+const m_id = computed(() => {
+  return store.getters["member/getM_id"]
+});
+
+const m_name = computed(() => {
+  return store.getters["member/getM_name"]
+});
 
 const store = useStore();
 

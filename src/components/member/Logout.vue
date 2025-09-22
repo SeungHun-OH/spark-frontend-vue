@@ -12,7 +12,7 @@ const store = useStore();
 function logOut()
 {
   alert("로그아웃");
-  store.dispatch("/member/logOut");
+  store.dispatch("member/logOut");
 }
 
 </script>

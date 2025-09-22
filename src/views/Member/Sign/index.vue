@@ -5,10 +5,8 @@
 
       <!-- 프로필 이미지 업로드 -->
       <div class="text-center mb-4">
-        <div class="border rounded d-flex justify-content-center align-items-center mb-2"
-             style="width:120px; height:120px; margin:0 auto; background:#f8f9fa;">
-          <img v-if="image" :src="image" class="rounded-circle"
-               style="width:100%; height:100%; object-fit:cover;" />
+        <div class="border rounded d-flex justify-content-center align-items-center mb-2" style="width:120px; height:120px; margin:0 auto; background:#f8f9fa;">
+          <img v-if="image" :src="image" class="rounded-circle" style="width:100%; height:100%; object-fit:cover;" />
           <span v-else class="text-muted">Photo</span>
         </div>
         <label class="btn btn-outline-danger btn-sm mt-2">
@@ -53,12 +51,8 @@
         <div class="mb-3">
           <label class="form-label fw-bold d-block mb-2"><i class="bi bi-gender-ambiguous me-2"></i>성별</label>
           <div class="d-flex justify-content-between">
-            <button type="button" class="btn w-50 me-2"
-                    :class="member.m_gender === 'M' ? 'btn-danger' : 'btn-outline-secondary'"
-                    @click="member.m_gender = 'M'">남자</button>
-            <button type="button" class="btn w-50"
-                    :class="member.m_gender === 'F' ? 'btn-danger' : 'btn-outline-secondary'"
-                    @click="member.m_gender = 'F'">여자</button>
+            <button type="button" class="btn w-50 me-2" :class="member.m_gender === 'M' ? 'btn-danger' : 'btn-outline-secondary'" @click="member.m_gender = 'M'">남자</button>
+            <button type="button" class="btn w-50" :class="member.m_gender === 'F' ? 'btn-danger' : 'btn-outline-secondary'" @click="member.m_gender = 'F'">여자</button>
           </div>
         </div>
 
@@ -146,15 +140,26 @@ const handleSubmit = async () => {
 
   const response = await memberApi.memberInsert(member.value);
 
-  console.log("회원가입 데이터:", member.value);
-  alert("회원가입 요청 전송됨!");
+  // console.log("회원가입 데이터:", member.value);
+  // alert("회원가입 요청 전송됨!");
 
-  if(response.data.result === "success"){
+  if (response.data.result === "success") {
     alert("회원가입 성공");
     router.push("/")
   }
-  else{
+  else {
     alert("회원가입 실패" + response.data.message);
+  }
+
+  const formdata = new FormData();
+  formdata.append("", member.value.m_)
+
+  const responsepicture = await memberApi.memberInsertPicture(image);
+  if (response.data.result === "success") {
+    alert("사진 등록 성공");
+  }
+  else {
+    alert("사진 등록 실패" + response.data.message);
   }
 };
 </script>
