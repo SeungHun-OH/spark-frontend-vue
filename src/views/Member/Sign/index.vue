@@ -6,7 +6,7 @@
       <!-- 프로필 이미지 업로드 -->
       <div class="text-center mb-4">
         <div class="border rounded d-flex justify-content-center align-items-center mb-2" style="width:120px; height:120px; margin:0 auto; background:#f8f9fa;">
-          <img v-if="image" :src="image" class="rounded-circle" style="width:100%; height:100%; object-fit:cover;" />
+          <img v-if="preview" :src="preview" class="rounded-circle" style="width:100%; height:100%; object-fit:cover;" />
           <span v-else class="text-muted">Photo</span>
         </div>
         <label class="btn btn-outline-danger btn-sm mt-2">
@@ -110,6 +110,8 @@ const router = useRouter();
 
 const image = ref(null);
 
+const preview = ref(null); // 미리보기 URL
+
 const member = ref({
   m_id: "user1",
   m_password: "123456",
@@ -128,38 +130,38 @@ const member = ref({
 const handleFileUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      image.value = e.target.result;
-    };
-    reader.readAsDataURL(file);
+    image.value = file; // File 객체 그대로 저장
+    preview.value = URL.createObjectURL(file);
   }
 };
 
 const handleSubmit = async () => {
 
-  const response = await memberApi.memberInsert(member.value);
+  const formdata = new FormData();
 
-  // console.log("회원가입 데이터:", member.value);
-  // alert("회원가입 요청 전송됨!");
+  formdata.append("member", new Blob([JSON.stringify(member.value)], { type: "application/json" }));
+  formdata.append("file", image.value);
+
+  const response = await memberApi.memberCreate(formdata);
 
   if (response.data.result === "success") {
-    alert("회원가입 성공");
-    router.push("/")
+    alert("회원가입 성공" + response.data.message);
+    // router.push("/")
   }
   else {
     alert("회원가입 실패" + response.data.message);
   }
 
-  const formdata = new FormData();
-  formdata.append("", member.value.m_)
+  // const response = await memberApi.memberInsert(member.value);
+  // const formdata = new FormData();
+  // formdata.append("", member.value.m_)
 
-  const responsepicture = await memberApi.memberInsertPicture(image);
-  if (response.data.result === "success") {
-    alert("사진 등록 성공");
-  }
-  else {
-    alert("사진 등록 실패" + response.data.message);
-  }
+  // const responsepicture = await memberApi.memberInsertPicture(image);
+  // if (response.data.result === "success") {
+  //   alert("사진 등록 성공");
+  // }
+  // else {
+  //   alert("사진 등록 실패" + response.data.message);
+  // }
 };
 </script>

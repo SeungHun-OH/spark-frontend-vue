@@ -26,6 +26,7 @@
         </div>
         <button class="btn btn-sm btn-danger mt-3 w-100">Logout</button>
       </div>
+
     </aside>
 </template>
 
@@ -36,5 +37,36 @@
 
 <!-- 컴포넌트 스타일 정의 -->
 <style scoped>
+.layout {
+  display: flex;
+}
 
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 250px;
+  background: #fff;
+  border-right: 1px solid #ddd;
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.main-content {
+  margin-left: 250px; /* 사이드바 넓이만큼 */
+  padding: 1rem;
+  flex: 1;
+  min-width: 0; /* 줄어들 때 잘림 방지 */
+}
+
+/* 이미지 반응형 */
+.main-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
 </style>

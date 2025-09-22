@@ -16,6 +16,8 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 
+const store = useStore();
+
 const m_id = computed(() => {
   return store.getters["member/getM_id"]
 });
@@ -24,11 +26,9 @@ const m_name = computed(() => {
   return store.getters["member/getM_name"]
 });
 
-const store = useStore();
-
 const profileImage = computed(() => {
   const data = store.getters["member/getM_attachdata"];
-  return data ? `data.image/png.base64,${data}` : null;
+  return data ? `data:image/png;base64,${data}` : null;
 });
 
 </script>

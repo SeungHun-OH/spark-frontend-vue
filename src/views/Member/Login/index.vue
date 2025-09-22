@@ -54,20 +54,32 @@ const member = ref({
 async function handleLogin() {
   try {
     const payload = { ...member.value };   // 순수 JSON으로 변환
+
     const response = await memberApi.memberLogin(payload);
 
     if (response.data.result === "success") {
       alert(response.data.message);
       console.log(response.data);
 
-      // vuex에 로그인 정보 저장
+      const m_no = response.data.m_no;
+
+      // dispatch login vuex에 로그인 정보 저장
       store.dispatch("member/saveAuth", {
         m_id: response.data.m_id,
         m_name: response.data.m_name,
+        m_no: response.data.m_no,
         jwt: response.data.jwt,
-
-        mattachdata: response.data.m_attachdata
       });
+
+      // dispatch Login Photo vuex에 로그인 정보 저장
+      const photoRes = await memberApi.memberPictureGet(m_no);
+      console.log(photoRes.data);
+
+      if(photoRes.data){
+        store.dispatch("member/savePhoto", {
+          m_attachdata: photoRes.data.data.mp_attachdata
+        });
+      }
 
       await router.push("/");
     } else {

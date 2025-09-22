@@ -3,6 +3,7 @@ const member = {
 
   state: {
     m_id: "",
+    m_no: "",
     m_name: "",
     jwt: "",
     m_attachdata: "",
@@ -11,6 +12,9 @@ const member = {
   getters: {
     getM_id(state, getters, rootState, rootGetters) {
       return state.m_id;
+    },
+    getM_no(state, getters, rootState, rootGetters) {
+      return state.m_no;
     },
     getM_name(state, getters, rootState, rootGetters) {
       return state.m_name;
@@ -21,6 +25,7 @@ const member = {
     getM_attachdata(state, getters, rootState, rootGetters) {
       return state.m_attachdata;
     },
+
     getisLogin(state, getters, rootState, rootGetters) {
       return !!state.jwt;
     }
@@ -28,8 +33,10 @@ const member = {
 
   mutations: {
     setM_id(state, payload) {
-      payload.mm
       state.m_id = payload;
+    },
+    setM_no(state, payload) {
+      state.m_no = payload;
     },
     setM_name(state, payload) {
       state.m_name = payload;
@@ -45,23 +52,31 @@ const member = {
   actions: {
     saveAuth(context, payload) {
       context.commit("setM_id", payload.m_id);
+      context.commit("setM_no", payload.m_no);
       context.commit("setM_name", payload.m_name);
       context.commit("setJwt", payload.jwt);
       context.commit("setM_attachdata", payload.m_attachdata);
 
-      localStorage.setItem("setM_id", payload.m_id);
-      localStorage.setItem("setM_name", payload.m_name);
-      localStorage.setItem("setJwt", payload.jwt);
-      localStorage.setItem("setM_attachdata", payload.m_attachdata);
+      localStorage.setItem("m_id", payload.m_id);
+      localStorage.setItem("m_no", payload.m_no);
+      localStorage.setItem("m_name", payload.m_name);
+      localStorage.setItem("jwt", payload.jwt);
+      localStorage.setItem("m_attachdata", payload.m_attachdata);
+    },
+
+    savePhoto(context, payload){
+      context.commit("setM_attachdata", payload.m_attachdata);
     },
 
     loadAuth(context, payload) {
       const m_id = localStorage.getItem("m_id") || "";
+      const m_no = localStorage.getItem("m_no") || "";
       const m_name = localStorage.getItem("m_name") || "";
       const jwt = localStorage.getItem("jwt") || "";
       const m_attachdata = localStorage.getItem("m_attachdata") || "";
 
       context.commit("setM_id", m_id);
+      context.commit("setM_no", m_no);
       context.commit("setM_name", m_name);
       context.commit("setJwt", jwt);
       context.commit("setM_attachdata", m_attachdata);
@@ -69,11 +84,13 @@ const member = {
 
     logOut(context) {
       context.commit("setM_id", "");
+      context.commit("setM_no", "");
       context.commit("setM_name", "");
       context.commit("setJwt", "");
       context.commit("setM_attachdata", "");
 
       localStorage.removeItem("m_id");
+      localStorage.removeItem("m_no");
       localStorage.removeItem("m_name");
       localStorage.removeItem("jwt");
       localStorage.removeItem("m_attachdata");
