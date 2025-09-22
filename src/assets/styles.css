@@ -1,0 +1,82 @@
+:root{
+  --sidebar-width: 260px;
+  --content-max-width: 1120px;
+  --topbar-height: 64px;
+  --accent: #0b0813;
+  --muted: #6c6c74;
+}
+
+/* Reset basics */
+html, body, #app { height:100%; margin:0; font-family: "Segoe UI", Roboto, Helvetica, Arial; background:#fafafa; }
+
+/* App shell */
+.app-shell { display:flex; min-height:100vh; align-items:stretch; }
+
+/* Sidebar */
+.sidebar {
+  width:var(--sidebar-width);
+  background:#fff;
+  border-right:1px solid #eee;
+  display:flex;
+  flex-direction:column;
+}
+.brand { padding:28px 20px; border-bottom:1px solid #f5f5f5; display:flex; gap:10px; align-items:center; }
+.brand img { width:48px; height:48px; border-radius:8px; }
+.sidebar .nav-link { color:#222; padding:12px 18px; display:flex; align-items:center; gap:10px; font-weight:500; }
+.sidebar .nav-link.active { background: linear-gradient(180deg,#0c0b12,#0b0813); color:#fff; border-radius:10px; margin:6px 12px; padding:11px 16px; }
+.sidebar .nav-link.disabled { color:#999; cursor:not-allowed; }
+.sidebar .footer { margin-top:auto; padding:18px; border-top:1px solid #f5f5f5; }
+
+/* Topbar */
+.topbar { height:var(--topbar-height); background:#fff; border-bottom:1px solid #eee; display:flex; align-items:center; justify-content:space-between; padding:0 20px; }
+
+/* Content layout */
+.content-wrap { flex:1; display:flex; justify-content:center; overflow:auto; }
+.content { width:100%; max-width:var(--content-max-width); padding:28px; }
+
+/* Banner + category area (bigger as requested) */
+.banner { background:#fff; border-radius:10px; padding:18px 20px; box-shadow:0 6px 18px rgba(20,20,30,0.03); margin-bottom:22px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.banner-left { display:flex; align-items:center; gap:12px; }
+.banner h2 { margin:0; font-size:20px; }
+.category-tabs { display:flex; gap:8px; align-items:center; }
+/* make the tab bar larger */
+.category-tabs .btn { padding:10px 14px; border-radius:999px; }
+
+/* Feed card (instagram-like) */
+.feed-card { background:#fff; border-radius:12px; margin-bottom:22px; overflow:hidden; border:1px solid #eee; }
+.feed-card .feed-header { display:flex; align-items:center; gap:12px; padding:14px 16px; }
+.feed-card .feed-header img { width:44px; height:44px; border-radius:50%; }
+.feed-card .feed-image { width:100%; height:520px; object-fit:cover; display:block; background:#ddd; }
+.feed-actions { padding:14px 16px; display:flex; align-items:center; gap:12px; }
+.feed-stats { padding:0 16px 14px; color:#222; }
+
+/* My Posts grid below profile */
+.my-posts-title { background:#fff; border:1px solid #eee; border-radius:12px; padding:16px; margin:20px 0; }
+.my-post-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:18px; }
+.my-post-grid .post-item img { width:100%; height:200px; object-fit:cover; border-radius:12px; }
+
+/* Matching card already has its own style but ensure center */
+.match-card { max-width:760px; margin:40px auto; border-radius:12px; box-shadow:0 12px 30px rgba(10,10,20,0.08); overflow:hidden; background:#fff; }
+
+/* Hearts: top toggle 50/50 full width */
+.hearts-toggle { display:flex; width:100%; border-radius:12px; overflow:hidden; margin-bottom:16px; }
+.hearts-toggle button { flex:1; border-radius:0; padding:14px 16px; }
+
+/* Heart badge top-right on card */
+.heart-badge { position:absolute; top:12px; right:12px; z-index:4; width:44px; height:44px; border-radius:8px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.95); box-shadow:0 6px 18px rgba(10,10,20,0.06); }
+
+/* small utilities */
+.badge-light { background:#f5f6fa; color:#222; border-radius:999px; padding:6px 10px; }
+.center { display:flex; align-items:center; justify-content:center; }
+
+/* Responsive */
+@media (max-width:1100px) {
+  :root{ --content-max-width:900px; }
+  .my-post-grid { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width:700px) {
+  .sidebar{ display:none; }
+  .content { padding:16px; }
+  .banner { padding:12px; flex-direction:column; gap:8px; align-items:flex-start; }
+  .feed-card .feed-image { height:320px; }
+}
