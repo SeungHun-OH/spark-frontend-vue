@@ -1,4 +1,3 @@
-import { createRouter, createWebHistory } from 'vue-router';
 import MainFeed from '../views/MainFeed.vue';
 import Matching from '../views/Matching.vue';
 import MyFeed from '../views/MyFeed.vue';
@@ -12,7 +11,7 @@ const routes = [
   { path: '/matching', component: Matching },
   { path: '/feed', component: MyFeed },
   { path: '/hearts', component: Hearts },
-];
+
   {
     path: '/',
     name: 'home',
