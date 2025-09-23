@@ -146,6 +146,8 @@ const handleSubmit = async () => {
 
   if (response.data.result === "success") {
     alert("회원가입 성공" + response.data.message);
+
+    memberApi.memberLogin()
     // router.push("/")
   }
   else {

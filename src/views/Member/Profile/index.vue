@@ -104,7 +104,8 @@ import { useStore } from 'vuex';
 const store = useStore();
 
 const picture = computed(() => {
-  return store.getters["member/getM_attachdata"];
+  const data = store.getters["member/getM_attachdata"];
+  return data ? `data:image/png;base64,${data}` : null;
 });
 
 const profile = {

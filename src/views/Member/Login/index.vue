@@ -29,7 +29,7 @@
       <!-- 하단 링크 -->
       <div class="text-center mt-3">
         <a href="#" class="text-decoration-none me-3">비밀번호 찾기</a>
-        <a href="/sign" class="text-decoration-none">회원가입</a>
+        <a href="/Member/Sign" class="text-decoration-none">회원가입</a>
       </div>
     </div>
   </div>
