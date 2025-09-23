@@ -105,6 +105,10 @@
 import memberApi from "@/apis/memberApi";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { toRaw } from "vue";
+import { useStore } from "vuex";
+
+const store = useStore();
 
 const router = useRouter();
 
@@ -147,8 +151,41 @@ const handleSubmit = async () => {
   if (response.data.result === "success") {
     alert("회원가입 성공" + response.data.message);
 
-    memberApi.memberLogin()
-    // router.push("/")
+    const LoginResponse = await memberApi.memberLogin({
+      m_id: member.value.m_id,
+      m_password: member.value.m_password
+    });
+
+    if (LoginResponse.data.result === "success") {
+      alert("회원가입후 로그인");
+
+      alert(response.data.message);
+      console.log(response.data);
+
+      const m_no = response.data.m_no;
+
+      // dispatch login vuex에 로그인 정보 저장
+      store.dispatch("member/saveAuth", {
+        m_id: response.data.m_id,
+        m_name: response.data.m_name,
+        m_no: response.data.m_no,
+        jwt: response.data.jwt,
+      });
+
+      // dispatch Login Photo vuex에 로그인 정보 저장
+      const photoRes = await memberApi.memberPictureGet(m_no);
+      console.log(photoRes.data);
+
+      if (photoRes.data) {
+        store.dispatch("member/savePhoto", {
+          m_attachdata: photoRes.data.data.mp_attachdata
+        });
+      }
+
+    }
+    else {
+      console.log(LoginResponse.data.message);
+    }
   }
   else {
     alert("회원가입 실패" + response.data.message);
