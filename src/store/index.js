@@ -26,7 +26,7 @@ export default createStore({
   actions: {
   },
   modules: {
-    feed : feed
-    member
+    feed : feed,
+    member : member
   }
 })
