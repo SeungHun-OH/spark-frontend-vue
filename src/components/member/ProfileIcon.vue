@@ -1,8 +1,8 @@
 <template>
 
   <div class="d-flex align-items-center">
-    <img v-if="profileImage" :src="profileImage" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />
-    <img v-else src="@/assets/profile.png" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />
+    <img v-if="profileImage" :src="profileImage" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;" />
+    <img v-else src="@/assets/profile.png" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;" />
     <div>
       <div class="fw-bold"> id   {{ m_id }}</div>
       <div class="fw-bold"> name {{ m_name }}</div>

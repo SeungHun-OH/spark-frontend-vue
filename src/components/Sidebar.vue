@@ -17,14 +17,16 @@
       </nav>
 
       <div class="footer">
-        <div class="d-flex align-items-center">
-          <img src="https://i.pravatar.cc/48" class="rounded-circle me-2" />
-          <div>
-            <div class="fw-bold">Alex Johnson</div>
-            <small class="text-muted">ffd@naver.com</small>
-          </div>
+        <div>
+
+          <ProfileIcon/>
+          <Logout/>
+
         </div>
-        <button class="btn btn-sm btn-danger mt-3 w-100">Logout</button>
+        <div class="d-flex align-items-center">
+  
+          
+        </div>
       </div>
 
     </aside>
@@ -32,6 +34,9 @@
 
 <!-- 컴포넌트의 초기화 또는 이벤트 처리 -->
 <script setup>
+import Logout from './member/Logout.vue';
+import ProfileIcon from './member/ProfileIcon.vue';
+
     
 </script>
 
@@ -56,11 +61,11 @@
   justify-content: space-between;
 }
 
-.main-content {
-  margin-left: 250px; /* 사이드바 넓이만큼 */
-  padding: 1rem;
-  flex: 1;
-  min-width: 0; /* 줄어들 때 잘림 방지 */
+.main-content img {
+  width: 100%;        /* 부모 컨테이너 너비에 딱 맞춤 */
+  height: auto;       /* 세로는 비율 유지 */
+  object-fit: contain; /* 잘리지 않고 비율 유지 */
+  display: block;     /* inline 간격 없애기 */
 }
 
 /* 이미지 반응형 */
@@ -69,4 +74,13 @@
   height: auto;
   display: block;
 }
+
+.footer {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;  /* 컴포넌트 간격 */
+  align-items: center; /* 가운데 정렬 */
+}
+
 </style>
