@@ -157,19 +157,18 @@ const handleSubmit = async () => {
     });
 
     if (LoginResponse.data.result === "success") {
-      alert("회원가입후 로그인");
 
-      alert(response.data.message);
-      console.log(response.data);
+      alert(LoginResponse.data.message);
+      console.log(LoginResponse.data);
 
-      const m_no = response.data.m_no;
+      const m_no = LoginResponse.data.m_no;
 
       // dispatch login vuex에 로그인 정보 저장
       store.dispatch("member/saveAuth", {
-        m_id: response.data.m_id,
-        m_name: response.data.m_name,
-        m_no: response.data.m_no,
-        jwt: response.data.jwt,
+        m_id: LoginResponse.data.m_id,
+        m_name: LoginResponse.data.m_name,
+        m_no: LoginResponse.data.m_no,
+        jwt: LoginResponse.data.jwt,
       });
 
       // dispatch Login Photo vuex에 로그인 정보 저장
@@ -180,8 +179,8 @@ const handleSubmit = async () => {
         store.dispatch("member/savePhoto", {
           m_attachdata: photoRes.data.data.mp_attachdata
         });
+        router.push("/")
       }
-
     }
     else {
       console.log(LoginResponse.data.message);
