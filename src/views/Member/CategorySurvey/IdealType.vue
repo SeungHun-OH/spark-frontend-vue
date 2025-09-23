@@ -1,31 +1,37 @@
 <template>
-  <div class="card">
-    <h4>Your Ideal Type</h4>
-    <p>Select the qualities you’re looking for in a partner</p>
+  <div class="card shadow-sm p-4 mb-4">
+    <h4 class="mb-3">Your Ideal Type</h4>
+    <p class="text-muted">Select the qualities you’re looking for in a partner</p>
 
-    <div class="selected">
+    <!-- 선택된 -->
+    <div class="mb-3">
       <span 
         v-for="(quality, idx) in selectedQualities" 
         :key="idx" 
-        class="tag selected">
+        class="badge bg-primary me-2 p-2">
         {{ quality }}
-        <button @click="removeQuality(quality)">×</button>
+        <button 
+          class="btn-close btn-close-white ms-2" 
+          @click="removeQuality(quality)">
+        </button>
       </span>
     </div>
 
-    <h5 class="mt-3">Available Qualities</h5>
-    <div class="tags">
-      <span 
+    <!-- 선택 옵션 -->
+    <h6 class="fw-bold mb-2">Available Qualities</h6>
+    <div class="d-flex flex-wrap gap-2">
+      <button 
         v-for="quality in qualities" 
         :key="quality" 
-        class="tag" 
-        :class="{ active: selectedQualities.includes(quality) }"
+        class="btn btn-sm"
+        :class="selectedQualities.includes(quality) ? 'btn-dark text-white' : 'btn-outline-dark'"
         @click="toggleQuality(quality)">
         {{ quality }}
-      </span>
+      </button>
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref } from "vue";

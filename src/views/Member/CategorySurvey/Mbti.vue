@@ -1,19 +1,24 @@
 <template>
-  <div class="card">
-    <h4>Your MBTI Type</h4>
-    <p>Select your Myers-Briggs personality type</p>
+  <div class="card shadow-sm p-4 mb-4">
+    <h4 class="mb-3">Your MBTI Type</h4>
+    <p class="text-muted">Select your Myers-Briggs personality type</p>
 
-    <div class="mbti-grid">
-      <button 
+    <div class="row g-2">
+      <div 
         v-for="type in mbtiTypes" 
         :key="type" 
-        :class="['mbti-btn', { active: selectedMbti === type }]" 
-        @click="selectedMbti = type">
-        {{ type }}
-      </button>
+        class="col-3 d-grid">
+        <button 
+          class="btn"
+          :class="selectedMbti === type ? 'btn-dark text-white' : 'btn-outline-dark'"
+          @click="selectedMbti = type">
+          {{ type }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref } from "vue";
