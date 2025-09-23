@@ -1,13 +1,10 @@
 <script setup>
-import AppHeader from './components/member/AppHeader.vue'
 import Sidebar from './components/Sidebar.vue'
 </script>
 
 <template>
   <div class="d-flex flex-column flex-grow-1">
     <!-- 상단 헤더 -->
-    <AppHeader />
-
     <header class="topbar d-flex justify-content-between align-items-center">
       <div class="fw-bold">Dating App (Community)</div>
       <div>

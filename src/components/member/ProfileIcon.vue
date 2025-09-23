@@ -1,11 +1,11 @@
 <template>
 
   <div class="d-flex align-items-center">
-    <img v-if="profileImage" :src="profileImage" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;" />
-    <img v-else src="@/assets/profile.png" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;" />
-    <div>
-      <div class="fw-bold"> id   {{ m_id }}</div>
-      <div class="fw-bold"> name {{ m_name }}</div>
+    <img v-if="profileImage" :src="profileImage" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;" class = "me-2" />
+    <!-- <img v-else src="@/assets/profile.png" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;" /> -->
+    <div v-if="m_id">
+      <div class="fw-bold"> id : {{ m_id }}</div>
+      <div class="fw-bold"> na : {{ m_name }}</div>
     </div>
   </div>
 

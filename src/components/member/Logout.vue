@@ -1,18 +1,38 @@
 <template>
   <div class = "d-flex align-itmes-center">
-    <button class = "btn btn-info btn-sm" @click ="logOut()"> logOut</button>
+    <button v-if = "isLogin"
+     class = "btn btn-info btn-danger w-100" @click ="logOut()"> logOut
+    </button>
+
+    <button v-else 
+     class = "btn btn-info btn-success w-100" @click ="logIn()"> logIn
+    </button>
+
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 const store = useStore();
+
+const isLogin = computed(() => {
+  return store.getters["member/getJwt"];
+});
+
+const router = useRouter();
 
 function logOut()
 {
   alert("로그아웃");
   store.dispatch("member/logOut");
+}
+
+function logIn(){
+  router.push("/Member/Login")
+
 }
 
 </script>
