@@ -10,11 +10,19 @@
         </div>
       </div>
       <p>Software engineer, passionate about design and coding.</p>
-      <button class="btn btn-outline-primary">Edit Profile</button>
+      <button class="btn btn-outline-primary" @click="GoProfile()">Edit Profile</button>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
+
 // 별도의 상태가 필요 없으므로 그냥 비워둠
+
+const router = useRouter();
+
+function GoProfile(){
+  router.push("/Member/Profile");
+}
 </script>

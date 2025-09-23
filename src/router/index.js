@@ -6,12 +6,15 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Member from './Member'
 import Category from './Category'
+import Profile from '@/views/Profile.vue';
 
 const routes = [
+  
   { path: '/', component: MainFeed },
   { path: '/matching', component: Matching },
   { path: '/feed', component: MyFeed },
   { path: '/hearts', component: Hearts },
+  { path: '/Profile', component: Profile },
 
   {
     path: '/',
