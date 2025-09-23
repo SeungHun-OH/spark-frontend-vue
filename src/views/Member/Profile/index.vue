@@ -28,8 +28,9 @@
             <h6 class="fw-bold">Basic Info</h6>
             <i class="bi bi-pencil-square cursor-pointer"></i>
           </div>
-          <p class="mb-0 fw-bold">{{ profile.name }} {{ profile.age }}</p>
-          <p class="text-muted mb-1"><i class="bi bi-geo-alt"></i> {{ profile.location }}</p>
+          <p class="mb-0 fw-bold"> {{ store.getters["member/getM_name"] }} {{ store.getters["member/getM_age"] }}</p>
+          <p class="text-muted mb-1"><i class="bi bi-geo-alt"></i> {{ store.getters["member/getM_region"] }}</p>
+
           <p class="text-muted mb-1"><i class="bi bi-briefcase"></i> {{ profile.job }}</p>
           <p class="text-muted"><i class="bi bi-mortarboard"></i> {{ profile.education }}</p>
         </BaseCard>
@@ -40,7 +41,7 @@
             <h6 class="fw-bold">About Me</h6>
             <i class="bi bi-pencil-square cursor-pointer"></i>
           </div>
-          <p class="text-muted mb-0">{{ profile.about }}</p>
+          <p class="text-muted mb-0">{{ store.getters["member/getM_bio"] }}</p>
         </BaseCard>
 
       </div>

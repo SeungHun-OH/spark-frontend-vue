@@ -65,9 +65,12 @@ async function handleLogin() {
 
       // dispatch login vuex에 로그인 정보 저장
       store.dispatch("member/saveAuth", {
-        m_id: response.data.m_id,
-        m_name: response.data.m_name,
-        m_no: response.data.m_no,
+
+        // m_id: response.data.m_id,
+        // m_name: response.data.m_name,
+        // m_no: response.data.m_no,
+
+        ...response.data.data,
         jwt: response.data.jwt,
       });
 
