@@ -36,22 +36,37 @@
 
     <!-- grid exactly like provided image (3 columns) -->
     <div class="my-post-grid">
-      <div class="post-item" v-for="(p,i) in posts" :key="i">
+      <div class="post-item" v-for="(p, i) in posts" :key="i">
         <img :src="p" @click="openPost(i)" />
       </div>
     </div>
 
     <!-- modal for clicked post -->
-    <div class="modal fade" tabindex="-1" :class="{show:showModal}" style="display:block" v-if="showModal">
+    <div class="modal fade" tabindex="-1" :class="{ show: showModal }" style="display:block" v-if="showModal">
       <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content" style="border-radius:12px;">
           <div class="modal-body p-0 d-flex">
-            <div style="flex:1">
-              <img :src="posts[selectedIndex]" style="width:100%; height:80vh; object-fit:cover;" />
+
+            <div style="flex:1; position:relative;">
+              <img :src="modalPost.images[currentImageIndex]" style="width:100%; height:80vh; object-fit:cover;" />
+
+              <!-- 이전 버튼 -->
+              <button v-if="currentImageIndex > 0" @click="prevImage"
+                style="position:absolute; top:45%; left:10px; transform:translateY(-50%); font-size:8rem; background:none; border:none; color:white; cursor:pointer;">
+                ‹
+              </button>
+
+              <!-- 다음 버튼 -->
+              <button v-if="currentImageIndex < modalPost.images.length - 1" @click="nextImage"
+                style="position:absolute; top:45%; right:10px; transform:translateY(-50%); font-size:8rem; background:none; border:none; color:white; cursor:pointer;">
+                ›
+              </button>
             </div>
+
+
             <div style="width:420px; background:#fff; padding:20px;">
               <div class="d-flex align-items-center mb-3">
-                <img src="https://i.pravatar.cc/48" class="rounded-circle me-2" width="48" height="48"/>
+                <img src="https://i.pravatar.cc/48" class="rounded-circle me-2" width="48" height="48" />
                 <div>
                   <div class="fw-bold">Alex Johnson</div>
                   <small class="text-muted">2 days ago</small>
@@ -73,6 +88,16 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+//상태 정의
+// const profile = ref({
+//   m_name : "",
+//   m_bio : "",
+//   m_survey : ""
+// });
+
 const posts = ref([
   'https://picsum.photos/500/500?img=11',
   'https://picsum.photos/500/500?img=12',
@@ -81,8 +106,38 @@ const posts = ref([
   'https://picsum.photos/500/500?img=15',
   'https://picsum.photos/500/500?img=16'
 ]);
+
+const currentImageIndex = ref(0);
+
 const showModal = ref(false);
 const selectedIndex = ref(0);
-function openPost(i){ selectedIndex.value = i; showModal.value = true; document.body.style.overflow='hidden'; }
-function closeModal(){ showModal.value = false; document.body.style.overflow='auto'; }
+
+function openPost(i) { 
+  selectedIndex.value = i; 
+  showModal.value = true; 
+  document.body.style.overflow = 'hidden'; 
+}
+
+function nextImage() {
+  if (currentImageIndex.value < selectedIndex.value.images.length - 1) {
+    currentImageIndex.value++;
+  }
+}
+
+function prevImage() {
+  if (currentImageIndex.value > 0) {
+    currentImageIndex.value--;
+  }
+}
+
+function closeModal() { 
+  showModal.value = false; 
+  document.body.style.overflow = 'auto'; 
+  }
 </script>
+
+<style scoped>
+.modal {
+  background: rgba(10, 10, 10, 0.6);
+}
+</style>
