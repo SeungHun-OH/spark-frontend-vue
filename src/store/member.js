@@ -89,7 +89,7 @@ const member = {
     },
 
     loadAuth(context) {
-      
+
       const payload = {};
       Object.keys(localStorage).forEach((key) => {
         payload[key] = localStorage.getItem(key);
@@ -138,13 +138,13 @@ const member = {
 export default member;
 
 // context.commit("setM_id", "");
-      // context.commit("setM_no", "");
-      // context.commit("setM_name", "");
-      // context.commit("setJwt", "");
-      // context.commit("setM_attachdata", "");
+// context.commit("setM_no", "");
+// context.commit("setM_name", "");
+// context.commit("setJwt", "");
+// context.commit("setM_attachdata", "");
 
-      // localStorage.removeItem("m_id");
-      // localStorage.removeItem("m_no");
-      // localStorage.removeItem("m_name");
-      // localStorage.removeItem("jwt");
-      // localStorage.removeItem("m_attachdata");
+// localStorage.removeItem("m_id");
+// localStorage.removeItem("m_no");
+// localStorage.removeItem("m_name");
+// localStorage.removeItem("jwt");
+// localStorage.removeItem("m_attachdata");

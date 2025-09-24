@@ -10,39 +10,60 @@
         <!-- 사진 카드 -->
         <BaseCard>
           <div class="text-center">
-            <img
-              :src="picture"
-              alt="profile"
-              class="rounded img-fluid mb-2"
-              style="max-height: 250px; object-fit: cover;"
-            />
+            <img :src="picture" alt="profile" class="rounded img-fluid mb-2" style="max-height: 250px; object-fit: cover;" />
             <button class="btn btn-outline-secondary btn-sm">
               <i class="bi bi-camera"></i> Add Photo
             </button>
           </div>
         </BaseCard>
 
-        <!-- 기본 정보 -->
+        <!-- 기본 정보 카드 -->
         <BaseCard>
           <div class="d-flex justify-content-between">
             <h6 class="fw-bold">Basic Info</h6>
-            <i class="bi bi-pencil-square cursor-pointer"></i>
+            <i class="bi bi-pencil-square cursor-pointer" @click="toggleEdit('basic')"></i>
           </div>
-          <p class="mb-0 fw-bold"> {{ store.getters["member/getM_name"] }} {{ store.getters["member/getM_age"] }}</p>
-          <p class="text-muted mb-1"><i class="bi bi-geo-alt"></i> {{ store.getters["member/getM_region"] }}</p>
 
-          <p class="text-muted mb-1"><i class="bi bi-briefcase"></i> {{ profile.job }}</p>
-          <p class="text-muted"><i class="bi bi-mortarboard"></i> {{ profile.education }}</p>
+          <!-- 보기 모드 -->
+          <div v-if="!editState.basic">
+            <p class="mb-0 fw-bold">{{ store.getters["member/getM_name"] }} {{ store.getters["member/getM_age"] }}</p>
+            <p class="text-muted mb-1"><i class="bi bi-geo-alt"></i> {{ store.getters["member/getM_region"]}}</p>
+            <p class="text-muted mb-1"><i class="bi bi-briefcase"></i> {{ store.getters["member/getM_email"] }}</p>
+          </div>
+
+          <!-- 수정 모드 -->
+          <div v-else>
+            <input v-model="memberEdit.m_name" class="form-control mb-2" placeholder="이름" />
+            <input v-model="memberEdit.m_age" class="form-control mb-2" placeholder="나이" />
+            <input v-model="memberEdit.m_region" class="form-control mb-2" placeholder="지역" />
+            <input v-model="memberEdit.m_email" class="form-control mb-2" placeholder="이메일" />
+
+            <button class="btn btn-primary btn-sm" @click="saveChange('basic')">저장</button>
+            <button class="btn btn-secondary btn-sm ms-1" @click="cancelEdit('basic')">취소</button>
+          </div>
         </BaseCard>
 
-        <!-- 자기소개 -->
+        <!-- 자기소개 카드 -->
         <BaseCard>
           <div class="d-flex justify-content-between">
             <h6 class="fw-bold">About Me</h6>
-            <i class="bi bi-pencil-square cursor-pointer"></i>
+            <i class="bi bi-pencil-square cursor-pointer" @click="toggleEdit('about')"></i>
           </div>
-          <p class="text-muted mb-0">{{ store.getters["member/getM_bio"] }}</p>
+
+          <!-- 보기 모드 -->
+          <div v-if="!editState.about">
+            <p class="text-muted mb-0">{{ store.getters["member/getM_bio"] }}</p>
+          </div>
+
+          <!-- 수정 모드 -->
+          <div v-else>
+            <textarea v-model="memberEdit.m_bio" class="form-control mb-2" rows="4" placeholder="자기소개를 입력하세요"></textarea>
+
+            <button class="btn btn-primary btn-sm" @click="saveChange('about')">저장</button>
+            <button class="btn btn-secondary btn-sm ms-1" @click="cancelEdit('about')">취소</button>
+          </div>
         </BaseCard>
+
 
       </div>
 
@@ -56,11 +77,7 @@
             <i class="bi bi-pencil-square cursor-pointer"></i>
           </div>
           <div>
-            <span
-              v-for="(hobby, index) in profile.interests"
-              :key="index"
-              class="badge bg-light text-dark me-1 mb-1"
-            >
+            <span v-for="(hobby, index) in profile.interests" :key="index" class="badge bg-light text-dark me-1 mb-1">
               {{ hobby }}
             </span>
           </div>
@@ -98,11 +115,55 @@
 
 <script setup>
 
+import memberApi from '@/apis/memberApi';
 import BaseCard from '@/components/member/BaseCard.vue';
-import { computed } from 'vue';
+import member from '@/store/member';
+import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 
 const store = useStore();
+
+const editState = ref({
+  basic: false,
+  about: false,
+});
+
+// Vuex에 저장된 state 통째로 가져오기
+// const memberState = store.state.member;
+// 수정용 임시 객체
+// const memberEdit = ref({ ...memberState }); 
+
+const memberEdit = ref({ ...store.getters["member/getMember"] })
+
+function toggleEdit(section) {
+  editState.value[section] = true
+
+  // memberEdit.value = { ...member.value } // 원본 복사
+  //memberEdit.value = member.value 는 깊은복사 같은 값 참조 복사
+
+  console.log(memberEdit.value);
+}
+
+function CancelEdit(section) {
+  editState.value[section] = false;
+}
+
+async function saveChange() {
+  try {
+    const response = await memberApi.memberUpdate(memberEdit.value);
+    member.value = { ...memberEdit.value };
+    editState.value.basic = false
+
+    if (response.data.result == "success") {
+      alert("업데이트 성공" + response.data.message);
+    }
+    else {
+      alert("업데이트 실패" + response.data.message);
+    }
+  } catch (error) {
+    alert("업데이트 실패[서버]" + error);
+  }
+}
 
 const picture = computed(() => {
   const data = store.getters["member/getM_attachdata"];
