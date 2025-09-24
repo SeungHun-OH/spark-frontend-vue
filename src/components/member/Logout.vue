@@ -1,11 +1,11 @@
 <template>
   <div class = "d-flex align-itmes-center">
     <button v-if = "isLogin"
-     class = "btn btn-info btn-danger w-100" @click ="logOut()"> logOut
+     class = "btn btn-sm btn-danger mt-3 w-100" @click ="logOut()"> logOut
     </button>
 
     <button v-else 
-     class = "btn btn-info btn-success w-100" @click ="logIn()"> logIn
+     class = "btn btn-sm btn-danger mt-3 w-100" @click ="logIn()"> logIn
     </button>
 
   </div>
