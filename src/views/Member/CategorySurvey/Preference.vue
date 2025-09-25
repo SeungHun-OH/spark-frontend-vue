@@ -45,14 +45,6 @@ if (uniqueTypes.value.length > 0) {
   activeTab.value = uniqueTypes.value[0];
 }
 
-// async function insertMemberCategories() {
-//   const request = {
-//     member_No: store.getters["member/getM_no"],
-//     preferNos: store.getters["memberCategory/getselectcategories"]
-//   };
-//   console.log("저장 요청:", request);
-// }
-
 async function insertMemberCategories() {
   
   const request = {
@@ -68,6 +60,12 @@ async function insertMemberCategories() {
   }
   else{
     const response = await memberCategoryApi.insertMemberCategories(request);
+    if(response.data.result === "success"){
+      alert(response.data.message);
+    }
+    else{
+      alert(response.data.message);
+    }
   }  
 }
 

@@ -15,6 +15,9 @@ const memberCategory = {
     getUniqueTypes : (state) => {
       return [...new Set(state.categories.map(c => c.pc_type))]
     },
+    getUniqueDesc : (state) => {
+      return [... new Set(state.categories.map(c => c.pc_desc))]
+    },
 
     getCategoriesByType: (state) => (type) => {
       return state.categories.filter(c => c.pc_type === type)
@@ -26,10 +29,9 @@ const memberCategory = {
      getTypeMeta: (state) => (type) => {
       const first = state.categories.find(c => c.pc_type === type);
       if (!first) return { title: type, description: "" };
-
       return {
-        title: first.pc_group || type,  // pc_group을 제목처럼 활용
-        description: `Select your ${first.pc_group || type.toLowerCase()}`
+        title : first.pc_type,
+        description: first.pc_desc
       };
     }
   },
@@ -43,6 +45,11 @@ const memberCategory = {
           state.selectcategories.push(bno);
         }    
       });
+    },
+
+    // 선탁 카테고리 삭제 
+    removeSelectCategory(state, bno){
+      state.selectcategories = state.selectcategories.filter(no => no !== bno);
     },
 
     setCategories(state, payload) {
