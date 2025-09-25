@@ -43,10 +43,6 @@ const customHobby = ref("");
 
 const store = useStore();
 
-// const popularHobbies = computed(() => {
-//   return store.getters["memberCategory/getCategoriesByType"]("HOBBY").map(c => c.pc_name);
-// });
-
 const popularHobbies = computed(() => {
   return store.getters["memberCategory/getCategoriesByType"]("HOBBY");
 });

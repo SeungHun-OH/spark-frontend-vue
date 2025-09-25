@@ -73,17 +73,21 @@ async function getAllcategoryStatic() {
 }
 
 async function insertMemberCategories() {
-
+  
   const request = {
-    // member_No : 96,
-    // preferNos : [10, 20, 30, 40, 33]
-
     member_No : store.getters["member/getM_no"],
     preferNos : store.getters["memberCategory/getselectcategories"]
   };
 
-  const response = await memberCategoryApi.insertMemberCategories(request);
-  console.log(response.data);
+  if(request.member_No == null){
+    alert("로그인이 안되어 있습니다");
+  }
+  else if(request.preferNos == null){
+    alert("선택된 카테고리가 없습니다")
+  }
+  else{
+    const response = await memberCategoryApi.insertMemberCategories(request);
+  }  
 }
 
 const activeTab = ref("hobbies");
