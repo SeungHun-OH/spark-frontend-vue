@@ -12,36 +12,27 @@
     <!-- 탭 네비게이션 -->
     <ul class="nav nav-pills nav-justified mb-4">
       <li class="nav-item">
-        <button 
-          class="nav-link"
-          :class="{ active: activeTab==='hobbies' }"
-          @click="activeTab = 'hobbies'">
+        <button class="nav-link" :class="{ active: activeTab === 'hobbies' }" @click="activeTab = 'hobbies'">
           Hobbies
         </button>
       </li>
       <li class="nav-item">
-        <button 
-          class="nav-link"
-          :class="{ active: activeTab==='mbti' }"
-          @click="activeTab = 'mbti'">
+        <button class="nav-link" :class="{ active: activeTab === 'mbti' }" @click="activeTab = 'mbti'">
           MBTI
         </button>
       </li>
       <li class="nav-item">
-        <button 
-          class="nav-link"
-          :class="{ active: activeTab==='ideal' }"
-          @click="activeTab = 'ideal'">
+        <button class="nav-link" :class="{ active: activeTab === 'ideal' }" @click="activeTab = 'ideal'">
           Ideal Type
         </button>
       </li>
     </ul>
 
     <!-- 카드들 -->
-    <div v-if="activeTab==='hobbies'">
+    <div v-if="activeTab === 'hobbies'">
       <Hobbies />
     </div>
-    <div v-else-if="activeTab==='mbti'">
+    <div v-else-if="activeTab === 'mbti'">
       <Mbti />
     </div>
     <div v-else>
@@ -51,10 +42,11 @@
     <!-- 저장 버튼 -->
     <div class="d-flex justify-content-between mt-4">
       <button class="btn btn-outline-secondary">Cancel</button>
-      <button class="btn btn-dark">Save Preferences</button>
+      <button class="btn btn-outline-secondary" @click="getAllcategoryStatic()">카테고라 가져오기</button>
+      <button class="btn btn-dark" @click="insertMemberCategories()">Save Preferences</button>
     </div>
 
-     <!-- 오른쪽 네비 버튼 -->
+    <!-- 오른쪽 네비 버튼 -->
     <div class="d-flex justify-content-end mt-3">
       <button class="btn btn-outline-dark rounded-circle">
         <i class="bi bi-arrow-right"></i>
@@ -69,7 +61,30 @@ import { ref } from "vue";
 import Hobbies from "./Hobbies.vue";
 import IdealType from "./IdealType.vue";
 import Mbti from "./Mbti.vue";
+import memberCategoryApi from "@/apis/memberCategoryApi";
+import { useStore } from "vuex";
 
+const store = useStore();
+
+async function getAllcategoryStatic() {
+  const response = await memberCategoryApi.getAllcategoryStatic();
+  console.log(response.data);
+  store.commit("memberCategory/setCategories", response.data);
+}
+
+async function insertMemberCategories() {
+
+  const request = {
+    // member_No : 96,
+    // preferNos : [10, 20, 30, 40, 33]
+
+    member_No : store.getters["member/getM_no"],
+    preferNos : store.getters["memberCategory/getselectcategories"]
+  };
+
+  const response = await memberCategoryApi.insertMemberCategories(request);
+  console.log(response.data);
+}
 
 const activeTab = ref("hobbies");
 </script>
