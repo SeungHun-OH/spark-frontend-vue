@@ -45,12 +45,30 @@ if (uniqueTypes.value.length > 0) {
   activeTab.value = uniqueTypes.value[0];
 }
 
+// async function insertMemberCategories() {
+//   const request = {
+//     member_No: store.getters["member/getM_no"],
+//     preferNos: store.getters["memberCategory/getselectcategories"]
+//   };
+//   console.log("저장 요청:", request);
+// }
+
 async function insertMemberCategories() {
+  
   const request = {
-    member_No: store.getters["member/getM_no"],
-    preferNos: store.getters["memberCategory/getselectcategories"]
+    member_No : store.getters["member/getM_no"],
+    preferNos : store.getters["memberCategory/getselectcategories"]
   };
-  console.log("저장 요청:", request);
+
+  if(request.member_No == null){
+    alert("로그인이 안되어 있습니다");
+  }
+  else if(request.preferNos == null){
+    alert("선택된 카테고리가 없습니다")
+  }
+  else{
+    const response = await memberCategoryApi.insertMemberCategories(request);
+  }  
 }
 
 async function getAllcategoryStatic() {

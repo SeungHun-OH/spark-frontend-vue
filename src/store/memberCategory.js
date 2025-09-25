@@ -21,8 +21,17 @@ const memberCategory = {
     },
     getCategoriesByTypeNum: (state) => (typenum) => {
       return state.categories.filter(c => c.pc_typenum === typenum)
-    }
+    },
 
+     getTypeMeta: (state) => (type) => {
+      const first = state.categories.find(c => c.pc_type === type);
+      if (!first) return { title: type, description: "" };
+
+      return {
+        title: first.pc_group || type,  // pc_group을 제목처럼 활용
+        description: `Select your ${first.pc_group || type.toLowerCase()}`
+      };
+    }
   },
 
   mutations: {
