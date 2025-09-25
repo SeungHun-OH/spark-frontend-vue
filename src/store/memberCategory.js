@@ -12,6 +12,10 @@ const memberCategory = {
 
     getCategories: (state) => state.categories,
 
+    getUniqueTypes : (state) => {
+      return [...new Set(state.categories.map(c => c.pc_type))]
+    },
+
     getCategoriesByType: (state) => (type) => {
       return state.categories.filter(c => c.pc_type === type)
     },
