@@ -4,6 +4,7 @@
       <div class="card-header">
         Example
         <div>
+          
           <router-link to = "/Member/CategorySurvey/Preference"> 선호도 조사 </router-link>
 
         </div>

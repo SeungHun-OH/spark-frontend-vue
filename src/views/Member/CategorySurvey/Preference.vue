@@ -24,7 +24,7 @@
     <div class="d-flex justify-content-between mt-4">
       <button class="btn btn-outline-secondary">Cancel</button>
       <button class="btn btn-outline-secondary" @click="getAllcategoryStatic()">카테고리불러오기</button>
-      <button class="btn btn-dark" @click="insertMemberCategories()">Save Preferences</button>
+      <button class="btn btn-dark" @click="insertMemberCategories()"> 저장하기 </button>
     </div>
 
   </div>
@@ -35,8 +35,11 @@ import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import Hobbies from "./Hobbies.vue";
 import memberCategoryApi from "@/apis/memberCategoryApi";
+import { useRouter } from "vue-router";
 
 const store = useStore();
+const router = useRouter();
+
 const uniqueTypes = computed(() => store.getters["memberCategory/getUniqueTypes"]);
 const activeTab = ref("");
 
@@ -62,6 +65,7 @@ async function insertMemberCategories() {
     const response = await memberCategoryApi.insertMemberCategories(request);
     if(response.data.result === "success"){
       alert(response.data.message);
+      router.push("/")
     }
     else{
       alert(response.data.message);

@@ -165,9 +165,12 @@ const handleSubmit = async () => {
 
       // dispatch login vuex에 로그인 정보 저장
       store.dispatch("member/saveAuth", {
-        m_id: LoginResponse.data.m_id,
-        m_name: LoginResponse.data.m_name,
-        m_no: LoginResponse.data.m_no,
+        // m_id: LoginResponse.data.m_id,
+        // m_name: LoginResponse.data.m_name,
+        // m_no: LoginResponse.data.m_no,
+
+        ...LoginResponse.data.data,
+
         jwt: LoginResponse.data.jwt,
       });
 
@@ -179,7 +182,8 @@ const handleSubmit = async () => {
         store.dispatch("member/savePhoto", {
           m_attachdata: photoRes.data.data.mp_attachdata
         });
-        router.push("/")
+        alert("나의 성향을 선택해주세요")
+        router.push("/Member/CategorySurvey/Preference")
       }
     }
     else {
