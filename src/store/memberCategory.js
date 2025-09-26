@@ -13,25 +13,25 @@ const memberCategory = {
     getCategories: (state) => state.categories,
 
     getUniqueTypes : (state) => {
-      return [...new Set(state.categories.map(c => c.pc_type))]
+      return [...new Set(state.categories.map(c => c.pcType))]
     },
     getUniqueDesc : (state) => {
-      return [... new Set(state.categories.map(c => c.pc_desc))]
+      return [... new Set(state.categories.map(c => c.pcDesc))]
     },
 
     getCategoriesByType: (state) => (type) => {
-      return state.categories.filter(c => c.pc_type === type)
+      return state.categories.filter(c => c.pcType === type)
     },
     getCategoriesByTypeNum: (state) => (typenum) => {
-      return state.categories.filter(c => c.pc_typenum === typenum)
+      return state.categories.filter(c => c.pcTypenum === typenum)
     },
 
      getTypeMeta: (state) => (type) => {
-      const first = state.categories.find(c => c.pc_type === type);
+      const first = state.categories.find(c => c.pcType === type);
       if (!first) return { title: type, description: "" };
       return {
-        title : first.pc_type,
-        description: first.pc_desc
+        title : first.pcType,
+        description: first.pcDesc
       };
     }
   },

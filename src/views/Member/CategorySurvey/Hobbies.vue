@@ -31,8 +31,8 @@ function toggleItem(item) {
 
 // 커스텀 입력
 function addCustom() {
-  if (customInput.value && !selectedItems.value.some(i => i.pc_name === customInput.value)) {
-    selectedItems.value.push({ pc_no: null, pc_name: customInput.value, pc_type: props.type });
+  if (customInput.value && !selectedItems.value.some(i => i.pcName === customInput.value)) {
+    selectedItems.value.push({ pcNo: null, pcName: customInput.value, pcType: props.type });
     customInput.value = "";
   }
 }
@@ -40,21 +40,21 @@ function addCustom() {
 // 삭제
 function removeItem(item) {
   selectedItems.value = selectedItems.value.filter(h => h !== item);
-  store.commit("memberCategory/removeSelectCategory", item.pc_no);
-  console.log("removeItem 삭제", item.pc_no);
+  store.commit("memberCategory/removeSelectCategory", item.pcNo);
+  console.log("removeItem 삭제", item.pcNo);
 }
 
 // 저장
 function saveSelected() {
   store.commit(
     "memberCategory/addSelectCategories",
-    selectedItems.value.map(item => item.pc_no).filter(no => no !== null)
+    selectedItems.value.map(item => item.pcNo).filter(no => no !== null)
   );
   alert(props.type + "저장완료");
 }
 
 watch(selectedItems, (newItems) => {
-  const pcNos = newItems.map(item => item.pc_no).filter(no => no !== null);
+  const pcNos = newItems.map(item => item.pcNo).filter(no => no !== null);
   store.commit("memberCategory/addSelectCategories", pcNos);
 }, {deep: true});
 </script>
@@ -66,7 +66,7 @@ watch(selectedItems, (newItems) => {
     <!-- 선택된 항목 -->
     <div class="mb-3">
       <span v-for="(item, idx) in selectedItems" :key="idx" class="badge bg-dark text-white me-2 p-2">
-        {{ item.pc_name }}
+        {{ item.pcName }}
         <button class="btn-close btn-close-white ms-2" @click="removeItem(item)"></button>
       </span>
     </div>
@@ -86,11 +86,11 @@ watch(selectedItems, (newItems) => {
     <div class="d-flex flex-wrap gap-2">
       <button 
         v-for="item in options" 
-        :key="item.pc_no" 
+        :key="item.pcNo" 
         class="btn btn-sm"
         :class="selectedItems.includes(item) ? 'btn-dark text-white' : 'btn-outline-dark'"
         @click="toggleItem(item)">
-        {{ item.pc_name }}
+        {{ item.pcName }}
       </button>
     </div>
 

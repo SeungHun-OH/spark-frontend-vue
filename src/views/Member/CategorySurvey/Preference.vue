@@ -51,11 +51,11 @@ if (uniqueTypes.value.length > 0) {
 async function insertMemberCategories() {
   
   const request = {
-    member_No : store.getters["member/getM_no"],
+    memberNo : store.getters["member/getMNo"],
     preferNos : store.getters["memberCategory/getselectcategories"]
   };
 
-  if(request.member_No == null){
+  if(request.memberNo == null){
     alert("로그인이 안되어 있습니다");
   }
   else if(request.preferNos == null){

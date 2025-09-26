@@ -26,17 +26,17 @@
 
           <!-- 보기 모드 -->
           <div v-if="!editState.basic">
-            <p class="mb-0 fw-bold">{{ store.getters["member/getM_name"] }} {{ store.getters["member/getM_age"] }}</p>
-            <p class="text-muted mb-1"><i class="bi bi-geo-alt"></i> {{ store.getters["member/getM_region"]}}</p>
-            <p class="text-muted mb-1"><i class="bi bi-briefcase"></i> {{ store.getters["member/getM_email"] }}</p>
+            <p class="mb-0 fw-bold">{{ store.getters["member/getMName"] }} {{ store.getters["member/getMAge"] }}</p>
+            <p class="text-muted mb-1"><i class="bi bi-geo-alt"></i> {{ store.getters["member/getMRegion"]}}</p>
+            <p class="text-muted mb-1"><i class="bi bi-briefcase"></i> {{ store.getters["member/getMEmail"] }}</p>
           </div>
 
           <!-- 수정 모드 -->
           <div v-else>
-            <input v-model="memberEdit.m_name" class="form-control mb-2" placeholder="이름" />
-            <input v-model="memberEdit.m_age" class="form-control mb-2" placeholder="나이" />
-            <input v-model="memberEdit.m_region" class="form-control mb-2" placeholder="지역" />
-            <input v-model="memberEdit.m_email" class="form-control mb-2" placeholder="이메일" />
+            <input v-model="memberEdit.mName" class="form-control mb-2" placeholder="이름" />
+            <input v-model="memberEdit.mAge" class="form-control mb-2" placeholder="나이" />
+            <input v-model="memberEdit.mRegion" class="form-control mb-2" placeholder="지역" />
+            <input v-model="memberEdit.mEmail" class="form-control mb-2" placeholder="이메일" />
 
             <button class="btn btn-primary btn-sm" @click="saveChange('basic')">저장</button>
             <button class="btn btn-secondary btn-sm ms-1" @click="cancelEdit('basic')">취소</button>
@@ -52,12 +52,12 @@
 
           <!-- 보기 모드 -->
           <div v-if="!editState.about">
-            <p class="text-muted mb-0">{{ store.getters["member/getM_bio"] }}</p>
+            <p class="text-muted mb-0">{{ store.getters["member/getMBio"] }}</p>
           </div>
 
           <!-- 수정 모드 -->
           <div v-else>
-            <textarea v-model="memberEdit.m_bio" class="form-control mb-2" rows="4" placeholder="자기소개를 입력하세요"></textarea>
+            <textarea v-model="memberEdit.mBio" class="form-control mb-2" rows="4" placeholder="자기소개를 입력하세요"></textarea>
 
             <button class="btn btn-primary btn-sm" @click="saveChange('about')">저장</button>
             <button class="btn btn-secondary btn-sm ms-1" @click="cancelEdit('about')">취소</button>

@@ -19,31 +19,31 @@
       <form @submit.prevent="handleSubmit">
         <!-- 아이디 -->
         <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="mid" v-model="member.m_id" placeholder="아이디" />
+          <input type="text" class="form-control" id="mid" v-model="member.mId" placeholder="아이디" />
           <label for="mid"><i class="bi bi-person me-2"></i>아이디</label>
         </div>
 
         <!-- 이름 -->
         <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="mname" v-model="member.m_name" placeholder="이름" />
+          <input type="text" class="form-control" id="mname" v-model="member.mName" placeholder="이름" />
           <label for="mname"><i class="bi bi-person-badge me-2"></i>이름</label>
         </div>
 
         <!-- 주민번호 -->
         <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="mssn" v-model="member.m_ssn" placeholder="주민번호" />
+          <input type="text" class="form-control" id="mssn" v-model="member.mSsn" placeholder="주민번호" />
           <label for="mssn"><i class="bi bi-card-text me-2"></i>주민번호</label>
         </div>
 
         <!-- 나이 -->
         <div class="form-floating mb-3">
-          <input type="number" class="form-control" id="mage" v-model="member.m_age" placeholder="나이" />
+          <input type="number" class="form-control" id="mage" v-model="member.mAge" placeholder="나이" />
           <label for="mage"><i class="bi bi-calendar me-2"></i>나이</label>
         </div>
 
         <!-- 이메일 -->
         <div class="form-floating mb-3">
-          <input type="email" class="form-control" id="memail" v-model="member.m_email" placeholder="Email" />
+          <input type="email" class="form-control" id="memail" v-model="member.mEmail" placeholder="Email" />
           <label for="memail"><i class="bi bi-envelope me-2"></i>Email</label>
         </div>
 
@@ -51,44 +51,44 @@
         <div class="mb-3">
           <label class="form-label fw-bold d-block mb-2"><i class="bi bi-gender-ambiguous me-2"></i>성별</label>
           <div class="d-flex justify-content-between">
-            <button type="button" class="btn w-50 me-2" :class="member.m_gender === 'M' ? 'btn-danger' : 'btn-outline-secondary'" @click="member.m_gender = 'M'">남자</button>
-            <button type="button" class="btn w-50" :class="member.m_gender === 'F' ? 'btn-danger' : 'btn-outline-secondary'" @click="member.m_gender = 'F'">여자</button>
+            <button type="button" class="btn w-50 me-2" :class="member.mGender === 'M' ? 'btn-danger' : 'btn-outline-secondary'" @click="member.mGender = 'M'">남자</button>
+            <button type="button" class="btn w-50" :class="member.mGender === 'F' ? 'btn-danger' : 'btn-outline-secondary'" @click="member.mGender = 'F'">여자</button>
           </div>
         </div>
 
         <!-- 비밀번호 -->
         <div class="form-floating mb-3">
-          <input type="password" class="form-control" id="mpassword" v-model="member.m_password" placeholder="비밀번호" />
+          <input type="password" class="form-control" id="mpassword" v-model="member.mPassword" placeholder="비밀번호" />
           <label for="mpassword"><i class="bi bi-lock me-2"></i>비밀번호</label>
         </div>
 
         <!-- 닉네임 -->
         <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="mnickname" v-model="member.m_nickname" placeholder="닉네임" />
+          <input type="text" class="form-control" id="mnickname" v-model="member.mNickname" placeholder="닉네임" />
           <label for="mnickname"><i class="bi bi-person-circle me-2"></i>닉네임</label>
         </div>
 
         <!-- 전화번호 -->
         <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="mphone" v-model="member.m_phone" placeholder="전화번호" />
+          <input type="text" class="form-control" id="mphone" v-model="member.mPhone" placeholder="전화번호" />
           <label for="mphone"><i class="bi bi-telephone me-2"></i>전화번호</label>
         </div>
 
         <!-- 지역 -->
         <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="mregion" v-model="member.m_region" placeholder="지역" />
+          <input type="text" class="form-control" id="mregion" v-model="member.mRegion" placeholder="지역" />
           <label for="mregion"><i class="bi bi-geo-alt me-2"></i>지역</label>
         </div>
 
         <!-- 자기소개 -->
         <div class="form-floating mb-3">
-          <textarea class="form-control" id="mbio" v-model="member.m_bio" placeholder="자기소개"></textarea>
+          <textarea class="form-control" id="mbio" v-model="member.mBio" placeholder="자기소개"></textarea>
           <label for="mbio"><i class="bi bi-chat-left-text me-2"></i>자기소개</label>
         </div>
 
         <!-- MBTI -->
         <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="mbti" v-model="member.m_mbti" placeholder="MBTI" />
+          <input type="text" class="form-control" id="mbti" v-model="member.mMbti" placeholder="MBTI" />
           <label for="mbti"><i class="bi bi-emoji-smile me-2"></i>MBTI</label>
         </div>
 
@@ -105,7 +105,7 @@
 import memberApi from "@/apis/memberApi";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { toRaw } from "vue";
+// import { toRaw } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();
@@ -117,18 +117,18 @@ const image = ref(null);
 const preview = ref(null); // 미리보기 URL
 
 const member = ref({
-  m_id: "user1",
-  m_password: "123456",
-  m_name: "사용자1",
-  m_ssn: "999999-191919",
-  m_age: 30,
-  m_email: "www1@www.www",
-  m_gender: "",
-  m_phone: "01012345678",
-  m_nickname: "손오공1",
-  m_region: "서울",
-  m_bio: "",
-  m_mbti: ""
+  mId: "user1",
+  mPassword: "123456",
+  mName: "사용자1",
+  mSsn: "999999-191919",
+  mAge: 30,
+  mEmail: "www1@www.www",
+  mGender: "",
+  mPhone: "01012345678",
+  mNickname: "손오공1",
+  mRegion: "서울",
+  mBio: "",
+  mMbti: ""
 });
 
 const handleFileUpload = (event) => {
@@ -152,8 +152,8 @@ const handleSubmit = async () => {
     alert("회원가입 성공" + response.data.message);
 
     const LoginResponse = await memberApi.memberLogin({
-      m_id: member.value.m_id,
-      m_password: member.value.m_password
+      mId: member.value.mId,
+      mPassword: member.value.mPassword
     });
 
     if (LoginResponse.data.result === "success") {
@@ -161,7 +161,7 @@ const handleSubmit = async () => {
       alert(LoginResponse.data.message);
       console.log(LoginResponse.data);
 
-      const m_no = LoginResponse.data.m_no;
+      const mNo = LoginResponse.data.mNo;
 
       // dispatch login vuex에 로그인 정보 저장
       store.dispatch("member/saveAuth", {
@@ -175,12 +175,12 @@ const handleSubmit = async () => {
       });
 
       // dispatch Login Photo vuex에 로그인 정보 저장
-      const photoRes = await memberApi.memberPictureGet(m_no);
+      const photoRes = await memberApi.memberPictureGet(mNo);
       console.log(photoRes.data);
 
       if (photoRes.data) {
         store.dispatch("member/savePhoto", {
-          m_attachdata: photoRes.data.data.mp_attachdata
+          mAttachdata: photoRes.data.data.mpAttachdata
         });
         alert("나의 성향을 선택해주세요")
         router.push("/Member/CategorySurvey/Preference")
