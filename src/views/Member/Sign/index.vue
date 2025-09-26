@@ -176,11 +176,10 @@ const handleSubmit = async () => {
 
       // dispatch Login Photo vuex에 로그인 정보 저장
       const photoRes = await memberApi.memberPictureGet(mNo);
-      console.log(photoRes.data);
 
       if (photoRes.data) {
         store.dispatch("member/savePhoto", {
-          mAttachdata: photoRes.data.data.mpAttachdata
+          mAttachData: photoRes.data.data.mpAttachData
         });
         alert("나의 성향을 선택해주세요")
         router.push("/Member/CategorySurvey/Preference")

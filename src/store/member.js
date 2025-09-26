@@ -17,11 +17,11 @@ const member = {
     mMbti: "",
     mActive: "T",
     jwt: "",
-    mAttachdata: ""   // 프로필 사진 Base64
+    mAttachData: ""   // 프로필 사진 Base64
   },
 
   getters: {
-    getMember(state) { return state; },
+    getMember: (state) => state,
     getMNo: (state) => state.mNo,
     getMId: (state) => state.mId,
     getMPassword: (state) => state.mPassword,
@@ -37,59 +37,67 @@ const member = {
     getMMbti: (state) => state.mMbti,
     getMActive: (state) => state.mActive,
     getJwt: (state) => state.jwt,
-    getMAttachdata: (state) => state.mAttachdata,
+    getMAttachData: (state) => state.mAttachData,
     getIsLogin: (state) => !!state.jwt
   },
 
   mutations: {
     setMember(state, payload) { Object.assign(state, payload); },
 
-    setM_id(state, payload) {
-      state.mId = payload;
-    },
-    setM_no(state, payload) {
-      state.mNo = payload;
-    },
-    setM_name(state, payload) {
-      state.mName = payload;
-    },
-    setJwt(state, payload) {
-      state.jwt = payload;
-    },
-    setM_attachdata(state, payload) {
-      state.mAttachdata = payload;
-    }
+    setMNo(state, payload) { state.mNo = payload; },
+    setMId(state, payload) { state.mId = payload; },
+    setMPassword(state, payload) { state.mPassword = payload; },
+    setMName(state, payload) { state.mName = payload; },
+    setMSsn(state, payload) { state.mSsn = payload; },
+    setMAge(state, payload) { state.mAge = payload; },
+    setMEmail(state, payload) { state.mEmail = payload; },
+    setMGender(state, payload) { state.mGender = payload; },
+    setMPhone(state, payload) { state.mPhone = payload; },
+    setMNickname(state, payload) { state.mNickname = payload; },
+    setMRegion(state, payload) { state.mRegion = payload; },
+    setMBio(state, payload) { state.mBio = payload; },
+    setMMbti(state, payload) { state.mMbti = payload; },
+    setMActive(state, payload) { state.mActive = payload; },
+    setJwt(state, payload) { state.jwt = payload; },
+    setMAttachData(state, payload) { state.mAttachData = payload; }
   },
 
   actions: {
     saveAuth(context, payload) {
-      //Member 다정의하기
+      // 전체 멤버 한번에 저장
       context.commit("setMember", payload);
 
+      // 로컬스토리지에 저장
       Object.keys(payload).forEach((key) => {
         localStorage.setItem(key, payload[key]);
       });
 
+      // 개별 필드도 commit
       context.commit("setMId", payload.mId);
       context.commit("setMNo", payload.mNo);
       context.commit("setMName", payload.mName);
       context.commit("setJwt", payload.jwt);
-      context.commit("setMAttachdata", payload.mAttachdata);
+      context.commit("setMAttachData", payload.mAttachData);
 
+      // 로컬스토리지 개별 필드 저장
       localStorage.setItem("mId", payload.mId);
       localStorage.setItem("mNo", payload.mNo);
       localStorage.setItem("mName", payload.mName);
       localStorage.setItem("jwt", payload.jwt);
-      localStorage.setItem("mAttachdata", payload.mAttachdata);
+      localStorage.setItem("mAttachData", payload.mAttachData);
     },
 
     savePhoto(context, payload) {
-      context.commit("setMAttachdata", payload.mAttachdata);
-      localStorage.setItem("mAttachdata", payload.mAttachdata);
+      // context.commit("setMAttachData", payload.mAttachData);
+      // localStorage.setItem("mAttachData", payload.mAttachData);
+
+      console.log("savePhoto payload >>>", payload.mAttachData);
+      context.commit("setMAttachData", payload.mAttachData);
+      console.log("after commit >>>", context.state.mAttachData);
+      localStorage.setItem("mAttachData", payload.mAttachData);
     },
 
     loadAuth(context) {
-
       const payload = {};
       Object.keys(localStorage).forEach((key) => {
         payload[key] = localStorage.getItem(key);
@@ -101,13 +109,13 @@ const member = {
       const mNo = localStorage.getItem("mNo") || "";
       const mName = localStorage.getItem("mName") || "";
       const jwt = localStorage.getItem("jwt") || "";
-      const mAttachdata = localStorage.getItem("mAttachdata") || "";
+      const mAttachData = localStorage.getItem("mAttachData") || "";
 
       context.commit("setMId", mId);
       context.commit("setMNo", mNo);
       context.commit("setMName", mName);
       context.commit("setJwt", jwt);
-      context.commit("setMAttachdata", mAttachdata);
+      context.commit("setMAttachData", mAttachData);
     },
 
     logOut(context) {
@@ -127,7 +135,7 @@ const member = {
         mMbti: "",
         mActive: "T",
         jwt: "",
-        mAttachdata: ""
+        mAttachData: ""
       });
 
       localStorage.clear();
@@ -137,14 +145,143 @@ const member = {
 
 export default member;
 
-// context.commit("setM_id", "");
-// context.commit("setM_no", "");
-// context.commit("setM_name", "");
-// context.commit("setJwt", "");
-// context.commit("setM_attachdata", "");
 
-// localStorage.removeItem("m_id");
-// localStorage.removeItem("m_no");
-// localStorage.removeItem("m_name");
-// localStorage.removeItem("jwt");
-// localStorage.removeItem("m_attachdata");
+// const member = {
+//   namespaced: true,
+
+//   state: {
+//     mNo: "",
+//     mId: "",
+//     mPassword: "",
+//     mName: "",
+//     mSsn: "",
+//     mAge: 0,
+//     mEmail: "",
+//     mGender: "",
+//     mPhone: "",
+//     mNickname: "",
+//     mRegion: "",
+//     mBio: "",
+//     mMbti: "",
+//     mActive: "T",
+//     jwt: "",
+//     mAttachData: ""   
+//   },
+
+//   getters: {
+//     getMember(state) { return state; },
+//     getMNo: (state) => state.mNo,
+//     getMId: (state) => state.mId,
+//     getMPassword: (state) => state.mPassword,
+//     getMName: (state) => state.mName,
+//     getMSsn: (state) => state.mSsn,
+//     getMAge: (state) => state.mAge,
+//     getMEmail: (state) => state.mEmail,
+//     getMGender: (state) => state.mGender,
+//     getMPhone: (state) => state.mPhone,
+//     getMNickname: (state) => state.mNickname,
+//     getMRegion: (state) => state.mRegion,
+//     getMBio: (state) => state.mBio,
+//     getMMbti: (state) => state.mMbti,
+//     getMActive: (state) => state.mActive,
+//     getJwt: (state) => state.jwt,
+//     getMAttachData: (state) => state.mAttachData,
+//     getIsLogin: (state) => !!state.jwt
+//   },
+
+//   mutations: {
+//     setMember(state, payload) { Object.assign(state, payload); },
+
+//     setMid(state, payload) {
+//       state.mId = payload;
+//     },
+//     setMno(state, payload) {
+//       state.mNo = payload;
+//     },
+//     setMname(state, payload) {
+//       state.mName = payload;
+//     },
+//     setJwt(state, payload) {
+//       state.jwt = payload;
+//     },
+//     setMattachData(state, payload) {
+//       state.mAttachData = payload;
+//     }
+//   },
+
+//   actions: {
+//     saveAuth(context, payload) {
+  
+//       context.commit("setMember", payload);
+
+//       Object.keys(payload).forEach((key) => {
+//         localStorage.setItem(key, payload[key]);
+//       });
+
+//       context.commit("setMid", payload.mId);
+//       context.commit("setMno", payload.mNo);
+//       context.commit("setMname", payload.mName);
+//       context.commit("setMattachData", payload.mAttachData);
+//       context.commit("setJwt", payload.jwt);
+
+//       localStorage.setItem("mId", payload.mId);
+//       localStorage.setItem("mNo", payload.mNo);
+//       localStorage.setItem("mName", payload.mName);
+//       localStorage.setItem("jwt", payload.jwt);
+//       localStorage.setItem("mAttachData", payload.mAttachData);
+//     },
+
+//     savePhoto(context, payload) {
+//       context.commit("setMattachData", payload.mAttachData);
+//       localStorage.setItem("mAttachData", payload.mAttachData);
+//     },
+
+//     loadAuth(context) {
+
+//       const payload = {};
+//       Object.keys(localStorage).forEach((key) => {
+//         payload[key] = localStorage.getItem(key);
+//       });
+
+//       context.commit("setMember", payload);
+
+//       const mId = localStorage.getItem("mId") || "";
+//       const mNo = localStorage.getItem("mNo") || "";
+//       const mName = localStorage.getItem("mName") || "";
+//       const jwt = localStorage.getItem("jwt") || "";
+//       const mAttachData = localStorage.getItem("mAttachData") || "";
+
+//       context.commit("setMId", mId);
+//       context.commit("setMNo", mNo);
+//       context.commit("setMName", mName);
+//       context.commit("setJwt", jwt);
+//       context.commit("setMAttachData", mAttachData);
+//     },
+
+//     logOut(context) {
+//       context.commit("setMember", {
+//         mNo: "",
+//         mId: "",
+//         mPassword: "",
+//         mName: "",
+//         mSsn: "",
+//         mAge: 0,
+//         mEmail: "",
+//         mGender: "",
+//         mPhone: "",
+//         mNickname: "",
+//         mRegion: "",
+//         mBio: "",
+//         mMbti: "",
+//         mActive: "T",
+//         jwt: "",
+//         mAttachData: ""
+//       });
+
+//       localStorage.clear();
+//     }
+//   }
+// }
+
+// export default member;
+

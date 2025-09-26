@@ -80,7 +80,7 @@ async function handleLogin() {
 
       if(photoRes.data){
         store.dispatch("member/savePhoto", {
-          mAttachdata: photoRes.data.data.mpAttachdata
+          mAttachData: photoRes.data.data.mpAttachData
         });
       }
 

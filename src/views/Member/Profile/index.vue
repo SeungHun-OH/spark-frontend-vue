@@ -166,7 +166,7 @@ async function saveChange() {
 }
 
 const picture = computed(() => {
-  const data = store.getters["member/getM_attachdata"];
+  const data = store.getters["member/getMAttachData"];
   return data ? `data:image/png;base64,${data}` : null;
 });
 

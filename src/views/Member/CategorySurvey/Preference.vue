@@ -37,11 +37,11 @@ import Hobbies from "./Hobbies.vue";
 import memberCategoryApi from "@/apis/memberCategoryApi";
 import { useRouter } from "vue-router";
 
-const store = useStore();
+const store  = useStore();
 const router = useRouter();
 
 const uniqueTypes = computed(() => store.getters["memberCategory/getUniqueTypes"]);
-const activeTab = ref("");
+const activeTab   = ref("");
 
 // 첫 번째 탭 자동 선택
 if (uniqueTypes.value.length > 0) {
