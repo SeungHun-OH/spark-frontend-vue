@@ -16,7 +16,6 @@ function memberCreate(formdata) {
     console.log("member JSON 내용:", reader.result);
   };
   reader.readAsText(formdata.get("member"));
-  
 
   return axios.post("http://localhost:8040/member/create", formdata)
 }
@@ -36,7 +35,6 @@ function memberPictureGet(mNo) {
     params: { mNo: mNo }
   });
 }
-
 
 function memberInsert(member) {
   return axios.post("http://localhost:8040/member", member)

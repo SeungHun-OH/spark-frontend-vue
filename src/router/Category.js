@@ -7,6 +7,13 @@ const routes = [
     )
   },
   {
+    path: '/Member/CategorySurvey/PartnerPreference',
+    component: () => import(
+      /* webpackChunkName: "about" */
+      '@/views/Member/CategorySurvey/PartnerPreference.vue'
+    )
+  },
+  {
     path: '/Member/CategorySurvey/Hobbies',
     component: () => import(
       /* webpackChunkName: "about" */

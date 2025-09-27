@@ -88,12 +88,7 @@ const member = {
     },
 
     savePhoto(context, payload) {
-      // context.commit("setMAttachData", payload.mAttachData);
-      // localStorage.setItem("mAttachData", payload.mAttachData);
-
-      console.log("savePhoto payload >>>", payload.mAttachData);
       context.commit("setMAttachData", payload.mAttachData);
-      console.log("after commit >>>", context.state.mAttachData);
       localStorage.setItem("mAttachData", payload.mAttachData);
     },
 

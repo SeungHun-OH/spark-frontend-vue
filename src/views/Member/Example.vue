@@ -4,14 +4,15 @@
       <div class="card-header">
         Example
         <div>
-          
-          <router-link to = "/Member/CategorySurvey/Preference"> 선호도 조사 </router-link>
-
+          <router-link to="/Member/CategorySurvey/Preference"> 나의 선호도 조사 </router-link>
+        </div>
+        <div>
+          <router-link to="/Member/CategorySurvey/PartnerPreference"> 파트너 선호도 조사 </router-link>
         </div>
       </div>
 
       <div class="card-body">
-        
+
       </div>
 
     </div>

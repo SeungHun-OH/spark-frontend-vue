@@ -3,7 +3,7 @@
 
     <!-- 상단 헤더 -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h3 class="fw-bold">My Preferences</h3>
+      <h3 class="fw-bold">Partner Preferences</h3>
     </div>
 
     <!-- 탭 네비게이션 -->
@@ -52,7 +52,7 @@ async function insertMemberCategories() {
   
   const request = {
     memberNo : store.getters["member/getMNo"],
-    memberWho : "S",
+    memberWho : "P",
     preferNos : store.getters["memberCategory/getselectcategories"]
   };
 
