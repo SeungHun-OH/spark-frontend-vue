@@ -66,7 +66,7 @@ async function insertMemberCategories() {
     const response = await memberCategoryApi.insertMemberCategories(request);
     if (response.data.result === "success") {
       alert(response.data.message);
-      router.push("/")
+      router.push("/Member/CategorySurvey/PartnerPreference");
       store.commit("memberCategory/clearSelectCategories");
     }
     else {

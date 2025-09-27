@@ -75,7 +75,7 @@
         <BaseCard>
           <div class="d-flex justify-content-between">
             <h6 class="fw-bold">MyPreference</h6>
-            <i class="bi bi-pencil-square cursor-pointer"></i>
+            <i class="bi bi-pencil-square cursor-pointer" @click="routePreference('self')"></i>
           </div>
           <div>
             <span v-for="(hobby, index) in profile.interests" :key="index" class="badge bg-light text-dark me-1 mb-1">
@@ -87,7 +87,7 @@
         <BaseCard>
           <div class="d-flex justify-content-between">
             <h6 class="fw-bold">PartnerPreference</h6>
-            <i class="bi bi-pencil-square cursor-pointer"></i>
+            <i class="bi bi-pencil-square cursor-pointer" @click="routePreference('partner')"></i>
           </div>
           <div>
             <span v-for="(hobby, index) in profile.preferences" :key="index" class="badge bg-light text-dark me-1 mb-1">
@@ -144,6 +144,7 @@
 import memberApi from '@/apis/memberApi';
 import memberCategoryApi from '@/apis/memberCategoryApi';
 import BaseCard from '@/components/member/BaseCard.vue';
+import router from '@/router';
 import member from '@/store/member';
 import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
@@ -163,6 +164,15 @@ function toggleEdit(section) {
 
 function cancelEdit(section) {
   editState.value[section] = false;
+}
+
+function routePreference(state){
+  if(state === 'self'){
+    router.push("/Member/CategorySurvey/Preference")
+  }
+  else{
+    router.push("/Member/CategorySurvey/PartnerPreference")
+  }
 }
 
 async function saveChange() {
