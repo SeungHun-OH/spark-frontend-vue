@@ -21,6 +21,7 @@ function memberCreate(formdata) {
 }
 
 function memberUpdate(member) {
+  console.log("memberUpdataApis호출" + JSON.stringify(member));
   return axios.put("http://localhost:8040/member", member)
 }
 

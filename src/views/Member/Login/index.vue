@@ -37,7 +37,6 @@
 
 <script setup>
 import memberApi from "@/apis/memberApi";
-import memberCategoryApi from "@/apis/memberCategoryApi";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -72,7 +71,7 @@ async function handleLogin() {
 
       // dispatch Login Photo vuex에 로그인 정보 저장
       const photoRes = await memberApi.memberPictureGet(mNo);
-      // console.log(photoRes.data);
+      console.log(photoRes.data);
 
       if(photoRes.data){
         store.dispatch("member/savePhoto", {

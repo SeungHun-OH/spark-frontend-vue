@@ -159,19 +159,26 @@ const memberEdit = ref({ ...store.getters["member/getMember"] })
 
 function toggleEdit(section) {
   editState.value[section] = true
-
-  console.log(memberEdit.value);
 }
 
-function CancelEdit(section) {
+function cancelEdit(section) {
   editState.value[section] = false;
 }
 
 async function saveChange() {
   try {
-    const response = await memberApi.memberUpdate(memberEdit.value);
-    member.value = { ...memberEdit.value };
+
+    store.commit("member/setMember", memberEdit.value);
+
+    //커밋후에 지워서 보내기
+    delete memberEdit.value.jwt;
+    delete memberEdit.value.mAttachData;
+
     editState.value.basic = false
+
+    console.log("업데이트 세이브 체인지 수정된후" + JSON.stringify(memberEdit.value));
+
+    const response = await memberApi.memberUpdate(memberEdit.value);
 
     if (response.data.result == "success") {
       alert("업데이트 성공" + response.data.message);
@@ -200,10 +207,6 @@ const profile = ref({
   interests: [],
   preferences: [],
   MatchedPreferences: []
-  //   ageRange: "25 - 35",
-  //   distance: "25 km",
-  //   lookingFor: "Long-term relationship"
-  // }
 })
 
 onMounted(async () => {
@@ -217,9 +220,6 @@ onMounted(async () => {
 
   // profile.value.interests = resInterests;
   // profile.value.preferences = resPreferences;
-  
-  console.log(resInterests);
-  console.log(resPreferences);
 
   profile.value.MatchedPreferences = resInterests.filter(item => {
     return resPreferences.includes(item);
@@ -232,11 +232,6 @@ onMounted(async () => {
   profile.value.preferences = resPreferences.filter(item => {
     return !resInterests.includes(item);
   });
-
-  console.log("Match", profile.value.MatchedPreferences);
-  console.log("interests", profile.value.interests);
-  console.log("preferences", profile.value.preferences);
-
 
 
   // const common = profile.value.interests.filter(item =>{

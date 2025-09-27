@@ -42,7 +42,30 @@ const member = {
   },
 
   mutations: {
-    setMember(state, payload) { Object.assign(state, payload); },
+    //로그인 로그아웃 전용
+    // setMemberLogin(state, payload) { Object.assign(state, payload); },
+    //Update 전용
+    setMember(state, payload) {
+    const clean = {
+      mNo: payload.mNo,
+      mId: payload.mId,
+      mPassword: payload.mPassword,
+      mName: payload.mName,
+      mSsn: payload.mSsn,
+      mAge: payload.mAge,
+      mEmail: payload.mEmail,
+      mGender: payload.mGender,
+      mPhone: payload.mPhone,
+      mNickname: payload.mNickname,
+      mRegion: payload.mRegion,
+      mBio: payload.mBio,
+      mMbti: payload.mMbti,
+      mActive: payload.mActive,
+      jwt: payload.jwt,
+      mAttachData: payload.mAttachData
+    };
+    Object.assign(state, clean);
+    },
 
     setMNo(state, payload) { state.mNo = payload; },
     setMId(state, payload) { state.mId = payload; },
