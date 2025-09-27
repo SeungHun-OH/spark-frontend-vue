@@ -54,6 +54,10 @@ const memberCategory = {
 
     setCategories(state, payload) {
       state.categories = payload;
+    },
+
+    clearSelectCategories(state){
+      state.selectcategories = [];
     }
   },
 

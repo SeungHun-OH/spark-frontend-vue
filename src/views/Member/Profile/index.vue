@@ -78,7 +78,7 @@
             <i class="bi bi-pencil-square cursor-pointer"></i>
           </div>
           <div>
-            <span v-for="(hobby, index) in profile.interests  " :key="index" class="badge bg-light text-dark me-1 mb-1">
+            <span v-for="(hobby, index) in profile.interests" :key="index" class="badge bg-light text-dark me-1 mb-1">
               {{ hobby }}
             </span>
           </div>
@@ -96,13 +96,13 @@
           </div>
         </BaseCard>
 
-          <BaseCard>
+        <BaseCard>
           <div class="d-flex justify-content-between">
             <h6 class="fw-bold">MatchedPreferences</h6>
             <i class="bi bi-pencil-square cursor-pointer"></i>
           </div>
           <div>
-            <span v-for="(hobby, index) in profile.preferences" :key="index" class="badge bg-light text-dark me-1 mb-1">
+            <span v-for="(hobby, index) in profile.MatchedPreferences" :key="index" class="badge bg-light text-dark me-1 mb-1">
               {{ hobby }}
             </span>
           </div>
@@ -115,9 +115,9 @@
             <h6 class="fw-bold">Dating Preferences</h6>
             <i class="bi bi-pencil-square cursor-pointer"></i>
           </div>
-          <p class="mb-1">Age Range: {{ profile.preferences.ageRange }}</p>
+          <!-- <p class="mb-1">Age Range: {{ profile.preferences.ageRange }}</p>
           <p class="mb-1">Maximum Distance: {{ profile.preferences.distance }}</p>
-          <p class="mb-0">Looking For: <span class="fw-bold">{{ profile.preferences.lookingFor }}</span></p>
+          <p class="mb-0">Looking For: <span class="fw-bold">{{ profile.preferences.lookingFor }}</span></p> -->
         </BaseCard>
 
         <!-- 계정 설정 -->
@@ -198,7 +198,8 @@ const profile = ref({
   education: "Computer Science, Stanford University",
   about: "Software engineer who loves cooking, traveling, and meeting new people. Always up for trying new restaurants or exploring hidden gems in the city!",
   interests: [],
-  preferences: []
+  preferences: [],
+  MatchedPreferences: []
   //   ageRange: "25 - 35",
   //   distance: "25 km",
   //   lookingFor: "Long-term relationship"
@@ -209,21 +210,46 @@ onMounted(async () => {
   const mNo = store.getters["member/getMNo"];
   const res = await memberCategoryApi.getPreferenceByMemberNo(mNo);
 
-  console.log("CateRes무엇?", JSON.stringify(res.data.data));
-  profile.value.interests = res.data.data.selfPrefers.map(item => item.pcName);
-  profile.value.preferences = res.data.data.partnerPrefers.map(item => item.pcName);
+  // console.log("CateRes무엇?", JSON.stringify(res.data.data));
 
-  const common = profile.value.interests.filter(item =>{
-    profile.value.preferences.includes(item);
+  const resInterests = res.data.data.selfPrefers.map(item => item.pcName);
+  const resPreferences = res.data.data.partnerPrefers.map(item => item.pcName);
+
+  // profile.value.interests = resInterests;
+  // profile.value.preferences = resPreferences;
+  
+  console.log(resInterests);
+  console.log(resPreferences);
+
+  profile.value.MatchedPreferences = resInterests.filter(item => {
+    return resPreferences.includes(item);
   });
 
-  const onlyInterests = profile.value.interests.filter(item => {
-    !profile.value.preferences.includes(item);
+  profile.value.interests = resInterests.filter(item => {
+    return !resPreferences.includes(item);
   });
 
-  const onlyPreferences = profile.value.preferences.filter(item => {
-    !profile.value.interests.includes(item);
+  profile.value.preferences = resPreferences.filter(item => {
+    return !resInterests.includes(item);
   });
+
+  console.log("Match", profile.value.MatchedPreferences);
+  console.log("interests", profile.value.interests);
+  console.log("preferences", profile.value.preferences);
+
+
+
+  // const common = profile.value.interests.filter(item =>{
+  //   profile.value.preferences.includes(item);
+  // });
+
+  // const onlyInterests = profile.value.interests.filter(item => {
+  //   !profile.value.preferences.includes(item);
+  // });
+
+  // const onlyPreferences = profile.value.preferences.filter(item => {
+  //   !profile.value.interests.includes(item);
+  // });
 });
 
 

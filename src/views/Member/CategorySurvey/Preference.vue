@@ -37,11 +37,11 @@ import Hobbies from "./Hobbies.vue";
 import memberCategoryApi from "@/apis/memberCategoryApi";
 import { useRouter } from "vue-router";
 
-const store  = useStore();
+const store = useStore();
 const router = useRouter();
 
 const uniqueTypes = computed(() => store.getters["memberCategory/getUniqueTypes"]);
-const activeTab   = ref("");
+const activeTab = ref("");
 
 // 첫 번째 탭 자동 선택
 if (uniqueTypes.value.length > 0) {
@@ -49,29 +49,30 @@ if (uniqueTypes.value.length > 0) {
 }
 
 async function insertMemberCategories() {
-  
+
   const request = {
-    memberNo : store.getters["member/getMNo"],
-    memberWho : "S",
-    preferNos : store.getters["memberCategory/getselectcategories"]
+    memberNo: store.getters["member/getMNo"],
+    memberWho: "S",
+    preferNos: store.getters["memberCategory/getselectcategories"]
   };
 
-  if(request.memberNo == null){
+  if (request.memberNo == null) {
     alert("로그인이 안되어 있습니다");
   }
-  else if(request.preferNos == null){
+  else if (request.preferNos == null) {
     alert("선택된 카테고리가 없습니다")
   }
-  else{
+  else {
     const response = await memberCategoryApi.insertMemberCategories(request);
-    if(response.data.result === "success"){
+    if (response.data.result === "success") {
       alert(response.data.message);
       router.push("/")
+      store.commit("memberCategory/clearSelectCategories");
     }
-    else{
+    else {
       alert(response.data.message);
     }
-  }  
+  }
 }
 
 async function getAllcategoryStatic() {
