@@ -2,7 +2,8 @@ const getDefaultState = () => {
   return {
     PreferenceResponse: {},
     categories: [],
-    selectcategories: []
+    selectcategories: [],
+    selectedItems: []
   }
 }
 
@@ -12,10 +13,13 @@ const memberCategory = {
   state: {
     PreferenceResponse: {},
     categories: [],
-    selectcategories: []    
+    selectcategories: [],    
+    selectedItems: []
   },
 
   getters: {
+    getselectedItems: (state) => state.selectedItems,
+
     getPreferenceResponse: (state) => state.PreferenceResponse,
     
     getselectcategories: (state) => state.selectcategories,
@@ -47,6 +51,10 @@ const memberCategory = {
   },
 
   mutations: {
+    setselectedItems(state, payload){
+      state.selectedItems = payload;
+    },
+
     setPreferenceResponse(state, payload){
       state.PreferenceResponse = payload;
     },

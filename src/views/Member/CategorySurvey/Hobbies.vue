@@ -31,13 +31,6 @@ function toggleItem(item) {
   } else {
     selectedItems.value.push(item);
   }
-
-  // if (selectedItems.value.includes(item)) {
-  //   selectedItems.value = selectedItems.value.filter(h => h !== item);
-  //   removeItem(item);
-  // } else {
-  //   selectedItems.value.push(item);
-  // }
 }
 
 

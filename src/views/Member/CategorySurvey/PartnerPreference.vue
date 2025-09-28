@@ -15,7 +15,6 @@
       </li>
     </ul>
 
-    <!-- :initialItems="getInitialItems(type)"  -->
     <!-- 카드들 -->
     <div v-for="type in uniqueTypes" :key="type" v-show="activeTab === type">
       <Hobbies :type="type" />
@@ -92,7 +91,6 @@ onMounted(async () => {
       alert(response.data.message);
 
       selectedItems.value = response.data.data;
-
       store.commit("memberCategory/setPreferenceResponse", response.data.data);
     }
   }

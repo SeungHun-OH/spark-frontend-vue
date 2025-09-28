@@ -81,11 +81,12 @@ async function getAllcategoryStatic() {
   store.commit("memberCategory/setCategories", response.data);
 }
 
+const selectedItems = ref(null);
+
 onMounted(async () => {
   const mno = (store.getters["member/getMNo"]);
   if (mno !== null) {
     const response = await memberCategoryApi.getPreferenceByMemberNo(mno)
-    console.log("멤버 카테고리 수정해보까?" + JSON.stringify(response.data));
   }
 })
 
