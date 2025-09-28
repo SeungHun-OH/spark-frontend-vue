@@ -14,10 +14,17 @@ function getPreferenceByMemberNo(memberNo){
   });
 }
 
+function deleteCategoriesByMemberWho(memberNo, memberWho){
+  return axios.delete("http://localhost:8040/member/membercategories", {
+    params: { memberNo: memberNo, memberWho: memberWho }
+  })
+}
+
 const memberCategoryApi = {
   getAllcategoryStatic, 
   insertMemberCategories,
-  getPreferenceByMemberNo
+  getPreferenceByMemberNo,
+  deleteCategoriesByMemberWho
 };
 
 export default memberCategoryApi;

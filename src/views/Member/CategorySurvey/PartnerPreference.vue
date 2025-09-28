@@ -63,11 +63,13 @@ async function insertMemberCategories() {
     alert("선택된 카테고리가 없습니다")
   }
   else {
+    const resdelete = await memberCategoryApi.deleteCategoriesByMemberWho(request.memberNo, request.memberWho);
+    
     const response = await memberCategoryApi.insertMemberCategories(request);
     if (response.data.result === "success") {
       alert(response.data.message);
       router.push("/")
-      
+
       store.commit("memberCategory/clearSelectCategories");
     }
     else {
@@ -88,7 +90,7 @@ onMounted(async () => {
 
     if (response.data.result === "success") {
       alert("PartnerPreference실행", response.data.message);
-      
+
       store.commit("memberCategory/resetState");
       store.commit("memberCategory/setPreferenceResponse", response.data.data);
       store.commit("memberCategory/setSelectedItems", response.data.data.partnerPrefers);

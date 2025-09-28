@@ -28,6 +28,7 @@ const meta = computed(() => {
 function toggleItem(item) {
   if (selectedItems.value.some(h => h.pcNo === item.pcNo)) {
     selectedItems.value = selectedItems.value.filter(h => h.pcNo !== item.pcNo);
+    removeItem(item);
   } else {
     selectedItems.value.push(item);
   }
@@ -37,7 +38,6 @@ function toggleItem(item) {
 // 삭제
 function removeItem(item) {
   selectedItems.value = selectedItems.value.filter(h => h.pcNo !== item.pcNo);
-  // selectedItems.value = selectedItems.value.filter(h => h !== item);
   store.commit("memberCategory/removeSelectCategory", item.pcNo);
   console.log("removeItem 삭제", item.pcNo);
 }
@@ -48,11 +48,6 @@ watch(selectedItems, (newItems) => {
 }, { deep: true });
 
 onMounted(() => {
-  // selectedItems.value =
-  //   (store.getters["memberCategory/getPreferenceResponse"]?.selfPrefers || []).filter((item) => {
-  //     return item.pcType === props.type
-  //   });
-
   selectedItems.value =
     (store.getters["memberCategory/getSelectedItems"] || []).filter((item) => {
       return item.pcType === props.type
