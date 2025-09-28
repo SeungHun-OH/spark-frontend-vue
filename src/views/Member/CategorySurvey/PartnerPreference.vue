@@ -17,7 +17,7 @@
 
     <!-- 카드들 -->
     <div v-for="type in uniqueTypes" :key="type" v-show="activeTab === type">
-      <Hobbies :type="type" />
+      <Hobbies :type="type" :initialItems="getInitialItems(type)" />
     </div>
 
     <!-- 저장 버튼 -->
@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import Hobbies from "./Hobbies.vue";
 import memberCategoryApi from "@/apis/memberCategoryApi";
@@ -80,6 +80,41 @@ async function getAllcategoryStatic() {
   console.log(response.data);
   store.commit("memberCategory/setCategories", response.data);
 }
+
+const selectedItems = ref(null);
+
+onMounted(async () => {
+  const mno = (store.getters["member/getMNo"]);
+  if (mno !== null) {
+    const response = await memberCategoryApi.getPreferenceByMemberNo(mno)
+
+    if (response.data.result === "success") {
+      alert(response.data.message);
+      console.log("멤버 카테고리 수정해보까?" + JSON.stringify(response.data.data));
+      selectedItems.value = response.data.data;
+
+      store.commit("memberCategory/setPreferenceResponse", response.data.data);
+
+      const partnerNos = response.data.data.partnerPrefers.map((item) => {
+        return item.pcNo;
+      });
+      store.commit("memberCategory/addSelectCategories", partnerNos);
+      console.log("...partnerNos", ...partnerNos);
+    }
+  }
+})
+
+function getInitialItems(type) {
+  console.log("타입은 무엇?", type);
+  if (!selectedItems.value) return [];
+  return (selectedItems.value.partnerPrefers || []).filter(
+    (item) => {
+      return item.pcType === type
+    }
+  );
+}
+
+
 
 </script>
 

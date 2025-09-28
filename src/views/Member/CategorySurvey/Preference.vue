@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import Hobbies from "./Hobbies.vue";
 import memberCategoryApi from "@/apis/memberCategoryApi";
@@ -80,6 +80,14 @@ async function getAllcategoryStatic() {
   console.log(response.data);
   store.commit("memberCategory/setCategories", response.data);
 }
+
+onMounted(async () => {
+  const mno = (store.getters["member/getMNo"]);
+  if (mno !== null) {
+    const response = await memberCategoryApi.getPreferenceByMemberNo(mno)
+    console.log("멤버 카테고리 수정해보까?" + JSON.stringify(response.data));
+  }
+})
 
 </script>
 

@@ -1,14 +1,20 @@
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 const props = defineProps({
-  type: String // "HOBBY", "TRAIT", "IDEALTYPE" ...
+  type: String, // "HOBBY", "TRAIT", "IDEALTYPE" ...
+  initialItems: {
+    type: Array,
+    default: () => []
+  }
 });
 
 const store = useStore();
-const selectedItems = ref([]);
+const selectedItems = ref([...props.initialItems]);
 const customInput = ref("");
+
+const items = computed(() => {return props.initialItems});
 
 // 타입별 카테고리 목록
 const options = computed(() => {
@@ -27,6 +33,9 @@ function toggleItem(item) {
   } else {
     selectedItems.value.push(item);
   }
+
+  // 2. JSON으로 문자열화해서 찍기
+  console.log("초기 initialItems(JSON):", JSON.stringify(props.initialItems));
 }
 
 // 커스텀 입력
@@ -56,8 +65,14 @@ function saveSelected() {
 watch(selectedItems, (newItems) => {
   const pcNos = newItems.map(item => item.pcNo).filter(no => no !== null);
   store.commit("memberCategory/addSelectCategories", pcNos);
-}, {deep: true});
+}, { deep: true });
+
+onMounted(() => {
+  // selectedItems.value.pcNo = store.getters["memberCategory/getselectcategories"];
+});
+
 </script>
+
 
 <template>
   <div class="card shadow-sm p-4 mb-4">
@@ -73,23 +88,14 @@ watch(selectedItems, (newItems) => {
 
     <!-- 입력 -->
     <div class="input-group mb-3">
-      <input 
-        v-model="customInput" 
-        :placeholder="`Enter a custom ${props.type.toLowerCase()}...`"
-        class="form-control" 
-        @keyup.enter="addCustom" />
+      <input v-model="customInput" :placeholder="`Enter a custom ${props.type.toLowerCase()}...`" class="form-control" @keyup.enter="addCustom" />
       <button class="btn btn-outline-dark" @click="addCustom">+</button>
     </div>
 
     <!-- 옵션 -->
     <h6 class="fw-bold mb-2">Popular {{ props.type }}</h6>
     <div class="d-flex flex-wrap gap-2">
-      <button 
-        v-for="item in options" 
-        :key="item.pcNo" 
-        class="btn btn-sm"
-        :class="selectedItems.includes(item) ? 'btn-dark text-white' : 'btn-outline-dark'"
-        @click="toggleItem(item)">
+      <button v-for="item in options" :key="item.pcNo" class="btn btn-sm" :class="selectedItems.includes(item) ? 'btn-dark text-white' : 'btn-outline-dark'" @click="toggleItem(item)">
         {{ item.pcName }}
       </button>
     </div>
@@ -99,6 +105,3 @@ watch(selectedItems, (newItems) => {
     </div>
   </div>
 </template>
-
-
-

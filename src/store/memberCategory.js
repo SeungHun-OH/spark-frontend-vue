@@ -3,11 +3,15 @@ const memberCategory = {
   namespaced: true,
 
   state: {
+    PreferenceResponse: {},
+
     categories: [],
-    selectcategories: []
+    selectcategories: []    
   },
 
   getters: {
+    getPreferenceResponse: (state) => state.PreferenceResponse,
+    
     getselectcategories: (state) => state.selectcategories,
 
     getCategories: (state) => state.categories,
@@ -37,6 +41,9 @@ const memberCategory = {
   },
 
   mutations: {
+    setPreferenceResponse(state, payload){
+      state.PreferenceResponse = payload;
+    },
 
     // 선택 카테고리 추가 중복 방지
     addSelectCategories(state, bnos){
