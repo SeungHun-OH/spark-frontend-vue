@@ -11,10 +11,18 @@ const props = defineProps({
 });
 
 const store = useStore();
-const selectedItems = ref([...props.initialItems]);
+
+const selectedItems = computed(() => {
+  return (store.getters["memberCategory/getPreferenceResponse"]?.selfPrefers || [])
+    .filter((item) => {
+      return item.pcType === props.type
+    });
+});
+
+console.log("selectedItems", selectedItems.value);
+
 const customInput = ref("");
 
-const items = computed(() => {return props.initialItems});
 
 // 타입별 카테고리 목록
 const options = computed(() => {
@@ -35,7 +43,7 @@ function toggleItem(item) {
   }
 
   // 2. JSON으로 문자열화해서 찍기
-  console.log("초기 initialItems(JSON):", JSON.stringify(props.initialItems));
+  // console.log("초기 initialItems(JSON):", JSON.stringify(props.initialItems));
 }
 
 // 커스텀 입력
@@ -68,6 +76,8 @@ watch(selectedItems, (newItems) => {
 }, { deep: true });
 
 onMounted(() => {
+  //  console.log("Hobbyis Onmounted getPreferenceReponse출력", store.getters["memberCategory/getPreferenceResponse"]?.selfPrefers || []);
+  //  console.log("SelectedItem출력", selectedItems.value);
   // selectedItems.value.pcNo = store.getters["memberCategory/getselectcategories"];
 });
 
