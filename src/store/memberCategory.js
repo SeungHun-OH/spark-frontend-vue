@@ -18,7 +18,7 @@ const memberCategory = {
   },
 
   getters: {
-    getselectedItems: (state) => state.selectedItems,
+    getSelectedItems: (state) => state.selectedItems,
 
     getPreferenceResponse: (state) => state.PreferenceResponse,
     
@@ -51,7 +51,7 @@ const memberCategory = {
   },
 
   mutations: {
-    setselectedItems(state, payload){
+    setSelectedItems(state, payload){
       state.selectedItems = payload;
     },
 

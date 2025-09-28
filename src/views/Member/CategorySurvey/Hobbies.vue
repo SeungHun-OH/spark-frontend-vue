@@ -26,7 +26,7 @@ const meta = computed(() => {
 
 // 토글
 function toggleItem(item) {
-  if(selectedItems.value.some(h => h.pcNo === item.pcNo)){
+  if (selectedItems.value.some(h => h.pcNo === item.pcNo)) {
     selectedItems.value = selectedItems.value.filter(h => h.pcNo !== item.pcNo);
   } else {
     selectedItems.value.push(item);
@@ -48,8 +48,13 @@ watch(selectedItems, (newItems) => {
 }, { deep: true });
 
 onMounted(() => {
+  // selectedItems.value =
+  //   (store.getters["memberCategory/getPreferenceResponse"]?.selfPrefers || []).filter((item) => {
+  //     return item.pcType === props.type
+  //   });
+
   selectedItems.value =
-    (store.getters["memberCategory/getPreferenceResponse"]?.selfPrefers || []).filter((item) => {
+    (store.getters["memberCategory/getSelectedItems"] || []).filter((item) => {
       return item.pcType === props.type
     });
 });
@@ -73,9 +78,8 @@ onMounted(() => {
     <h6 class="fw-bold mb-2">Popular {{ props.type }}</h6>
     <div class="d-flex flex-wrap gap-2">
 
-      <button v-for="item in options" :key="item.pcNo" class="btn btn-sm" 
-      :class="selectedItems.some(selected => selected.pcNo === item.pcNo) 
-      ? 'btn-dark text-white' : 'btn-outline-dark'" @click="toggleItem(item)">
+      <button v-for="item in options" :key="item.pcNo" class="btn btn-sm" :class="selectedItems.some(selected => selected.pcNo === item.pcNo)
+        ? 'btn-dark text-white' : 'btn-outline-dark'" @click="toggleItem(item)">
 
         {{ item.pcName }}
       </button>

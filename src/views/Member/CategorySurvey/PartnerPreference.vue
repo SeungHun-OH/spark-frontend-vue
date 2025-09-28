@@ -67,6 +67,7 @@ async function insertMemberCategories() {
     if (response.data.result === "success") {
       alert(response.data.message);
       router.push("/")
+      
       store.commit("memberCategory/clearSelectCategories");
     }
     else {
@@ -80,18 +81,17 @@ async function getAllcategoryStatic() {
   store.commit("memberCategory/setCategories", response.data);
 }
 
-const selectedItems = ref(null);
-
 onMounted(async () => {
   const mno = (store.getters["member/getMNo"]);
   if (mno !== null) {
-    const response = await memberCategoryApi.getPreferenceByMemberNo(mno)
+    const response = await memberCategoryApi.getPreferenceByMemberNo(mno);
 
     if (response.data.result === "success") {
-      alert(response.data.message);
-
-      selectedItems.value = response.data.data;
+      alert("PartnerPreference실행", response.data.message);
+      
+      store.commit("memberCategory/resetState");
       store.commit("memberCategory/setPreferenceResponse", response.data.data);
+      store.commit("memberCategory/setSelectedItems", response.data.data.partnerPrefers);
     }
   }
 })
