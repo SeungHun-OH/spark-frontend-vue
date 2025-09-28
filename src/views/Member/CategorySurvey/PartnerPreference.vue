@@ -15,9 +15,10 @@
       </li>
     </ul>
 
+    <!-- :initialItems="getInitialItems(type)"  -->
     <!-- 카드들 -->
     <div v-for="type in uniqueTypes" :key="type" v-show="activeTab === type">
-      <Hobbies :type="type" :initialItems="getInitialItems(type)" />
+      <Hobbies :type="type" />
     </div>
 
     <!-- 저장 버튼 -->
@@ -104,17 +105,15 @@ onMounted(async () => {
   }
 })
 
-function getInitialItems(type) {
-  // console.log("타입은 무엇?", type);
-  if (!selectedItems.value) return [];
-  return (selectedItems.value.partnerPrefers || []).filter(
-    (item) => {
-      return item.pcType === type
-    }
-  );
-}
-
-
+// function getInitialItems(type) {
+//   // console.log("타입은 무엇?", type);
+//   if (!selectedItems.value) return [];
+//   return (selectedItems.value.partnerPrefers || []).filter(
+//     (item) => {
+//       return item.pcType === type
+//     }
+//   );
+// }
 
 </script>
 

@@ -4,20 +4,11 @@ import { useStore } from "vuex";
 
 const props = defineProps({
   type: String, // "HOBBY", "TRAIT", "IDEALTYPE" ...
-  initialItems: {
-    type: Array,
-    default: () => []
-  }
 });
 
 const store = useStore();
 
-const selectedItems = computed(() => {
-  return (store.getters["memberCategory/getPreferenceResponse"]?.selfPrefers || [])
-    .filter((item) => {
-      return item.pcType === props.type
-    });
-});
+const selectedItems = ref([]);
 
 console.log("selectedItems", selectedItems.value);
 
@@ -41,18 +32,8 @@ function toggleItem(item) {
   } else {
     selectedItems.value.push(item);
   }
-
-  // 2. JSON으로 문자열화해서 찍기
-  // console.log("초기 initialItems(JSON):", JSON.stringify(props.initialItems));
 }
 
-// 커스텀 입력
-function addCustom() {
-  if (customInput.value && !selectedItems.value.some(i => i.pcName === customInput.value)) {
-    selectedItems.value.push({ pcNo: null, pcName: customInput.value, pcType: props.type });
-    customInput.value = "";
-  }
-}
 
 // 삭제
 function removeItem(item) {
@@ -61,24 +42,16 @@ function removeItem(item) {
   console.log("removeItem 삭제", item.pcNo);
 }
 
-// 저장
-function saveSelected() {
-  store.commit(
-    "memberCategory/addSelectCategories",
-    selectedItems.value.map(item => item.pcNo).filter(no => no !== null)
-  );
-  alert(props.type + "저장완료");
-}
-
 watch(selectedItems, (newItems) => {
   const pcNos = newItems.map(item => item.pcNo).filter(no => no !== null);
   store.commit("memberCategory/addSelectCategories", pcNos);
 }, { deep: true });
 
 onMounted(() => {
-  //  console.log("Hobbyis Onmounted getPreferenceReponse출력", store.getters["memberCategory/getPreferenceResponse"]?.selfPrefers || []);
-  //  console.log("SelectedItem출력", selectedItems.value);
-  // selectedItems.value.pcNo = store.getters["memberCategory/getselectcategories"];
+  selectedItems.value = 
+  (store.getters["memberCategory/getPreferenceResponse"]?.selfPrefers || []).filter((item) => {
+    return item.pcType === props.type
+  });
 });
 
 </script>
@@ -111,7 +84,40 @@ onMounted(() => {
     </div>
 
     <div>
-      <button class="btn btn-info-primary mt-3" @click="saveSelected">저장</button>
+      <button class="btn btn-info-primary mt-3" @click="saveSelected"></button>
     </div>
   </div>
 </template>
+
+
+
+
+ <!-- 커스텀 입력
+ function addCustom() {
+   if (customInput.value && !selectedItems.value.some(i => i.pcName === customInput.value)) {
+     selectedItems.value.push({ pcNo: null, pcName: customInput.value, pcType: props.type });
+     customInput.value = "";
+   }
+ }
+
+ 저장
+ function saveSelected() {
+   store.commit(
+     "memberCategory/addSelectCategories",
+     selectedItems.value.map(item => item.pcNo).filter(no => no !== null)
+   );
+   alert(props.type + "저장완료");
+ } -->
+
+
+   <!-- initialItems: {
+     type: Array,
+     default: () => []
+  } -->
+
+  <!-- const selectedItems = computed(() => {
+  return (store.getters["memberCategory/getPreferenceResponse"]?.selfPrefers || [])
+    .filter((item) => {
+      return item.pcType === props.type
+    });
+}); -->
