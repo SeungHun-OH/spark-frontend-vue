@@ -78,7 +78,6 @@ async function insertMemberCategories() {
 
 async function getAllcategoryStatic() {
   const response = await memberCategoryApi.getAllcategoryStatic();
-  // console.log(response.data);
   store.commit("memberCategory/setCategories", response.data);
 }
 
@@ -91,29 +90,13 @@ onMounted(async () => {
 
     if (response.data.result === "success") {
       alert(response.data.message);
-      // console.log("멤버 카테고리 수정해보까?" + JSON.stringify(response.data.data));
+
       selectedItems.value = response.data.data;
 
       store.commit("memberCategory/setPreferenceResponse", response.data.data);
-
-      const partnerNos = response.data.data.partnerPrefers.map((item) => {
-        return item.pcNo;
-      });
-      store.commit("memberCategory/addSelectCategories", partnerNos);
-      console.log("...partnerNos", ...partnerNos);
     }
   }
 })
-
-// function getInitialItems(type) {
-//   // console.log("타입은 무엇?", type);
-//   if (!selectedItems.value) return [];
-//   return (selectedItems.value.partnerPrefers || []).filter(
-//     (item) => {
-//       return item.pcType === type
-//     }
-//   );
-// }
 
 </script>
 

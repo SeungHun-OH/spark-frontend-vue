@@ -1,10 +1,16 @@
+const getDefaultState = () => {
+  return {
+    PreferenceResponse: {},
+    categories: [],
+    selectcategories: []
+  }
+}
 
 const memberCategory = {
   namespaced: true,
 
   state: {
     PreferenceResponse: {},
-
     categories: [],
     selectcategories: []    
   },
@@ -65,6 +71,10 @@ const memberCategory = {
 
     clearSelectCategories(state){
       state.selectcategories = [];
+    },
+
+    resetState(state) {
+      Object.assign(state, getDefaultState());
     }
   },
 
