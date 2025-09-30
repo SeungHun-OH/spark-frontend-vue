@@ -28,9 +28,9 @@
       <!-- <router-link to="/Member/Profile" class="nav-link" :class="{ active: $route.path === '/Member/Profile' }"><i class="bi bi-person"></i> Profile</router-link> -->
     </nav>
 
-    <!-- <div>
+    <div>
       <Example />
-    </div> -->
+    </div>
 
     <div class="footer">
       <div class="d-flex align-items-center">

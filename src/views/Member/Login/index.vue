@@ -13,11 +13,9 @@
 
         <!-- 비밀번호 -->
         <div class="form-floating mb-3">
-          <input :type="showPassword ? 'text' : 'password'" class="form-control" id="mpassword"
-                 v-model="member.mPassword" placeholder="비밀번호" required />
+          <input :type="showPassword ? 'text' : 'password'" class="form-control" id="mpassword" v-model="member.mPassword" placeholder="비밀번호" required />
           <label for="mpassword"><i class="bi bi-lock me-2"></i>비밀번호</label>
-          <button class="btn btn-sm btn-outline-secondary mt-2" type="button"
-                  @click="showPassword = !showPassword">
+          <button class="btn btn-sm btn-outline-secondary mt-2" type="button" @click="showPassword = !showPassword">
             <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
           </button>
         </div>
@@ -73,7 +71,7 @@ async function handleLogin() {
       const photoRes = await memberApi.memberPictureGet(mNo);
       console.log(photoRes.data);
 
-      if(photoRes.data){
+      if (photoRes.data) {
         store.dispatch("member/savePhoto", {
           mAttachData: photoRes.data.data.mpAttachData
         });

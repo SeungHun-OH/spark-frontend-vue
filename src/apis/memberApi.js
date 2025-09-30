@@ -45,6 +45,14 @@ function memberInsertPicture(formdata) {
   return axios.post("http://localhost:8040/member/picture", formdata)
 }
 
+function memberGetJwt(jwt) {
+  return axios.get("http://localhost:8040/member/getjwt", {
+    headers: {
+      Authorization : "Bearer " + jwt
+    }
+  })
+}
+
 const memberApi = {
   memberLogin,
   memberCreate,
@@ -55,6 +63,8 @@ const memberApi = {
 
   memberInsert,
   memberInsertPicture,
+
+  memberGetJwt
 };
 
 export default memberApi;

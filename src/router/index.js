@@ -7,6 +7,7 @@ import HomeView from '../views/HomeView.vue'
 import Member from './Member'
 import Category from './Category'
 import Profile from '@/views/Profile.vue';
+import Thread from './Thread';
 
 const routes = [
   
@@ -30,7 +31,8 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   ...Member,
-  ...Category
+  ...Category,
+  ...Thread
 ]
 
 const router = createRouter({
