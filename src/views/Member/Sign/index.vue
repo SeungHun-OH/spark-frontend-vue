@@ -161,7 +161,7 @@ const handleSubmit = async () => {
       alert(LoginResponse.data.message);
       console.log(LoginResponse.data);
 
-      const mNo = LoginResponse.data.mNo;
+      const mNo = LoginResponse.data.data.mNo;
 
       // dispatch login vuex에 로그인 정보 저장
       store.dispatch("member/saveAuth", {

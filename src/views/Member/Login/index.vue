@@ -61,7 +61,7 @@ async function handleLogin() {
       alert(response.data.message);
       console.log(response.data);
 
-      const mNo = response.data.mNo;
+      const mNo = response.data.data.mNo;
 
       // dispatch login vuex에 로그인 정보 저장
       store.dispatch("member/saveAuth", {
