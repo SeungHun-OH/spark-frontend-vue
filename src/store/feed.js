@@ -3,6 +3,8 @@ const feed = {
   //namespaced : 상태들이 소속되어 있는 그룹 이름 //하위상태는 무조건 넣어야 함
   namespaced: true,
   state: {
+    fno:"",
+    fmemberno:"",
     fcontent:"",
     fdate:""
   },
@@ -11,7 +13,7 @@ const feed = {
   },
   mutations: {
     setContent(state, payload) {
-      state.content = payload;
+      state.fcontent = payload;
     },
     setDate(state, payload) {
       state.fdate = payload;
