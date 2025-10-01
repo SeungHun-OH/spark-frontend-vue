@@ -8,7 +8,7 @@
       <div style="flex:1;">
         <div class="d-flex align-items-center justify-content-between">
           <div>
-            <h4 class="mb-0">Alex Johnson</h4>
+            <h4 class="mb-0">{{ profile.mname }}</h4>
             <small class="text-muted">6 posts · 156 followers · 89 following</small>
           </div>
           <div>
@@ -16,7 +16,7 @@
             <button class="btn btn-outline-secondary btn-sm">Share Profile</button>
           </div>
         </div>
-        <p class="mt-2 mb-0 text-muted">Software engineer who loves cooking, traveling, and meeting new people.</p>
+        <p class="mt-2 mb-0 text-muted">{{ profile.mbio }}</p>
         <div class="mt-2">
           <span class="badge bg-light text-dark me-1">Cooking</span>
           <span class="badge bg-light text-dark me-1">Travel</span>
@@ -36,8 +36,8 @@
 
     <!-- grid exactly like provided image (3 columns) -->
     <div class="my-post-grid">
-      <div class="post-item" v-for="(p, i) in posts" :key="i">
-        <img :src="p" @click="openPost(i)" />
+      <div class="post-item" v-for="p, i in feedNoList" :key="i" @click="openPost(i)">
+        <img :src="`http://localhost:8040/feedPicture/picture/${p.fpNo}`" />
       </div>
     </div>
 
@@ -59,10 +59,10 @@
               <!-- 다음 버튼 -->
               <button v-if="currentImageIndex < modalPost.images.length - 1" @click="nextImage"
                 style="position:absolute; top:45%; right:10px; transform:translateY(-50%); font-size:8rem; background:none; border:none; color:white; cursor:pointer;">
+
                 ›
               </button>
             </div>
-
 
             <div style="width:420px; background:#fff; padding:20px;">
               <div class="d-flex align-items-center mb-3">
@@ -82,40 +82,66 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
+import memberApi from '@/apis/memberApi';
+import feedApi from '@/apis/feedApi';
+import feedPictureApi from '@/apis/feedPictureApi';
+// import { getPrototypeOf } from 'core-js/core/object';
+// import { cosh } from 'core-js/core/number';
 
 const store = useStore();
-//상태 정의
-// const profile = ref({
-//   m_name : "",
-//   m_bio : "",
-//   m_survey : ""
-// });
 
-const posts = ref([
-  'https://picsum.photos/500/500?img=11',
-  'https://picsum.photos/500/500?img=12',
-  'https://picsum.photos/500/500?img=13',
-  'https://picsum.photos/500/500?img=14',
-  'https://picsum.photos/500/500?img=15',
-  'https://picsum.photos/500/500?img=16'
-]);
+const profile = ref({
+  mno: "",
+  mname: "",
+  mbio: ""
+});
+
+const feedNoList = ref([]);
 
 const currentImageIndex = ref(0);
-
 const showModal = ref(false);
 const selectedIndex = ref(0);
 
-function openPost(i) { 
-  selectedIndex.value = i; 
-  showModal.value = true; 
-  document.body.style.overflow = 'hidden'; 
+async function getProfile() {
+  try {
+    const response = await memberApi.memberGet("test4");
+    profile.value.mno = response.data.data.m_no;
+    profile.value.mname = response.data.data.m_name;
+    profile.value.mbio = response.data.data.m_bio;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getPosts() {
+  //1. feed List 가져오기
+  const feedListResponse = await feedApi.getFeedList(profile.value.mno, 1);
+  const feedList = feedListResponse.data;
+
+  //2. 각 feed의 첫번째 이미지 가져오기
+  const firstImgResponse = await feedPictureApi.getFirstImageofFeed(profile.value.mno);
+  const firstImg = firstImgResponse.data;
+
+  for (let i = 0; i < firstImg.length; i++) {
+    feedNoList.value.push({
+      fNo: firstImg[i].fNo, //feed 번호
+      fpNo: firstImg[i].fpNo, //첫번째 이미지 번호
+    });
+  }
+}
+
+function openPost(i) {
+  const post = feedNoList.value[i];
+  
+  selectedIndex.value = i;
+  showModal.value = true;
+  document.body.style.overflow = 'hidden';
 }
 
 function nextImage() {
@@ -130,10 +156,15 @@ function prevImage() {
   }
 }
 
-function closeModal() { 
-  showModal.value = false; 
-  document.body.style.overflow = 'auto'; 
-  }
+function closeModal() {
+  showModal.value = false;
+  document.body.style.overflow = 'auto';
+}
+
+onMounted(async () => {
+  await getProfile(); //1.프로필 먼저 불러오기
+  await getPosts();   //2. mno가 들어간 뒤 포스트 불러오기
+});
 </script>
 
 <style scoped>
