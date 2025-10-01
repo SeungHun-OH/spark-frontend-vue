@@ -10,7 +10,7 @@
           <router-link to="/Member/CategorySurvey/PartnerPreference"> 파트너 선호도 조사 </router-link>
         </div>
         <div>
-          <router-link to="/Thread/ThreadMain"> 파트너 선호도 조사 </router-link>
+          <router-link to="/Thread/ThreadMain"> 게시판쓰기 </router-link>
         </div>
         <div>
           <button class = "btn btn-info btn-sm" @click = "jwtTest()"> Jwt 테스트 </button>
