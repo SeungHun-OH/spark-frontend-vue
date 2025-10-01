@@ -27,7 +27,9 @@
             </div>
 
             <!-- 글 내용 -->
-            <p>{{ post.content }}</p>
+            <p class="post-title">{{ post.title }}</p>
+            <p class="post-content">{{ post.content }}</p>
+
             <img v-if="post.image" :src="post.image" class="img-fluid rounded mb-2" />
 
             <!-- 좋아요/댓글 -->
@@ -41,8 +43,7 @@
               <div v-for="c in post.comments" :key="c.id" class="border rounded p-2 mb-1">
                 <b>{{ c.author }}</b> {{ c.content }}
               </div>
-              <input v-model="newComment" type="text" class="form-control form-control-sm"
-                     placeholder="댓글 달기..." @keyup.enter="addComment(post)" />
+              <input v-model="newComment" type="text" class="form-control form-control-sm" placeholder="댓글 달기..." @keyup.enter="addComment(post)" />
             </div>
           </div>
         </div>
@@ -60,6 +61,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import ThreadPost from "@/components/Thread/ThreadPost.vue";
+import threadboardApi from "@/apis/threadboardApi";
 
 const posts = ref([]);
 const page = ref(0);
@@ -72,41 +74,36 @@ const showForm = ref(false);
 const loadPosts = async () => {
   if (loading.value) return;
   loading.value = true;
-  const newPosts = await mockFetch(page.value, size.value, keyword.value);
-  if (newPosts.length > 0) {
-    posts.value.push(...newPosts);
-    page.value++;
-  }
-  loading.value = false;
-  console.log("loadPosts function called");
-};
+  try {
+    const res = await threadboardApi.getThreadBoardList();
 
-// const loadPosts = async () => {
-//   if (loading.value) return;
-//   loading.value = true;
-//   try {
-//     const res = await threadboardApi.getBoardList(page.value, size.value, keyword.value);
-//     const newPosts = res.data.map(b => ({
-//       id: b.tbNo,
-//       author: { nickname: "User" + b.tbMemeberNo, profileImg: "https://via.placeholder.com/40" },
-//       date: b.createdAt,
-//       title: b.tbTitle,
-//       content: b.tbContent,
-//       image: b.tbImageNo ? `/images/${b.tbImageNo}` : null,
-//       likes: b.tbLickCount,
-//       liked: false,
-//       comments: []
-//     }));
-//     if (newPosts.length > 0) {
-//       posts.value.push(...newPosts);
-//       page.value++;
-//     }
-//   } catch (err) {
-//     console.error("게시글 로드 실패:", err);
-//   } finally {
-//     loading.value = false;
-//   }
-// };
+    console.log("API 응답:", res.data);
+
+    const newPosts = res.data.data.map(b => ({
+      id: b.tbNo,
+      author: { nickname: b.memberName + b.tbMemberNo, profileImg: "https://via.placeholder.com/40" },
+      date: b.createdAt,
+      title: b.tbTitle,
+      content: b.tbContent,
+      image: b.tbImageNo ? `/images/${b.tbImageNo}` : null,
+      likes: b.tbLikeCount,
+      liked: false,
+      comments: []
+    }));
+
+    console.log("Fetched posts:", newPosts);
+
+    if (newPosts.length > 0) {
+      posts.value.push(...newPosts);
+      page.value++;
+    }
+
+  } catch (err) {
+    console.error("게시글 로드 실패:", err);
+  } finally {
+    loading.value = false;
+  }
+};
 
 const searchPosts = async () => {
   page.value = 0;
@@ -164,7 +161,6 @@ const timeAgo = (date) => {
   return `${days}일 전`;
 };
 
-// ✅ 더미 데이터
 const mockFetch = async (page, size, keyword) => {
   const dummy = [];
   const regions = ["서울", "부산", "대구", "인천", "광주", "대전"];
@@ -182,6 +178,8 @@ const mockFetch = async (page, size, keyword) => {
       comments: []
     });
   }
+
+
 
   let filtered = dummy;
   if (keyword && keyword.trim() !== "") {
@@ -204,6 +202,22 @@ onMounted(() => {
   overflow-y: auto;
   padding-right: 10px;
 }
+
+.post-box {
+  margin-bottom: 20px; /* 박스 사이 간격 */
+}
+
+.post-title {
+  font-size: 0.75em; 
+  margin-bottom: 2px; 
+  color: #555; 
+}
+
+.post-content {
+  font-size: 1em; 
+  margin: 0; 
+  line-height: 1.4; 
+}
 </style>
 
 
@@ -212,8 +226,22 @@ onMounted(() => {
 
 
 
+  
 
 
+
+
+<!-- const loadPosts = async () => {
+  if (loading.value) return;
+  loading.value = true;
+  const newPosts = await mockFetch(page.value, size.value, keyword.value);
+  if (newPosts.length > 0) {
+    posts.value.push(...newPosts);
+    page.value++;
+  }
+  loading.value = false;
+  console.log("loadPosts function called");
+}; -->
 
 
 

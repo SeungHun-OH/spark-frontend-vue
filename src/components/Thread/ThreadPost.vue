@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import threadboard from "@/apis/threadboardApi";
+import threadboardApi from "@/apis/threadboardApi";
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
@@ -83,7 +83,7 @@ const submitPost = async () => {
 
   console.log("threadBoard mNo >>> ", member.value.mNo);
   
-  const response = await threadboard.insertThreadBoard(threadBoard);
+  const response = await threadboardApi.insertThreadBoard(threadBoard);
   if(response.data.result === "success"){
     alert("글이 성공적으로 등록 bNo는." + response.data.data);
   }

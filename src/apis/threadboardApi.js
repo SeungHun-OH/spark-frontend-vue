@@ -4,8 +4,13 @@ function insertThreadBoard(member) {
   return axios.post("http://localhost:8040/thread/board", member)
 }
 
-const threadboard = {
-  insertThreadBoard
+function getThreadBoardList() {
+  return axios.get("http://localhost:8040/thread/boardList")
+}
+
+const threadboardApi = {
+  insertThreadBoard,
+  getThreadBoardList
 };
 
-export default threadboard;
+export default threadboardApi;
