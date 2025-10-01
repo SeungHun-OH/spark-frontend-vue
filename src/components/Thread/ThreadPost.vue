@@ -6,16 +6,19 @@
       <div class="d-flex justify-content-between align-items-center mb-2 border-bottom pb-2">
         <button class="btn btn-sm btn-outline-secondary" @click="$emit('close')">취소</button>
         <span class="fw-bold">새로운 글쓰기</span>
-        <button class="btn btn-sm btn-primary" @click="submitPost" :disabled="!content.trim()">게시</button>
+        <button class="btn btn-sm btn-primary" @click="submitPost" :disabled="!title.trim() && !content.trim()">게시</button>
       </div>
 
       <!-- 작성자 -->
       <div class="d-flex align-items-center mb-2">
-        <img src="https://via.placeholder.com/40" class="rounded-circle me-2" />
-        <span class="fw-bold">Me</span>
+        <img :src="storeimage" class="rounded-circle me-2 profile-img" alt="프로필 이미지" />
+        <span class="fw-bold"> {{ member.mName }} </span>
       </div>
 
-      <!-- 글쓰기 textarea (자동 늘어남) -->
+      <!-- 제목 입력 -->
+      <input v-model="title" type="text" class="form-control mb-2" placeholder="제목을 입력하세요" />
+
+      <!-- 본문 textarea (자동 늘어남) -->
       <textarea v-model="content" class="form-control border-0 auto-textarea" placeholder="무슨 생각을 하고 있나요?" rows="1" @input="autoResize"></textarea>
 
       <!-- 아이콘 버튼들 -->
@@ -30,22 +33,32 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { useStore } from "vuex";
 
+const store = useStore();
 
+const member = computed(() => store.getters["member/getMember"]);
+
+const storeimage = computed(() => {
+  const data = store.getters["member/getMAttachData"];
+  return data ? `data:image/png;base64,${data}` : "https://via.placeholder.com/40";
+})
 
 const props = defineProps({
   show: Boolean,
 });
 const emit = defineEmits(["post-added", "close"]);
 
+const title = ref("");
 const content = ref("");
 
 const submitPost = () => {
-  if (!content.value.trim()) return;
+  if (!title.value.trim() && !content.value.trim()) return;
   const newPost = {
     id: Date.now(),
     author: { nickname: "Me", profileImg: "https://via.placeholder.com/40" },
+    title: title.value,
     content: content.value,
     image: null,
     likes: 0,
@@ -53,6 +66,7 @@ const submitPost = () => {
     comments: []
   };
   emit("post-added", newPost);
+  title.value = "";
   content.value = "";
   emit("close");
 };
@@ -89,6 +103,12 @@ const autoResize = (e) => {
   resize: none;
   overflow: hidden;
   font-size: 1rem;
+}
+
+.profile-img {
+  width: 40px;   /* 원하는 크기 */
+  height: 40px;  /* 정사각형으로 맞춤 */
+  object-fit: cover; /* 이미지가 영역 안에서 잘리더라도 비율 유지 */
 }
 </style>
 
