@@ -33,6 +33,7 @@
 </template>
 
 <script setup>
+import threadboard from "@/apis/threadboardApi";
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
@@ -53,22 +54,43 @@ const emit = defineEmits(["post-added", "close"]);
 const title = ref("");
 const content = ref("");
 
-const submitPost = () => {
-  if (!title.value.trim() && !content.value.trim()) return;
-  const newPost = {
-    id: Date.now(),
-    author: { nickname: "Me", profileImg: "https://via.placeholder.com/40" },
-    title: title.value,
-    content: content.value,
-    image: null,
-    likes: 0,
-    liked: false,
-    comments: []
+const submitPost = async () => {
+
+  // if (!title.value.trim() && !content.value.trim()) return;
+  // const newPost = {
+  //   id: Date.now(),
+  //   author: { nickname: "Me", profileImg: "https://via.placeholder.com/40" },
+  //   title: title.value,
+  //   content: content.value,
+  //     date: new Date(), 
+  //   image: null,
+  //   likes: 0,
+  //   liked: false,
+  //   comments: []
+  // };
+
+  // emit("post-added", newPost);
+  // title.value = "";
+  // content.value = "";
+  // emit("close");
+
+  const threadBoard = {
+    tbTitle: title.value,
+    tbContent : content.value,
+    tbMemberNo : member.value.mNo,
+    tbActive : 'Y',
   };
-  emit("post-added", newPost);
-  title.value = "";
-  content.value = "";
-  emit("close");
+
+  console.log("threadBoard mNo >>> ", member.value.mNo);
+  
+  const response = await threadboard.insertThreadBoard(threadBoard);
+  if(response.data.result === "success"){
+    alert("글이 성공적으로 등록 bNo는." + response.data.data);
+  }
+  else{
+    alert("글 등록 실패");
+  }
+  console.log(response.data);
 };
 
 // ✅ textarea 자동 늘어남

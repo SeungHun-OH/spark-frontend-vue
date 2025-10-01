@@ -78,7 +78,35 @@ const loadPosts = async () => {
     page.value++;
   }
   loading.value = false;
+  console.log("loadPosts function called");
 };
+
+// const loadPosts = async () => {
+//   if (loading.value) return;
+//   loading.value = true;
+//   try {
+//     const res = await threadboardApi.getBoardList(page.value, size.value, keyword.value);
+//     const newPosts = res.data.map(b => ({
+//       id: b.tbNo,
+//       author: { nickname: "User" + b.tbMemeberNo, profileImg: "https://via.placeholder.com/40" },
+//       date: b.createdAt,
+//       title: b.tbTitle,
+//       content: b.tbContent,
+//       image: b.tbImageNo ? `/images/${b.tbImageNo}` : null,
+//       likes: b.tbLickCount,
+//       liked: false,
+//       comments: []
+//     }));
+//     if (newPosts.length > 0) {
+//       posts.value.push(...newPosts);
+//       page.value++;
+//     }
+//   } catch (err) {
+//     console.error("게시글 로드 실패:", err);
+//   } finally {
+//     loading.value = false;
+//   }
+// };
 
 const searchPosts = async () => {
   page.value = 0;
@@ -177,6 +205,17 @@ onMounted(() => {
   padding-right: 10px;
 }
 </style>
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- <template>
   <div class="d-flex">
