@@ -34,8 +34,7 @@ const routes = [
   },
   ...Member,
   ...Category,
-  ...chats
-  ...Category,
+  ...chats,
   ...Thread
 ]
 

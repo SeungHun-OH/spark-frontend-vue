@@ -28,20 +28,17 @@ import chatApi from '@/apis/chatApi';
 import { ref, onMounted } from 'vue';
 import { Client, Stomp } from '@stomp/stompjs';
 
-
-
 // onMounted(async() => {
 //   await getChatList(); //1.프로필 먼저 불러오기
 //   console.log("test");
 // });
-
-
 
 // const chats = ref([
 //   { name: "Emma", lastMessage: "See you soon!", unread: 2 },
 //   { name: "Jordan", lastMessage: "How was your day?", unread: 0 },
 //   { name: "Sophia", lastMessage: "Let's meet tomorrow", unread: 1 }
 // ]);
+
 const chats = ref();
 console.log(chats);
 
