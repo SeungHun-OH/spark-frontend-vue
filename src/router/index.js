@@ -8,6 +8,8 @@ import Member from './Member'
 import Category from './Category'
 import Profile from '@/views/Profile.vue';
 
+import chats from './Chats';
+
 const routes = [
   
   { path: '/', component: MainFeed },
@@ -30,7 +32,8 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   ...Member,
-  ...Category
+  ...Category,
+  ...chats
 ]
 
 const router = createRouter({

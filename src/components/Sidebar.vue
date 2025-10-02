@@ -13,7 +13,7 @@
       <router-link to="/matching" class="nav-link" :class="{ active: $route.path === '/matching' }"><i class="bi bi-people"></i> Matching</router-link>
       <router-link to="/feed" class="nav-link" :class="{ active: $route.path === '/feed' }"><i class="bi bi-camera"></i> My Feed</router-link>
       <!-- Chats and Profile disabled per request -->
-      <a class="nav-link disabled" href="#" title="Chats disabled"><i class="bi bi-chat-dots"></i> Chats</a>
+      <router-link to="/chat" class="nav-link" :class="{ active: $route.path === '/chat' }"><i class="bi bi-chat-dots"></i> Chats</router-link>
       <router-link to="/hearts" class="nav-link" :class="{ active: $route.path === '/hearts' }"><i class="bi bi-heart"></i> Hearts</router-link>
       <router-link to="/Profile" class="nav-link" :class="{ active: $route.path === '/Profile' }"><i class="bi bi-person"></i> Profile</router-link>
     </nav>
