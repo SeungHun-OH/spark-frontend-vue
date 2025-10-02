@@ -7,6 +7,7 @@ import HomeView from '../views/HomeView.vue'
 import Member from './Member'
 import Category from './Category'
 import Profile from '@/views/Profile.vue';
+import Thread from './Thread';
 
 import chats from './Chats';
 
@@ -34,6 +35,8 @@ const routes = [
   ...Member,
   ...Category,
   ...chats
+  ...Category,
+  ...Thread
 ]
 
 const router = createRouter({

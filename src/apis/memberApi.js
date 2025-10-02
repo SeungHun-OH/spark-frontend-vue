@@ -5,18 +5,35 @@ function memberLogin(member) {
 }
 
 function memberCreate(formdata) {
+
+  console.log("보내는 FormData 내용");
+  for (let pair of formdata.entries()) {
+    console.log(pair[0], pair[1]);
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    console.log("member JSON 내용:", reader.result);
+  };
+  reader.readAsText(formdata.get("member"));
+
   return axios.post("http://localhost:8040/member/create", formdata)
 }
 
-function memberGet(m_id) {
+function memberUpdate(member) {
+  console.log("memberUpdataApis호출" + JSON.stringify(member));
+  return axios.put("http://localhost:8040/member", member)
+}
+
+function memberGet(mId) {
   return axios.get("http://localhost:8040/member", {
-    params: { m_id: m_id }
+    params: { mId: mId }
   });
 }
 
-function memberPictureGet(m_no) {
+function memberPictureGet(mNo) {
   return axios.get("http://localhost:8040/member/picture", {
-    params: { m_no: m_no }
+    params: { mNo: mNo }
   });
 }
 
@@ -26,6 +43,14 @@ function memberInsert(member) {
 
 function memberInsertPicture(formdata) {
   return axios.post("http://localhost:8040/member/picture", formdata)
+}
+
+function memberGetJwt(jwt) {
+  return axios.get("http://localhost:8040/member/getjwt", {
+    headers: {
+      Authorization : "Bearer " + jwt
+    }
+  })
 }
 
 const memberApi = {
@@ -38,6 +63,8 @@ const memberApi = {
 
   memberInsert,
   memberInsertPicture,
+
+  memberGetJwt
 };
 
 export default memberApi;

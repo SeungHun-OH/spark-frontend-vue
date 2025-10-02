@@ -3,9 +3,9 @@
   <div class="d-flex align-items-center">
     <img v-if="profileImage" :src="profileImage" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;" class = "me-2" />
     <!-- <img v-else src="@/assets/profile.png" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;" /> -->
-    <div v-if="m_id">
-      <div class="fw-bold"> id : {{ m_id }}</div>
-      <div class="fw-bold"> na : {{ m_name }}</div>
+    <div v-if="mId">
+      <div class="fw-bold"> id : {{ mId }}</div>
+      <div class="fw-bold"> na : {{ mName }}</div>
     </div>
   </div>
 
@@ -18,16 +18,16 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 
-const m_id = computed(() => {
-  return store.getters["member/getM_id"]
+const mId = computed(() => {
+  return store.getters["member/getMId"]
 });
 
-const m_name = computed(() => {
-  return store.getters["member/getM_name"]
+const mName = computed(() => {
+  return store.getters["member/getMName"]
 });
 
 const profileImage = computed(() => {
-  const data = store.getters["member/getM_attachdata"];
+  const data = store.getters["member/getMAttachData"];
   return data ? `data:image/png;base64,${data}` : null;
 });
 
