@@ -2,6 +2,7 @@
   <div class="d-flex">
     <div class="flex-grow-1 container py-3">
 
+      <!-- 헤더 -->
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h4>🌱 Writing App (Community)</h4>
         <button class="btn btn-primary btn-sm" @click="showForm = !showForm">✍️ 글쓰기</button>
@@ -19,23 +20,34 @@
       <div class="scroll-box" @scroll="handleScroll">
         <div v-for="post in posts" :key="post.id" class="card mb-3">
           <div class="card-body">
-            <!-- 작성자 -->
+
+            <!-- 프로필 + 닉네임/아이디 + 시간 -->
             <div class="d-flex align-items-center mb-2">
-              <img :src="post.author.profileImg" class="rounded-circle me-2" width="40" height="40" />
-              <span class="fw-bold">{{ post.author.nickname }}</span>
-              <small class="text-muted ms-2">• {{ timeAgo(post.date) }} ({{ formatDate(post.date) }})</small>
+              <img :src="post.author.profileImg" alt="프로필" class="post-thumbnail rounded-circle me-2" width="40" height="40" />
+              <div>
+                <span class="fw-bold">{{ post.author.nickname }}</span>
+                <span class="text-muted"> | {{ post.author.userId }}</span>
+                <small class="text-muted ms-2">· {{ timeAgo(post.date) }} ({{ formatDate(post.date) }})</small>
+              </div>
             </div>
 
-            <!-- 글 내용 -->
-            <p class="post-title">{{ post.title }}</p>
-            <p class="post-content">{{ post.content }}</p>
+            <!-- 제목 -->
+            <p class="post-title mb-1">{{ post.title }}</p>
 
+            <!-- 내용 -->
+            <p class="post-content mb-2">{{ post.content }}</p>
+
+            <!-- 이미지 -->
             <img v-if="post.image" :src="post.image" class="img-fluid rounded mb-2" />
 
             <!-- 좋아요/댓글 -->
             <div class="d-flex justify-content-between">
-              <button class="btn btn-sm btn-outline-danger" @click="toggleLike(post)">❤️ {{ post.likes }}</button>
-              <button class="btn btn-sm btn-outline-secondary" @click="toggleComments(post)">💬 {{ post.comments.length }}</button>
+              <button class="btn btn-sm btn-outline-danger" @click="toggleLike(post)">
+                ❤️ {{ post.likes }}
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" @click="toggleComments(post)">
+                💬 {{ post.comments.length }}
+              </button>
             </div>
 
             <!-- 댓글 -->
@@ -45,6 +57,7 @@
               </div>
               <input v-model="newComment" type="text" class="form-control form-control-sm" placeholder="댓글 달기..." @keyup.enter="addComment(post)" />
             </div>
+
           </div>
         </div>
 
@@ -80,8 +93,8 @@ const loadPosts = async () => {
     console.log("API 응답:", res.data);
 
     const newPosts = res.data.data.map(b => ({
-      id: b.tbNo,
-      author: { nickname: b.memberName + b.tbMemberNo, profileImg: "https://via.placeholder.com/40" },
+      id: b.memberId,
+      author: { nickname: b.memberName + b.tbMemberNo, profileImg: b.memberPicture ? `data:image/png;base64,${b.memberPicture}` : null},
       date: b.createdAt,
       title: b.tbTitle,
       content: b.tbContent,
@@ -90,8 +103,6 @@ const loadPosts = async () => {
       liked: false,
       comments: []
     }));
-
-    console.log("Fetched posts:", newPosts);
 
     if (newPosts.length > 0) {
       posts.value.push(...newPosts);
@@ -114,9 +125,7 @@ const searchPosts = async () => {
 const handleScroll = (e) => {
   const el = e.target;
   const bottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 50;
-  if (bottom) {
-    loadPosts();
-  }
+  if (bottom) loadPosts();
 };
 
 const toggleLike = (post) => {
@@ -140,7 +149,7 @@ const addPost = (newPost) => {
   showForm.value = false;
 };
 
-// ✅ 날짜 포맷 함수 (YYYY-MM-DD)
+// ✅ 날짜 포맷 함수
 const formatDate = (date) => {
   const d = new Date(date);
   return d.toISOString().split("T")[0];
@@ -161,36 +170,6 @@ const timeAgo = (date) => {
   return `${days}일 전`;
 };
 
-const mockFetch = async (page, size, keyword) => {
-  const dummy = [];
-  const regions = ["서울", "부산", "대구", "인천", "광주", "대전"];
-
-  for (let i = 1; i <= 100; i++) {
-    dummy.push({
-      id: i,
-      author: { nickname: "User" + i, profileImg: "https://via.placeholder.com/40" },
-      region: regions[i % regions.length],
-      date: new Date(Date.now() - i * 86400000), // i일 전
-      content: `테스트 글 ${i}번 - 무한 스크롤 확인용 📜`,
-      image: i % 4 === 0 ? "https://via.placeholder.com/400x200" : null,
-      likes: Math.floor(Math.random() * 50),
-      liked: false,
-      comments: []
-    });
-  }
-
-
-
-  let filtered = dummy;
-  if (keyword && keyword.trim() !== "") {
-    filtered = dummy.filter((p) => p.content.includes(keyword) || p.author.nickname.includes(keyword));
-  }
-
-  const start = page * size;
-  const end = start + size;
-  return new Promise((resolve) => setTimeout(() => resolve(filtered.slice(start, end)), 500));
-};
-
 onMounted(() => {
   loadPosts();
 });
@@ -203,30 +182,22 @@ onMounted(() => {
   padding-right: 10px;
 }
 
-.post-box {
-  margin-bottom: 20px; /* 박스 사이 간격 */
-}
-
-.post-title {
-  font-size: 0.75em; 
-  margin-bottom: 2px; 
-  color: #555; 
-}
-
+/* 제목과 내용 같은 크기 */
+.post-title,
 .post-content {
-  font-size: 1em; 
-  margin: 0; 
-  line-height: 1.4; 
+  font-size: 1em;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* 제목만 살짝 굵게 */
+.post-title {
+  font-weight: 500;
 }
 </style>
 
 
 
-
-
-
-
-  
 
 
 

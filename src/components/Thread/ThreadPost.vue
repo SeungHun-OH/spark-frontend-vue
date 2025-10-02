@@ -56,24 +56,6 @@ const content = ref("");
 
 const submitPost = async () => {
 
-  // if (!title.value.trim() && !content.value.trim()) return;
-  // const newPost = {
-  //   id: Date.now(),
-  //   author: { nickname: "Me", profileImg: "https://via.placeholder.com/40" },
-  //   title: title.value,
-  //   content: content.value,
-  //     date: new Date(), 
-  //   image: null,
-  //   likes: 0,
-  //   liked: false,
-  //   comments: []
-  // };
-
-  // emit("post-added", newPost);
-  // title.value = "";
-  // content.value = "";
-  // emit("close");
-
   const threadBoard = {
     tbTitle: title.value,
     tbContent : content.value,
@@ -133,6 +115,28 @@ const autoResize = (e) => {
   object-fit: cover; /* 이미지가 영역 안에서 잘리더라도 비율 유지 */
 }
 </style>
+
+
+
+  <!-- if (!title.value.trim() && !content.value.trim()) return;
+  const newPost = {
+    id: Date.now(),
+    author: { nickname: "Me", profileImg: "https://via.placeholder.com/40" },
+    title: title.value,
+    content: content.value,
+      date: new Date(), 
+    image: null,
+    likes: 0,
+    liked: false,
+    comments: []
+  };
+
+  emit("post-added", newPost);
+  title.value = "";
+  content.value = "";
+  emit("close"); -->
+
+
 
 
 <!-- <template>
