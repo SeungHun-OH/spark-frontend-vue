@@ -31,7 +31,7 @@ function memberInsertPicture(formdata) {
 const memberApi = {
   memberLogin,
   memberCreate,
-  // memberUpdate,
+  //memberUpdate,
 
   memberPictureGet,
   memberGet,

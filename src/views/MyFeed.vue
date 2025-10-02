@@ -36,7 +36,7 @@
 
     <!-- grid exactly like provided image (3 columns) -->
     <div class="my-post-grid">
-      <div class="post-item" v-for="p, i in feedNoList" :key="i" @click="openPost(i)">
+      <div class="post-item" v-for="p in feedNoList" :key="p.fNo" @click="openPost(p.fNo)">
         <img :src="`http://localhost:8040/feedPicture/picture/${p.fpNo}`" />
       </div>
     </div>
@@ -48,7 +48,12 @@
           <div class="modal-body p-0 d-flex">
 
             <div style="flex:1; position:relative;">
-              <img :src="modalPost.images[currentImageIndex]" style="width:100%; height:80vh; object-fit:cover;" />
+              <img 
+                v-if="modalPost.value.length > 0"
+                :src="`http://localhost:8040/feedPicture/picture/${modalPost.value[currentImageIndex].fpNo}`" 
+                style="width:100%; height:80vh; object-fit:cover;" 
+              />
+              <!-- <img :src="modalPost.images[currentImageIndex]" style="width:100%; height:80vh; object-fit:cover;" /> -->
 
               <!-- 이전 버튼 -->
               <button v-if="currentImageIndex > 0" @click="prevImage"
@@ -107,6 +112,7 @@ const feedNoList = ref([]);
 const currentImageIndex = ref(0);
 const showModal = ref(false);
 const selectedIndex = ref(0);
+const modalPost = ref();
 
 async function getProfile() {
   try {
@@ -121,27 +127,40 @@ async function getProfile() {
 
 async function getPosts() {
   //1. feed List 가져오기
-  const feedListResponse = await feedApi.getFeedList(profile.value.mno, 1);
+  const feedListResponse = await feedApi.getMyFeedList(1);
   const feedList = feedListResponse.data;
 
   //2. 각 feed의 첫번째 이미지 가져오기
-  const firstImgResponse = await feedPictureApi.getFirstImageofFeed(profile.value.mno);
-  const firstImg = firstImgResponse.data;
+  const firstImgResponse = await feedPictureApi.getFirstImageofFeed();
+  const firstImg = firstImgResponse.data.data;
 
   for (let i = 0; i < firstImg.length; i++) {
     feedNoList.value.push({
-      fNo: firstImg[i].fNo, //feed 번호
-      fpNo: firstImg[i].fpNo, //첫번째 이미지 번호
+      fNo: firstImg[i].fpFeedNo, //feed 번호
+      fpNo: firstImg[i].fpNo //첫번째 이미지 번호
     });
   }
 }
 
-function openPost(i) {
-  const post = feedNoList.value[i];
+//i가 뭐가 되어야 할지 생각해보기
+//첫번째 이미지를 클릭하면 그 다음 이미지들이 나와야 함 //feedNo를 알아서 클릭하면 그 해당 이미지들이 나올 수 있게 함
+async function openPost(fNo) {
+
+  const feedNoResponse = await feedPictureApi.getFeedPictureList(fNo);
+  modalPost.value = feedNoResponse.data.data;
+  console.log(modalPost.value);
   
-  selectedIndex.value = i;
-  showModal.value = true;
-  document.body.style.overflow = 'hidden';
+
+  const feedPictures = [];
+  for (var i=0; i < modalPost.value.length; i++) {
+    feedPictures.push(modalPost.value[i].fpNo);
+  }
+  
+  // await feedPictureApi.getFeedPicture(feedPictures[0]);
+
+  // selectedIndex.value = fNo;
+  // showModal.value = true;
+  // document.body.style.overflow = 'hidden';
 }
 
 function nextImage() {
@@ -162,7 +181,7 @@ function closeModal() {
 }
 
 onMounted(async () => {
-  await getProfile(); //1.프로필 먼저 불러오기
+  //await getProfile(); //1.프로필 먼저 불러오기
   await getPosts();   //2. mno가 들어간 뒤 포스트 불러오기
 });
 </script>
