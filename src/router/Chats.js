@@ -10,7 +10,7 @@ const chats = [
     path: '/chat/chatting/:chatRoomBaseUuid',
     component: () => import(
       /* webpackChunkName: "chat" */
-      '@/views/Chats/ChatRoom.vue'
+      '@/views/Chats/ChatView.vue'
     ),
     props: true
   }

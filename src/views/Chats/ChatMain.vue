@@ -3,87 +3,107 @@
     <div class="banner">
       <div class="banner-left">
         <div>
-          <h2>My Feed</h2>
+          <h2>Chats</h2>
           <small class="text-muted">Manage your posts and profile</small>
         </div>
       </div>
     </div>
-    <h4>Chats</h4>
+
     <ul class="list-group">
-      <li v-for="(chat, i) in chats" :key="i" class="list-group-item d-flex justify-content-between align-items-center">
-        <router-link :to="`/chat/chatting/${chat.encodedUUID}`">
+      <router-link
+        v-for="(chat, i) in chats"
+        :key="i"
+        :to="`/chat/chatting/${chat.encodedUUID}`"
+        class="list-group-item d-flex justify-content-between align-items-center chat-item"
+      >
+        <!-- 좌측 -->
+        <div>
+          <strong>{{ chat.chatRoomName }}</strong>, <small>{{ chat.age }}</small><br />
+          <small class="text-muted">{{ chat.lastMessage }}</small>
+        </div>
+
+        <!-- 우측 -->
+        <div class="text-end">
+          <small class="text-muted">{{ formatTime(chat.date) }}</small>
           <div>
-            <strong>{{ chat.chatRoomName }}</strong><br />
-            <!-- <small>{{ chat.lastMessage }}</small> -->
+            <span v-if="chat.unreadCount > 0" class="badge bg-primary rounded-pill">
+              {{ chat.unreadCount }}
+            </span>
           </div>
-          <!-- <span class="badge bg-primary rounded-pill">{{ chat.unread }}</span> -->
-        </router-link>
-      </li>
+        </div>
+      </router-link>
     </ul>
   </div>
 </template>
 
 <script setup>
-import chatApi from '@/apis/chatApi';
-import { ref, onMounted } from 'vue';
-import { Client, Stomp } from '@stomp/stompjs';
+import chatApi from "@/apis/chatApi";
+import { ref, onMounted, onUnmounted } from "vue";
+import stompClient from "@/sockets/stompClient";
 
+const chats = ref([]);
 
-
-// onMounted(async() => {
-//   await getChatList(); //1.프로필 먼저 불러오기
-//   console.log("test");
-// });
-
-
-
-// const chats = ref([
-//   { name: "Emma", lastMessage: "See you soon!", unread: 2 },
-//   { name: "Jordan", lastMessage: "How was your day?", unread: 0 },
-//   { name: "Sophia", lastMessage: "Let's meet tomorrow", unread: 1 }
-// ]);
-const chats = ref();
-console.log(chats);
-
-let stompClient = null;
-const jwtToken = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5MjE4NzgzLCJleHAiOjE3NTk1Nzg3ODN9.vcr-ZbZf0ChGAvgcbueIcF-e6Ekb_msDxAUxs9RhjwMIPMBTcZyFmhk6DxmdfI8tsoHvbYfyCgbvp5PuDS410g"
-
-function connect() {
-  stompClient = new Client({
-    webSocketFactory: function () {
-      return new WebSocket("ws://localhost:8040/ws-stomp")
-    },
-    connectHeaders: {
-      Authorization: jwtToken
-    },
-    debug: function (str) {
-      console.log(str);
-    },
-    reconnectDelay: 5000
-  });
-  stompClient.onConnect = function (frame) {
-    console.log("연결");
-  }
-
-  stompClient.activate();
-}
-
-
-
-
-
-
+// ✅ 리스트 불러오기
 async function getChatList() {
   const response = await chatApi.getChatList();
-  console.log(response.data.data)
   chats.value = response.data.data;
 }
 
-onMounted(
+// ✅ 실시간 이벤트 처리
+function handleRoomEvent(event) {
+  const room = chats.value.find((c) => c.encodedUUID === event.roomId);
+  if (room) {
+    room.lastMessage = event.lastMessage;
+    room.date = event.lastMessageTime ?? room.date;
+    room.unreadCount = event.unreadCount ?? room.unreadCount;
+  }
+}
 
-  async () => {
-    await getChatList();
-  }),
-  connect();
+// ✅ 시간 포맷 (오늘은 시간, 과거는 날짜)
+function formatTime(dateStr) {
+  if (!dateStr) return "";
+  const d = new Date(dateStr);
+  if (isNaN(d)) return "";
 
+  const today = new Date().toLocaleDateString("ko-KR");
+  const msgDay = d.toLocaleDateString("ko-KR");
+
+  if (today === msgDay) {
+    const hours = d.getHours();
+    const minutes = d.getMinutes().toString().padStart(2, "0");
+    const ampm = hours < 12 ? "오전" : "오후";
+    const hour12 = hours % 12 || 12;
+    return `${ampm} ${hour12}:${minutes}`;
+  } else {
+    return msgDay;
+  }
+}
+
+// ✅ 마운트 시 실행
+onMounted(async () => {
+  await getChatList();
+
+  stompClient.connect(() => {
+    stompClient.subscribeRoomList((event) => {
+      handleRoomEvent(event);
+    });
+  });
+});
+
+// ✅ 언마운트 시 구독만 해제
+onUnmounted(() => {
+  stompClient.unsubscribe(); // 연결은 유지, 리스트 구독만 해제
+});
 </script>
+
+<style scoped>
+.chat-item {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  padding: 12px 16px;
+}
+.chat-item:hover {
+  background-color: #f1f1f1;
+}
+</style>
