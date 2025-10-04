@@ -55,7 +55,7 @@ const input = ref("");
 const messages = ref([]);
 const chatContainer = ref(null);
 
-const partner = ref({ name: "로딩중...", age: "", profileImg: "https://placehold.co/50x50" });
+const partner = ref({ name: "로딩중...", age: "  ", profileImg: "https://placehold.co/50x50" });
 const isLoading = ref(true);
 
 // ✅ route param 감시해서 방 이동 시 자동 구독 교체
