@@ -1,11 +1,11 @@
-import axios from "axios";
+import axios from  "./axiosConfig";
 
 function insertThreadBoard(member) {
-  return axios.post("http://localhost:8040/thread/board", member)
+  return axios.post("/thread/board", member)
 }
 
 function getThreadBoardList() {
-  return axios.get("http://localhost:8040/thread/boardList")
+  return axios.get("/thread/boardList")
 }
 
 const threadboardApi = {

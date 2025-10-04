@@ -35,6 +35,7 @@
 
 <script setup>
 import memberApi from "@/apis/memberApi";
+import axios from "axios";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -60,6 +61,8 @@ async function handleLogin() {
       console.log(response.data);
 
       const mNo = response.data.data.mNo;
+
+      axios.addAhthHeader(response.data.jwt);
 
       // dispatch login vuex에 로그인 정보 저장
       store.dispatch("member/saveAuth", {
