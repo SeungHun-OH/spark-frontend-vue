@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 import feed from './feed';
 import member from './member';
 import memberCategory from './memberCategory';
+import memberStatus from './memberStatus';
 
 export default createStore({
   state: {
@@ -29,6 +30,7 @@ export default createStore({
   modules: {
     feed : feed,
     member : member,
-    memberCategory : memberCategory
+    memberCategory : memberCategory,
+    memberStatus
   }
 })

@@ -2,107 +2,181 @@
 import { Client } from "@stomp/stompjs";
 
 let client = null;
-let subscription = null;
-const jwtToken = "eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5MjE4NzgzLCJleHAiOjE3NTk1Nzg3ODN9.vcr-ZbZf0ChGAvgcbueIcF-e6Ekb_msDxAUxs9RhjwMIPMBTcZyFmhk6DxmdfI8tsoHvbYfyCgbvp5PuDS410g"
+let subscriptions = {};
+let isConnecting = false; // 연결 시도 중 여부
+let statusSubscribed = false; // /sub/status 중복 구독 방지
 
-// ✅ 연결 (이미 연결되어 있으면 재사용)
+
+const jwtToken = "eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng";
+
+function isConnected() {
+  return !!client && client.connected === true;
+}
+
 function connect(onConnected) {
   if (client && client.connected) {
     console.log("STOMP already connected, reuse existing connection");
     if (onConnected) onConnected();
     return;
   }
+  if (isConnecting) {
+    console.log("STOMP connection already in progress");
+    return;
+  }
+
+  isConnecting = true;
 
   client = new Client({
     brokerURL: "ws://localhost:8040/ws-stomp",
     reconnectDelay: 5000,
     connectHeaders: {
-      Authorization: `Bearer ${jwtToken}`
+      Authorization: `Bearer ${jwtToken}`, // ← 백틱 문자열로 수정
     },
+    heartbeatIncoming: 10000,
+    heartbeatOutgoing: 10000,
     onConnect: () => {
       console.log("Connected to STOMP");
+      isConnecting = false;
+
+      // 전역 상태 구독은 필요 시 한 번만
+      if (!statusSubscribed) {
+        subscribe("/sub/status", (payload) => {
+          // 전역 브로드캐스트 (뷰 컴포넌트에서 듣도록)
+          document.dispatchEvent(
+            new CustomEvent("status-event", { detail: payload })
+          );
+        });
+        statusSubscribed = true;
+      }
+
       if (onConnected) onConnected();
     },
     onStompError: (frame) => {
-      console.error("Broker error", frame);
-    }
+      const msg = frame.headers["message"] || "STOMP ERROR";
+      const details = frame.body || "";
+      console.error("STOMP ERROR:", msg, details);
+
+      const dest = frame.headers["destination"];
+      if (dest && subscriptions[dest]) {
+        subscriptions[dest].unsubscribe();
+        delete subscriptions[dest];
+        console.log(`자동 구독 해제: ${dest}`);
+      }
+    },
+    onWebSocketClose: () => {
+      // 연결 종료 시 상태 초기화
+      isConnecting = false;
+      statusSubscribed = false;
+    },
   });
 
   client.activate();
 }
 
-// ✅ 특정 채팅방 구독 (/sub/room/{roomId})
+function subscribe(destination, onMessage) {
+  if (!client || !client.connected) {
+    console.warn("STOMP not connected. Skip subscribe:", destination);
+    return;
+  }
+  // 중복 구독 제거
+  if (subscriptions[destination]) {
+    subscriptions[destination].unsubscribe();
+    delete subscriptions[destination];
+  }
+
+  const sub = client.subscribe(destination, (msg) => {
+    let payload = msg.body;
+    if (typeof msg.body === "string") {
+      try {
+        payload = JSON.parse(msg.body);
+      } catch {
+        // 문자열 그대로 전달
+      }
+    }
+    if (onMessage) onMessage(payload);
+  });
+
+  subscriptions[destination] = sub;
+  console.log(`Subscribed to ${destination}`);
+}
+
 function subscribeRoom(roomId, onMessage) {
-  if (!client || !client.connected) return;
-
-  if (subscription) {
-    subscription.unsubscribe();
-    subscription = null;
+  if (!roomId) {
+    console.warn("roomId가 없습니다. 기본 채널로 구독을 고려하세요.");
+    return;
   }
-
-  if (!roomId) return;
-
-  subscription = client.subscribe(`/sub/room/${roomId}`, (msg) => {
-    if (onMessage) {
-      onMessage(JSON.parse(msg.body));
-    }
-  });
-
-  console.log(`Subscribed to room ${roomId}`);
+  subscribe(`/sub/room/${roomId}`, onMessage);
 }
 
-// ✅ 채팅 리스트 구독 (/sub/room)
 function subscribeRoomList(onMessage) {
-  if (!client || !client.connected) return;
-
-  if (subscription) {
-    subscription.unsubscribe();
-    subscription = null;
-  }
-
-  subscription = client.subscribe(`/sub/room`, (msg) => {
-    if (onMessage) {
-      onMessage(JSON.parse(msg.body));
-    }
-  });
-
-  console.log("Subscribed to room list (/sub/room)");
+  subscribe("/sub/room", onMessage);
 }
 
-// ✅ 메시지 전송 (/pub/room/{roomId})
+function subscribeStatus(onMessage) {
+  subscribe("/sub/status", onMessage);
+  statusSubscribed = true;
+}
+
 function sendMessage(roomId, body) {
   if (client && client.connected) {
     client.publish({
       destination: `/pub/room/${roomId}`,
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     });
+  } else {
+    console.warn("STOMP not connected. Message not sent.");
   }
 }
 
-// ✅ 현재 구독만 해제
-function unsubscribe() {
-  if (subscription) {
-    subscription.unsubscribe();
-    subscription = null;
-    console.log("Unsubscribed from current subscription");
+function unsubscribeRoom(roomId) {
+  const destination = `/sub/room/${roomId}`;
+  unsubscribe(destination);
+}
+
+function unsubscribe(destination) {
+  if (subscriptions[destination]) {
+    subscriptions[destination].unsubscribe();
+    delete subscriptions[destination];
+    console.log(`Unsubscribed from ${destination}`);
   }
 }
 
-// ✅ 연결 완전히 종료
+function unsubscribeAll() {
+  Object.keys(subscriptions).forEach((dest) => {
+    subscriptions[dest].unsubscribe();
+    console.log(`Unsubscribed from ${dest}`);
+  });
+  subscriptions = {};
+  statusSubscribed = false;
+}
+
+function listSubscriptions() {
+  const list = Object.keys(subscriptions);
+  console.log("현재 구독 중인 destination 목록:", list);
+  return list;
+}
+
 function disconnect() {
-  unsubscribe();
+  unsubscribeAll();
   if (client) {
     client.deactivate();
     client = null;
+    isConnecting = false;
     console.log("Disconnected from STOMP");
   }
 }
 
 export default {
+  isConnected,
   connect,
+  subscribe,
   subscribeRoom,
   subscribeRoomList,
+  subscribeStatus,
   sendMessage,
+  unsubscribeRoom,
   unsubscribe,
-  disconnect
+  unsubscribeAll,
+  listSubscriptions,
+  disconnect,
 };

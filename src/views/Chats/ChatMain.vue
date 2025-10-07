@@ -13,9 +13,19 @@
       <router-link v-for="(chatRoom, i) in chatRoomList" :key="i" :to="`/chat/chatting/${chatRoom.encodedUUID}`"
         class="list-group-item d-flex justify-content-between align-items-center chat-item">
         <!-- 좌측 -->
-        <div>
-          <strong>{{ chatRoom.chatRoomName }}</strong>, <small>{{ chatRoom.age }}</small><br />
-          <small class="text-muted">{{ chatRoom.lastMessage }}</small>
+        <div class="d-flex align-items-center">
+          <!-- ✅ 프로필 이미지 + 상태 표시 -->
+          <div class="position-relative me-3" style="width: 50px; height: 50px;">
+            <img :src="chatRoom.imgData || 'https://placehold.co/50x50'" alt="profile" class="rounded-circle"
+              style="width: 50px; height: 50px;" />
+            <!-- 상태 인디케이터 -->
+            <span class="status-indicator" :class="chatRoom.status === 'ONLINE' ? 'online' : 'offline'"></span>
+          </div>
+
+          <div>
+            <strong>{{ chatRoom.chatRoomName }}</strong>, <small>{{ chatRoom.age }}</small><br />
+            <small class="text-muted">{{ chatRoom.lastMessage }}</small>
+          </div>
         </div>
 
         <!-- 우측 -->
@@ -45,7 +55,6 @@ async function getChatList() {
 
 // ✅ 서버에서 발행한 ChatRoomEvent 처리
 function handleRoomEvent(event) {
-  // event 구조: { lastMessage, chatRoomBase62RoomUUID, lastMessageDate }
   const room = chatRoomList.value.find(
     (c) => c.encodedUUID === event.chatRoomBase62RoomUUID
   );
@@ -56,7 +65,7 @@ function handleRoomEvent(event) {
   }
 }
 
-// ✅ 시간 포맷 (오늘은 시간, 과거는 날짜)
+// ✅ 시간 포맷
 function formatTime(dateStr) {
   if (!dateStr) return "";
   const d = new Date(dateStr);
@@ -76,20 +85,29 @@ function formatTime(dateStr) {
   }
 }
 
-// ✅ 마운트 시 실행
 onMounted(async () => {
-  await getChatList();
 
   stompClient.connect(() => {
     stompClient.subscribeRoomList((event) => {
       handleRoomEvent(event);
     });
   });
+
+  document.addEventListener("status-event", (e) => {
+    const payload = e.detail;
+    const chatRoom = chatRoomList.value.find(
+      (c) => c.opponentUuid === payload.memberUuid
+    );
+    if (payload.memberUuid === chatRoom.opponentUuid) {
+      chatRoom.status = payload.memberStatus;
+    }
+  });
+
+  await getChatList();
 });
 
-// ✅ 언마운트 시 구독만 해제
 onUnmounted(() => {
-  stompClient.unsubscribe();
+  stompClient.unsubscribe("/sub/room");
 });
 </script>
 
@@ -108,15 +126,8 @@ onUnmounted(() => {
 .chat-right {
   display: flex;
   align-items: center;
-  gap: 8px;              /* 시간과 뱃지 사이 간격 */
-  margin-left: auto;     /* 오른쪽 끝으로 밀기 */
-}
-
-.chat-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;              /* 시간과 뱃지 사이 간격 */
-  margin-left: auto;     /* 오른쪽 끝으로 밀기 */
+  gap: 8px;
+  margin-left: auto;
 }
 
 .unread-badge {
@@ -134,8 +145,35 @@ onUnmounted(() => {
 }
 
 @keyframes pop {
-  0% { transform: scale(0.8); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(0.8);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ✅ 상태 인디케이터 스타일 */
+.status-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.status-indicator.online {
+  background-color: #28a745;
+}
+
+.status-indicator.offline {
+  background-color: #6c757d;
 }
 </style>
