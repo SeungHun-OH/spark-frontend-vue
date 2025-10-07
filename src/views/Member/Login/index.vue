@@ -62,7 +62,7 @@ async function handleLogin() {
 
       const mNo = response.data.data.mNo;
 
-      axios.addAhthHeader(response.data.jwt);
+      axios.addAuthHeader(response.data.jwt);
 
       // dispatch login vuex에 로그인 정보 저장
       store.dispatch("member/saveAuth", {
@@ -85,6 +85,7 @@ async function handleLogin() {
       alert(response.data.message);
     }
   } catch (error) {
+    console.error("로그인 실패:", error);
     alert("로그인 실패: " + error);
   }
 }

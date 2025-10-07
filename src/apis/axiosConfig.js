@@ -11,4 +11,6 @@ function addAuthHeader(jwt) {
 //     delete axios.defaults.headers.common["Authorization"]; //"Authorization이라는 속성 제거"
 // }
 
+export { addAuthHeader };
+
 export default axios;

@@ -1,0 +1,39 @@
+/* ==========================
+   🌞 Light Theme for Spark
+   ========================== */
+:root {
+  --color-bg: #ffffff;
+  --color-bg-card: #f9f9f9;
+  --color-bg-hover: #efefef;
+  --color-text: #000000;
+  --color-text-muted: #555555;
+  --color-border: #ddd;
+  --color-accent: #007bff;
+}
+
+/* 전체 배경 */
+body, #app, .app-shell {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* 카드, 패널, 입력창 */
+.card, .content-box, .modal-content, .form-control {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border) !important;
+}
+
+/* 버튼 */
+button, .btn {
+  background-color: var(--color-bg-hover);
+  color: var(--color-text);
+  border-color: var(--color-border);
+  transition: background-color 0.2s;
+}
+
+button:hover, .btn:hover {
+  background-color: var(--color-accent);
+  color: #fff;
+}

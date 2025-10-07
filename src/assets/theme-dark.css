@@ -1,0 +1,55 @@
+/* ==========================
+   🌙 Dark Theme for Spark
+   ========================== */
+.dark {
+  --color-bg: #121212;
+  --color-bg-card: #1e1e1e;
+  --color-bg-hover: #2a2a2a;
+  --color-text: #f1f1f1;
+  --color-text-muted: #bbb;
+  --color-border: #333;
+  --color-accent: #80bfff;
+}
+
+/* 전체 배경 */
+.dark body, 
+.dark #app, 
+.dark .app-shell {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* 카드, 패널, 입력창 */
+.dark .card,
+.dark .content-box,
+.dark .modal-content,
+.dark .form-control {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border) !important;
+}
+
+/* d-flex 다크모드 */
+.dark .d-flex,
+.dark .flex-column,
+.dark .flex-grow-1,
+.dark .topbar,
+.dark .content {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text) !important;
+}
+
+/* 버튼 */
+.dark button, 
+.dark .btn {
+  background-color: var(--color-bg-hover);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.dark button:hover, 
+.dark .btn:hover {
+  background-color: var(--color-accent);
+  color: #000;
+}

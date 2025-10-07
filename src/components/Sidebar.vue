@@ -51,4 +51,11 @@ const store = useStore();
 </script>
 
 <!-- 컴포넌트 스타일 정의 -->
-<style scoped></style>
+<style scoped>
+
+.sidebar {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+</style>
