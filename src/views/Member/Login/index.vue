@@ -62,7 +62,10 @@ async function handleLogin() {
 
       const mNo = response.data.data.mNo;
 
-      axios.addAuthHeader(response.data.jwt);
+      console.log("로그인 성공, Jwt는?:", response.data.jwt);
+
+      axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.jwt;
+      // addAuthHeader(response.data.jwt);
 
       // dispatch login vuex에 로그인 정보 저장
       store.dispatch("member/saveAuth", {

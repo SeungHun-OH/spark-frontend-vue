@@ -75,6 +75,7 @@
 import { ref, onMounted } from "vue";
 import ThreadPost from "@/components/Thread/ThreadPost.vue";
 import threadboardApi from "@/apis/threadboardApi";
+import { useStore } from "vuex";
 
 const posts = ref([]);
 const page = ref(0);
@@ -83,6 +84,8 @@ const loading = ref(false);
 const keyword = ref("");
 const newComment = ref("");
 const showForm = ref(false);
+
+const store = useStore();
 
 const loadPosts = async () => {
   if (loading.value) return;
@@ -93,6 +96,7 @@ const loadPosts = async () => {
     console.log("API 응답:", res.data);
 
     const newPosts = res.data.data.map(b => ({
+      boardNo : b.tbNo,
       id: b.memberId,
       author: { nickname: b.memberName + b.tbMemberNo, profileImg: b.memberPicture ? `data:image/png;base64,${b.memberPicture}` : null},
       date: b.createdAt,
@@ -137,12 +141,24 @@ const toggleComments = (post) => {
   post.showComments = !post.showComments;
 };
 
+//임시 댓글 달기
 const addComment = (post) => {
   if (newComment.value.trim() !== "") {
     post.comments.push({ id: Date.now(), author: "Me", content: newComment.value });
     newComment.value = "";
   }
 };
+
+// const addComment = async (post) => {
+//   if(!newCommnet.value.trim()) return;
+
+//   const memberNo = store.gettres["member/getMNo"];
+//   const boardReplyReq = {
+//     brThreadBoardNo: post.id,
+//     brMemberNo: memberNo,
+//     brContent: newComment.value
+//   };
+// }
 
 const addPost = (newPost) => {
   posts.value.unshift(newPost);

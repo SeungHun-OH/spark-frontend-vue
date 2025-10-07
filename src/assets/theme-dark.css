@@ -6,9 +6,28 @@
   --color-bg-card: #1e1e1e;
   --color-bg-hover: #2a2a2a;
   --color-text: #f1f1f1;
-  --color-text-muted: #bbb;
+  --color-text-muted: #ffffff;
   --color-border: #333;
   --color-accent: #80bfff;
+}
+
+/* 🌙 다크모드 전용 텍스트 색상 보정 */
+.dark,
+.dark * {
+  color: var(--color-text) !important;
+}
+
+/* :placeholder-shown */
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: var(--color-text-muted) !important;
+}
+
+/* muted, secondary, small 텍스트 회색 보정 */
+.dark .text-muted,
+.dark .text-secondary,
+.dark small {
+  color: var(--color-text-muted) !important;
 }
 
 /* 전체 배경 */
