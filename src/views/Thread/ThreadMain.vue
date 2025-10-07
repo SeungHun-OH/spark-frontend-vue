@@ -18,35 +18,39 @@
 
       <!-- 스크롤 박스 -->
       <div class="scroll-box" @scroll="handleScroll">
-        <div v-for="post in posts" :key="post.id" class="card mb-3">
+
+
+        <div v-for="post in posts" :key="post.tbNo" class="card mb-3">
           <div class="card-body">
 
             <!-- 프로필 + 닉네임/아이디 + 시간 -->
             <div class="d-flex align-items-center mb-2">
-              <img :src="post.author.profileImg" alt="프로필" class="post-thumbnail rounded-circle me-2" width="40" height="40" />
+              <img :src="post.memberPicture ? `data:image/png;base64,${post.memberPicture}` : '/default-profile.png'" alt="프로필" class="post-thumbnail rounded-circle me-2" width="40" height="40" />
               <div>
-                <span class="fw-bold">{{ post.author.nickname }}</span>
-                <span class="text-muted"> | {{ post.author.userId }}</span>
-                <small class="text-muted ms-2">· {{ timeAgo(post.date) }} ({{ formatDate(post.date) }})</small>
+                <span class="fw-bold">{{ post.memberName }}</span>
+                <span class="text-muted"> | {{ post.memberId }}</span>
+                <small class="text-muted ms-2">
+                  · {{ timeAgo(post.createdAt) }} ({{ formatDate(post.createdAt) }})
+                </small>
               </div>
             </div>
 
             <!-- 제목 -->
-            <p class="post-title mb-1">{{ post.title }}</p>
+            <p class="post-title mb-1">{{ post.tbTitle }}</p>
 
             <!-- 내용 -->
-            <p class="post-content mb-2">{{ post.content }}</p>
+            <p class="post-content mb-2">{{ post.tbContent }}</p>
 
             <!-- 이미지 -->
-            <img v-if="post.image" :src="post.image" class="img-fluid rounded mb-2" />
+            <img v-if="post.tbImageNo" :src="`/images/${post.tbImageNo}`" class="img-fluid rounded mb-2" />
 
-            <!-- 좋아요/댓글 -->
+            <!-- 좋아요 / 댓글 -->
             <div class="d-flex justify-content-between">
               <button class="btn btn-sm btn-outline-danger" @click="toggleLike(post)">
-                ❤️ {{ post.likes }}
+                ❤️ {{ post.tbLikeCount }}
               </button>
               <button class="btn btn-sm btn-outline-secondary" @click="toggleComments(post)">
-                💬 {{ post.comments.length }}
+                💬 {{ post.comments ? post.comments.length : 0 }}
               </button>
             </div>
 
@@ -55,11 +59,13 @@
               <div v-for="c in post.comments" :key="c.id" class="border rounded p-2 mb-1">
                 <b>{{ c.author }}</b> {{ c.content }}
               </div>
-              <input v-model="newComment" type="text" class="form-control form-control-sm" placeholder="댓글 달기..." @keyup.enter="addComment(post)" />
+              <input v-model="newComment" type="text" class="form-control form-control-sm" 
+                     placeholder="댓글 달기..." @keyup.enter="addComment(post)" />
             </div>
 
           </div>
         </div>
+
 
         <!-- 로딩 -->
         <div v-if="loading" class="text-center py-3">
@@ -92,29 +98,11 @@ const loadPosts = async () => {
   loading.value = true;
   try {
     const res = await threadboardApi.getThreadBoardList();
-
     console.log("API 응답:", res.data);
+    posts.value.push(...res.data.data);
 
-    const newPosts = res.data.data.map(b => ({
-      boardNo : b.tbNo,
-      id: b.memberId,
-      author: { nickname: b.memberName + b.tbMemberNo, profileImg: b.memberPicture ? `data:image/png;base64,${b.memberPicture}` : null},
-      date: b.createdAt,
-      title: b.tbTitle,
-      content: b.tbContent,
-      image: b.tbImageNo ? `/images/${b.tbImageNo}` : null,
-      likes: b.tbLikeCount,
-      liked: false,
-      comments: []
-    }));
-
-    if (newPosts.length > 0) {
-      posts.value.push(...newPosts);
-      page.value++;
-    }
-
-  } catch (err) {
-    console.error("게시글 로드 실패:", err);
+  } catch (error) {
+    console.log("게시글 로드 실패:", error);
   } finally {
     loading.value = false;
   }
@@ -141,24 +129,36 @@ const toggleComments = (post) => {
   post.showComments = !post.showComments;
 };
 
-//임시 댓글 달기
-const addComment = (post) => {
-  if (newComment.value.trim() !== "") {
-    post.comments.push({ id: Date.now(), author: "Me", content: newComment.value });
+const addComment = async (post) => {
+  if (!newComment.value.trim()) return;
+
+  const memberNo = store.getters["member/getMNo"];
+
+  const boardReplyReq = {
+    brThreadBoardNo: post.tbNo,
+    brMemberNo: memberNo,
+    brContent: newComment.value
+  };
+
+  try {
+    const res = await threadboardApi.insertBoardReply(boardReplyReq);
+    console.log("댓글 등록 성공:", res.data);
+
+    // 댓글 디비에 저장 성공후 화면에 즉시 추가
+    // post.comments = post.comments || [];
+    // post.commeets.push({
+    //   id: Date.now(),
+    //   memberName: store.getters["member/getMName"],
+    //   content: newComment.value
+    // });
+
     newComment.value = "";
+
+  } catch (error) {
+    console.error("댓글 등록 실패:", error);
+    alert("댓글 등록 실패: " + error);
   }
 };
-
-// const addComment = async (post) => {
-//   if(!newCommnet.value.trim()) return;
-
-//   const memberNo = store.gettres["member/getMNo"];
-//   const boardReplyReq = {
-//     brThreadBoardNo: post.id,
-//     brMemberNo: memberNo,
-//     brContent: newComment.value
-//   };
-// }
 
 const addPost = (newPost) => {
   posts.value.unshift(newPost);
@@ -211,6 +211,43 @@ onMounted(() => {
   font-weight: 500;
 }
 </style>
+
+
+
+
+
+<!-- const loadPosts = async () => {
+  if (loading.value) return;
+  loading.value = true;
+  try {
+    const res = await threadboardApi.getThreadBoardList();
+
+    console.log("API 응답:", res.data);
+
+    const newPosts = res.data.data.map(b => ({
+      boardNo : b.tbNo,
+      id: b.memberId,
+      author: { nickname: b.memberName + b.tbMemberNo, profileImg: b.memberPicture ? `data:image/png;base64,${b.memberPicture}` : null},
+      date: b.createdAt,
+      title: b.tbTitle,
+      content: b.tbContent,
+      image: b.tbImageNo ? `/images/${b.tbImageNo}` : null,
+      likes: b.tbLikeCount,
+      liked: false,
+      comments: []
+    }));
+
+    if (newPosts.length > 0) {
+      posts.value.push(...newPosts);
+      page.value++;
+    }
+
+  } catch (err) {
+    console.error("게시글 로드 실패:", err);
+  } finally {
+    loading.value = false;
+  }
+}; -->
 
 
 
