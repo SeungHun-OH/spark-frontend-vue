@@ -24,8 +24,7 @@
             <!-- 프로필 + 닉네임/아이디 + 시간 + 수정삭제버튼 -->
             <div class="d-flex justify-content-between align-items-start mb-2">
               <div class="d-flex align-items-center">
-                <img :src="post.memberPicture ? `data:image/png;base64,${post.memberPicture}` : '/assets/profile.png'"
-                     alt="프로필" class="post-thumbnail rounded-circle me-2" width="40" height="40" />
+                <img :src="post.memberPicture ? `data:image/png;base64,${post.memberPicture}` : '/assets/profile.png'" alt="프로필" class="post-thumbnail rounded-circle me-2" width="40" height="40" />
                 <div>
                   <span class="fw-bold">{{ post.memberName }}</span>
                   <span class="text-muted"> | {{ post.memberId }}</span>
@@ -58,8 +57,7 @@
             <!-- 댓글 리스트 -->
             <div v-if="post.showComments" class="mt-3">
               <div v-for="reply in post.boardReplys" :key="reply.brNo" class="d-flex mb-3 p-2 rounded comment-item">
-                <img :src="reply.memberPicture ? `data:image/png;base64,${reply.memberPicture}` : '/default-profile.png'"
-                     alt="댓글 프로필" class="rounded-circle me-3" width="35" height="35" />
+                <img :src="reply.memberPicture ? `data:image/png;base64,${reply.memberPicture}` : '/default-profile.png'" alt="댓글 프로필" class="rounded-circle me-3" width="35" height="35" />
                 <div class="flex-grow-1">
                   <div class="d-flex justify-content-between align-items-center">
                     <div>
@@ -79,9 +77,8 @@
               <!-- 댓글 입력창 -->
               <div class="mt-2 d-flex align-items-center">
                 <img :src="userProfile" class="rounded-circle me-2" width="35" height="35" />
-                <input v-model="newComment" type="text"
-                       class="form-control form-control-sm rounded-pill bg-dark text-light border-secondary me-2"
-                       placeholder="댓글 달기..." @keyup.enter="addComment(post)" />
+                <input v-model="newComment" type="text" class="form-control form-control-sm rounded-pill bg-dark text-light border-secondary me-2" placeholder="댓글 달기..."
+                  @keyup.enter="addComment(post)" />
                 <button class="btn btn-primary btn-sm rounded-pill px-3" @click="addComment(post)">등록</button>
               </div>
             </div>
@@ -97,6 +94,14 @@
 
     </div>
   </div>
+
+  <!-- ✏️ 게시글 수정 모달 -->
+  <ThreadBoardEdit :show="showEditModal" 
+                   :post="selectedPost" 
+                  @close="showEditModal = false" 
+                  @updated="onPostUpdated" />
+
+
 </template>
 
 
@@ -105,6 +110,23 @@ import { ref, onMounted, computed } from "vue";
 import ThreadPost from "@/components/Thread/ThreadPost.vue";
 import threadboardApi from "@/apis/threadboardApi";
 import { useStore } from "vuex";
+import ThreadBoardEdit from "./ThreadBoardEdit.vue";
+
+const showEditModal = ref(false);
+const selectedPost = ref(null);
+
+const editPost = (post) => {
+  selectedPost.value = { ...post }; // 선택한 게시글 복사
+  showEditModal.value = true; // 모달 열기
+}
+
+const onPostUpdated = (updatedPost) => {
+  const index = posts.value.findIndex(p => p.tbNo === updatedPost.tbNo);
+  if (index !== -1) {
+    posts.value[index].tbTitle = updatedPost.tbTitle;
+    posts.value[index].tbContent = updatedPost.tbContent;
+  }
+};
 
 const posts = ref([]);
 const loading = ref(false);
@@ -142,21 +164,21 @@ const isMyPost = (post) => {
 };
 
 // 🔹 수정 버튼 클릭
-const editPost = async (post) => {
-  const newContent = prompt("게시글 내용을 수정하세요:", post.tbContent);
-  if (newContent && newContent.trim() !== "") {
-    post.tbContent = newContent;
-    post.tbTitle = "제목수정" + newContent;
-    
-    const response = await threadboardApi.updateThreadBoard(post);
-    if(response.data.result === "success") {
-      alert("게시글이", post.tbNo ,"번호 게시글이 성공적으로 수정되었습니다.");
-    } else {
-      alert("게시글 수정에 실패했습니다.");
-    }
-    console.log("게시글 수정 요청:", post);
-  }
-};
+// const editPost = async (post) => {
+//   const newContent = prompt("게시글 내용을 수정하세요:", post.tbContent);
+//   if (newContent && newContent.trim() !== "") {
+//     post.tbContent = newContent;
+//     post.tbTitle = "제목수정" + newContent;
+
+//     const response = await threadboardApi.updateThreadBoard(post);
+//     if (response.data.result === "success") {
+//       alert("게시글이", post.tbNo, "번호 게시글이 성공적으로 수정되었습니다.");
+//     } else {
+//       alert("게시글 수정에 실패했습니다.");
+//     }
+//     console.log("게시글 수정 요청:", post);
+//   }
+// };
 
 // 🔹 삭제 버튼 클릭
 const deletePost = async (post) => {
