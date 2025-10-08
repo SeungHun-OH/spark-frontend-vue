@@ -8,6 +8,10 @@ import HomeView from '../views/HomeView.vue'
 import Member from './Member'
 import Category from './Category'
 import Profile from '@/views/Profile.vue';
+import Thread from './Thread';
+
+import chats from './Chats';
+
 import Preferences from '@/views/Preferences.vue';
 import CreatePost from '@/views/CreatePost.vue';
 import EditPost from '@/views/EditPost.vue';
@@ -38,7 +42,10 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   ...Member,
-  ...Category
+  ...Category,
+  ...chats,
+  ...Category,
+  ...Thread
 ]
 
 const router = createRouter({

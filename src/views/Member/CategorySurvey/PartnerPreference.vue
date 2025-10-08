@@ -3,7 +3,7 @@
 
     <!-- 상단 헤더 -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h3 class="fw-bold">My Preferences</h3>
+      <h3 class="fw-bold">Partner Preferences</h3>
     </div>
 
     <!-- 탭 네비게이션 -->
@@ -52,7 +52,7 @@ async function insertMemberCategories() {
 
   const request = {
     memberNo: store.getters["member/getMNo"],
-    memberWho: "S",
+    memberWho: "P",
     preferNos: store.getters["memberCategory/getselectcategories"]
   };
 
@@ -66,12 +66,10 @@ async function insertMemberCategories() {
     const resdelete = await memberCategoryApi.deleteCategoriesByMemberWho(request.memberNo, request.memberWho);
     
     const response = await memberCategoryApi.insertMemberCategories(request);
-
-    console.log(request);
-
     if (response.data.result === "success") {
       alert(response.data.message);
-      router.push("/Member/CategorySurvey/PartnerPreference");
+      router.push("/")
+
       store.commit("memberCategory/clearSelectCategories");
     }
     else {
@@ -82,7 +80,6 @@ async function insertMemberCategories() {
 
 async function getAllcategoryStatic() {
   const response = await memberCategoryApi.getAllcategoryStatic();
-  console.log(response.data);
   store.commit("memberCategory/setCategories", response.data);
 }
 
@@ -92,11 +89,11 @@ onMounted(async () => {
     const response = await memberCategoryApi.getPreferenceByMemberNo(mno);
 
     if (response.data.result === "success") {
-      alert("SelfPreference실행", response.data.message);
+      alert("PartnerPreference실행", response.data.message);
 
       store.commit("memberCategory/resetState");
       store.commit("memberCategory/setPreferenceResponse", response.data.data);
-      store.commit("memberCategory/setSelectedItems", response.data.data.selfPrefers);
+      store.commit("memberCategory/setSelectedItems", response.data.data.partnerPrefers);
     }
   }
 })

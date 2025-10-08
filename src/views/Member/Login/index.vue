@@ -7,17 +7,15 @@
       <form @submit.prevent="handleLogin">
         <!-- 아이디 -->
         <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="mid" v-model="member.m_id" placeholder="아이디" required />
+          <input type="text" class="form-control" id="mid" v-model="member.mId" placeholder="아이디" required />
           <label for="mid"><i class="bi bi-person me-2"></i>아이디</label>
         </div>
 
         <!-- 비밀번호 -->
         <div class="form-floating mb-3">
-          <input :type="showPassword ? 'text' : 'password'" class="form-control" id="mpassword"
-                 v-model="member.m_password" placeholder="비밀번호" required />
+          <input :type="showPassword ? 'text' : 'password'" class="form-control" id="mpassword" v-model="member.mPassword" placeholder="비밀번호" required />
           <label for="mpassword"><i class="bi bi-lock me-2"></i>비밀번호</label>
-          <button class="btn btn-sm btn-outline-secondary mt-2" type="button"
-                  @click="showPassword = !showPassword">
+          <button class="btn btn-sm btn-outline-secondary mt-2" type="button" @click="showPassword = !showPassword">
             <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
           </button>
         </div>
@@ -47,8 +45,8 @@ const router = useRouter();
 const showPassword = ref(false);
 
 const member = ref({
-  m_id: "user3",
-  m_password: "123456"
+  mId: "user3",
+  mPassword: "123456"
 });
 
 async function handleLogin() {
@@ -61,26 +59,21 @@ async function handleLogin() {
       alert(response.data.message);
       console.log(response.data);
 
-      const m_no = response.data.m_no;
+      const mNo = response.data.data.mNo;
 
       // dispatch login vuex에 로그인 정보 저장
       store.dispatch("member/saveAuth", {
-
-        // m_id: response.data.m_id,
-        // m_name: response.data.m_name,
-        // m_no: response.data.m_no,
-
         ...response.data.data,
         jwt: response.data.jwt,
       });
 
       // dispatch Login Photo vuex에 로그인 정보 저장
-      const photoRes = await memberApi.memberPictureGet(m_no);
+      const photoRes = await memberApi.memberPictureGet(mNo);
       console.log(photoRes.data);
 
-      if(photoRes.data){
+      if (photoRes.data) {
         store.dispatch("member/savePhoto", {
-          m_attachdata: photoRes.data.data.mp_attachdata
+          mAttachData: photoRes.data.data.mpAttachData
         });
       }
 

@@ -13,14 +13,22 @@
       <router-link to="/matching" class="nav-link" :class="{ active: $route.path === '/matching' }"><i class="bi bi-people"></i> Matching</router-link>
       <router-link to="/feed" class="nav-link" :class="{ active: $route.path === '/feed' }"><i class="bi bi-camera"></i> My Feed</router-link>
       <!-- Chats and Profile disabled per request -->
-      <a class="nav-link disabled" href="#" title="Chats disabled"><i class="bi bi-chat-dots"></i> Chats</a>
+      <router-link to="/chat" class="nav-link" :class="{ active: $route.path === '/chat' }"><i class="bi bi-chat-dots"></i> Chats</router-link>
       <router-link to="/hearts" class="nav-link" :class="{ active: $route.path === '/hearts' }"><i class="bi bi-heart"></i> Hearts</router-link>
-      <router-link to="/Profile" class="nav-link" :class="{ active: $route.path === '/Profile' }"><i class="bi bi-person"></i> Profile</router-link>
+
+      <router-link v-if="store.getters['member/getJwt']" to="/Member/Profile" class="nav-link" :class="{ active: $route.path === '/Member/Profile' }">
+        <i class="bi bi-person"></i> Profile
+      </router-link>
+      <router-link v-else to="/Member/Login" class="nav-link">
+        <i class="bi bi-box-arrow-in-right"></i> Profile
+      </router-link>
+
+      <router-link to="/Thread/ThreadMain" class="nav-link" :class="{ active: $route.path === '/Thread/ThreadMain' }"><i class="bi bi-heart"></i> Thread</router-link>
     </nav>
 
-    <div>
+    <!-- <div>
       <Example />
-    </div>
+    </div> -->
 
     <div class="footer">
       <div class="d-flex align-items-center">
@@ -33,9 +41,13 @@
 
 <!-- 컴포넌트의 초기화 또는 이벤트 처리 -->
 <script setup>
-import Example from '@/views/Member/Example.vue';
+// import Example from '@/views/Member/Example.vue';
 import Logout from './member/Logout.vue';
 import ProfileIcon from './member/ProfileIcon.vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+
 </script>
 
 <!-- 컴포넌트 스타일 정의 -->
