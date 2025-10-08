@@ -49,6 +49,7 @@
               <button class="btn btn-outline-danger btn-sm" @click="toggleLike(post)">
                 ❤️ {{ post.tbLikeCount }}
               </button>
+
               <button class="btn btn-outline-info btn-sm" @click="toggleComments(post)">
                 💬 댓글 {{ post.boardReplys ? post.boardReplys.length : 0 }}
               </button>
@@ -57,7 +58,9 @@
             <!-- 댓글 리스트 -->
             <div v-if="post.showComments" class="mt-3">
               <div v-for="reply in post.boardReplys" :key="reply.brNo" class="d-flex mb-3 p-2 rounded comment-item">
+
                 <img :src="reply.memberPicture ? `data:image/png;base64,${reply.memberPicture}` : '/default-profile.png'" alt="댓글 프로필" class="rounded-circle me-3" width="35" height="35" />
+
                 <div class="flex-grow-1">
                   <div class="d-flex justify-content-between align-items-center">
                     <div>
@@ -67,10 +70,51 @@
                     <button class="btn btn-sm p-0 text-muted like-btn" @click="toggleReplyLike(reply)">
                       <i :class="reply.liked ? 'bi bi-heart-fill text-danger' : 'bi bi-heart'"></i>
                     </button>
+
+                    <div v-if="store.getters['member/getMNo'] == reply.brMemberNo">
+
+                      <!-- 수정모드가 아닐 때 -->
+                      <template v-if="!reply.editing">
+                        <button class="btn btn-outline-secondary btn-sm ms-2 py-0 px-2" @click="reply.editing = true">
+                          수정
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm py-0 px-2" @click="deleteReply(post, reply)">
+                          삭제
+                        </button>
+                      </template>
+
+                      <!-- 수정모드일 때 -->
+                      <template v-else>
+                        <button class="btn btn-primary btn-sm ms-2 py-0 px-2" @click="saveReplyEdit(post, reply)">
+                          저장
+                        </button>
+                        <button class="btn btn-secondary btn-sm py-0 px-2" @click="cancelReplyEdit(reply)">
+                          취소
+                        </button>
+                      </template>
+
+                      <!-- <button class="btn btn-outine-secondary btn-sm ms-2 py-0 px-2" @click="editReply(post, reply)"> 수정 </button> -->
+                      <!-- <button class="btn btn-outline-danger btn-sm py-0 px-2" @click="deleteReply(post, reply)"> 삭제 </button> -->
+
+                    </div>
+
                   </div>
-                  <div class="text-light mt-1 small" style="white-space: pre-line;">
+
+                  <!-- 댓글 내용 or 수정 input -->
+                  <div class="mt-1 small" style="white-space: pre-line;">
+                    <template v-if="!reply.editing">
+                      {{ reply.brContent }}
+                    </template>
+                    <template v-else>
+                      <input v-model="reply.tempContent" class="form-control form-control-sm bg-dark text-light border-secondary mt-1" placeholder="수정할 내용을 입력하세요..." />
+                    </template>
+                  </div>
+
+                  <!-- 댓글 내용 -->
+                  <!-- <div class="text-light mt-1 small" style="white-space: pre-line;">
                     {{ reply.brContent }}
-                  </div>
+                  </div> -->
+
                 </div>
               </div>
 
@@ -96,11 +140,7 @@
   </div>
 
   <!-- ✏️ 게시글 수정 모달 -->
-  <ThreadBoardEdit :show="showEditModal" 
-                   :post="selectedPost" 
-                  @close="showEditModal = false" 
-                  @updated="onPostUpdated" />
-
+  <ThreadBoardEdit :show="showEditModal" :post="selectedPost" @close="showEditModal = false" @updated="onPostUpdated" />
 
 </template>
 
@@ -157,29 +197,6 @@ const loadPosts = async () => {
   }
 };
 
-// 🔹 내 게시글인지 판별하는 함수
-const isMyPost = (post) => {
-  const myNo = store.getters["member/getMNo"];
-  return post.tbMemberNo === myNo;
-};
-
-// 🔹 수정 버튼 클릭
-// const editPost = async (post) => {
-//   const newContent = prompt("게시글 내용을 수정하세요:", post.tbContent);
-//   if (newContent && newContent.trim() !== "") {
-//     post.tbContent = newContent;
-//     post.tbTitle = "제목수정" + newContent;
-
-//     const response = await threadboardApi.updateThreadBoard(post);
-//     if (response.data.result === "success") {
-//       alert("게시글이", post.tbNo, "번호 게시글이 성공적으로 수정되었습니다.");
-//     } else {
-//       alert("게시글 수정에 실패했습니다.");
-//     }
-//     console.log("게시글 수정 요청:", post);
-//   }
-// };
-
 // 🔹 삭제 버튼 클릭
 const deletePost = async (post) => {
   if (!confirm("정말 삭제하시겠습니까?")) return;
@@ -234,6 +251,56 @@ const addComment = async (post) => {
     console.error("댓글 등록 실패:", error);
   }
 };
+
+const editReply = async (post, reply) => {
+  const newContent = prompt("댓글 내용을 수정하세요:", reply.brContent);
+  if (newContent && newContent.trim() !== "") {
+    reply.brContent = newContent.trim();
+    // 예: await threadboardApi.updateBoardReply(reply);
+  }
+}
+
+const deleteReply = async (post, reply) => {
+  if (!confirm("댓글을 삭제하시겠습니까?")) return;
+  try {
+    const res = await threadboardApi.deleteBoardReply(reply.brNo);
+    if (res.data.result === "success") {
+      post.boardReplys = post.boardReplys.filter(r => r.brNo !== reply.brNo);
+    } else {
+      alert("댓글 삭제에 실패했습니다.");
+    }
+  } catch (err) {
+    console.error("댓글 삭제 실패:", err);
+  }
+}
+
+const saveReplyEdit = async (post, reply) => {
+  const newContent = reply.tempContent?.trim();
+  if(!newContent) {alert("댓글 내용을 입력해주세요."); return }
+  
+  try{
+    const response = await threadboardApi.updateBoardReply({
+      brNo: reply.brNo,
+      brContent: newContent
+    });
+    console.log("response ", response.data);
+    if(response.data.result === "success"){
+      reply.brContent = newContent;
+      reply.editing = false;
+      alert("댓글 수정성공.");
+    } else {
+      alert("댓글 수정에 실패했습니다.");
+    }
+  } catch(err){
+    console.error("댓글 수정 실패:", err);
+    return;
+  }
+}
+
+const cancelReplyEdit = (reply) => {
+  reply.editing = false;
+  reply.tempContent = reply.brContent;
+}
 
 // 🔹 시간 경과 계산 (예: '2시간 전', '3일 전')
 const timeAgo = (date) => {

@@ -22,12 +22,25 @@ function insertBoardReply(boardreply) {
   return axios.post("/thread/boardreply", boardreply)
 }
 
+function deleteBoardReply(brNo) {
+  return axios.delete("/thread/boardreply",{
+    params: { brNo: brNo }
+  });
+}
+
+function updateBoardReply(boardreply) {
+  return axios.put("/thread/boardreply", boardreply);
+}
+
 const threadboardApi = {
   insertThreadBoard,
   getThreadBoardList,
-  insertBoardReply,
   deleteThreadBoard,
-  updateThreadBoard
+  updateThreadBoard,
+  
+  insertBoardReply,
+  deleteBoardReply,
+  updateBoardReply
 };
 
 export default threadboardApi;

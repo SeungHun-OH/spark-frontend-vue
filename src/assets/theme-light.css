@@ -73,3 +73,12 @@
   background-color: var(--color-accent);
   color: #fff;
 }
+
+/* 모달박스 컬러 */
+.app-shell .modal-box,
+.app-shell .form-control,
+.app-shell textarea {
+  background-color: var(--color-bg-card);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
