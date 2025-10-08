@@ -33,8 +33,6 @@ const memberCategoryApi = {
   insertMemberCategories,
   getPreferenceByMemberNo,
   deleteCategoriesByMemberWho,
-  getAllcategoryStatic, 
-  insertMemberCategories, 
   getHobbyCategoriesByMemberNo
 };
 
