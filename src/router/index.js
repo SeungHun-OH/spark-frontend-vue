@@ -1,22 +1,32 @@
 import MainFeed from '../views/MainFeed.vue';
 import Matching from '../views/Matching.vue';
-import MyFeed from '../views/MyFeed.vue';
+import MyFeed from '../views/OtherFeed.vue';
+import OtherFeed from '../views/OtherFeed.vue';
 import Hearts from '../views/Hearts.vue';
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Member from './Member'
 import Category from './Category'
 import Profile from '@/views/Profile.vue';
+import Thread from './Thread';
 
 import chats from './Chats';
 
+import Preferences from '@/views/Preferences.vue';
+import CreatePost from '@/views/CreatePost.vue';
+import EditPost from '@/views/EditPost.vue';
 const routes = [
   
   { path: '/', component: MainFeed },
   { path: '/matching', component: Matching },
   { path: '/feed', component: MyFeed },
+  { path: '/otherfeed', component: OtherFeed },
   { path: '/hearts', component: Hearts },
   { path: '/Profile', component: Profile },
+  
+  { path: '/preferences', component: Preferences },
+  { path: '/create-post', component: CreatePost },
+  { path: '/edit-post/:fNo', component: EditPost, props: true },
 
   {
     path: '/',
@@ -33,7 +43,9 @@ const routes = [
   },
   ...Member,
   ...Category,
-  ...chats
+  ...chats,
+  ...Category,
+  ...Thread
 ]
 
 const router = createRouter({

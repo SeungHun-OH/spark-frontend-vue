@@ -28,6 +28,7 @@ function logOut()
 {
   alert("로그아웃");
   store.dispatch("member/logOut");
+  store.commit("memberCategory/resetState");
 }
 
 function logIn(){

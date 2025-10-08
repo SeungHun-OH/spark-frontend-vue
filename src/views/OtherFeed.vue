@@ -38,16 +38,6 @@
     <div class="my-post-grid">
       <div class="post-item position-relative" v-for="p in feedNoList" :key="p.fNo" @click="openPost(p.fNo)">
         <img :src="`http://localhost:8040/feedPicture/picture/${p.fpNo}`" />
-
-        <!-- Hover Actions -->
-        <div class="hover-actions">
-          <button class="btn btn-light btn-sm me-1" @click.stop="editPost(p.fNo)">
-            <i class="bi bi-pencil"></i>
-          </button>
-          <button class="btn btn-danger btn-sm" @click.stop="deletePost(p.fNo)">
-            <i class="bi bi-trash"></i>
-          </button>
-        </div>
       </div>
     </div>
 
@@ -82,10 +72,6 @@
                   <div class="fw-bold">{{ modalAuthor.mName }}</div>
                   <small class="text-muted">{{ formatTimeAgo(modalPost.feed.fDate) }}</small>
                 </div>
-                <!-- 수정 아이콘 -->
-                <button class="btn btn-sm btn-outline-secondary ms-auto" @click="goEditPost(modalPost.feed.fNo)">
-                  <i class="bi bi-pencil"></i>
-                </button>
                 <button class="btn-close ms-2" @click="closeModal()"></button>
               </div>
               <div>
