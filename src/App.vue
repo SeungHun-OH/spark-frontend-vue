@@ -55,11 +55,12 @@ import login from './views/Member/Login/index.vue';
 import Sign from './views/Member/Sign/index.vue';
 import { computed, onMounted, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+
 
 // ✅ 테마 CSS 불러오기
 import './assets/theme-light.css';
 import './assets/theme-dark.css';
-import { useStore } from 'vuex';
 
 const store = useStore();
 const router = useRouter();
@@ -67,7 +68,6 @@ const route = useRoute();
 
 // ✅ 다크모드 상태
 const isDarkMode = ref(localStorage.getItem('theme') === 'dark');
-
 
 const isLoggedIn = computed(() => !!store.state.member.jwt);
 
@@ -91,7 +91,18 @@ watchEffect(() => {
   console.log("현재 라우터 경로:", route.path);
 });
 
+// onMounted(() => {
+//   if (!isLoggedIn.value && route.path !== '/Member/Login') {
+//     router.replace('/Member/Login')
+//   }
+// })
+
 onMounted(() => {
+  const savedJwt = localStorage.getItem('jwt');
+  if (savedJwt && !store.state.member.jwt) {
+    store.commit('member/setJwt', savedJwt);
+    console.log('✅ 새로고침 후 JWT 복원 완료');
+  }
   if (!isLoggedIn.value && route.path !== '/Member/Login') {
     router.replace('/Member/Login')
   }
@@ -132,20 +143,23 @@ html,
   align-items: flex-start;
   padding-top: 60px;
   background-color: var(--color-bg);
-  overflow: hidden; /* 외부 스크롤 제거 */
+  overflow: hidden;
+  /* 외부 스크롤 제거 */
   height: calc(100vh - 80px);
 }
 
 .auth-scroll::-webkit-scrollbar {
   width: 0px;
-  background: transparent; /* 완전 투명 */
+  background: transparent;
+  /* 완전 투명 */
 }
 
 .auth-scroll {
   width: 100%;
   max-width: 600px;
   height: 100%;
-  overflow-y: auto; /* 내부만 세로 스크롤 */
+  overflow-y: auto;
+  /* 내부만 세로 스크롤 */
   padding: 40px 20px;
 }
 

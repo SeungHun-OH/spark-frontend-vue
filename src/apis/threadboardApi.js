@@ -18,6 +18,12 @@ function getThreadBoardList() {
   return axios.get("/thread/boardList")
 }
 
+function searchThreadBoards(keyword) {
+  return axios.get("/thread/boardsearch", {
+    params: { keyword: keyword }
+  })
+}
+
 function insertBoardReply(boardreply) {
   return axios.post("/thread/boardreply", boardreply)
 }
@@ -35,6 +41,8 @@ function updateBoardReply(boardreply) {
 const threadboardApi = {
   insertThreadBoard,
   getThreadBoardList,
+  searchThreadBoards,
+  
   deleteThreadBoard,
   updateThreadBoard,
   

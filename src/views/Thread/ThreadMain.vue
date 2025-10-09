@@ -13,7 +13,7 @@
 
       <!-- 검색창 -->
       <div class="mb-3">
-        <input v-model="keyword" type="text" placeholder="검색어 입력..." class="form-control" @keyup.enter="searchPosts" />
+        <input v-model="keyword" type="text" placeholder="검색어 입력..." class="form-control" @keyup.enter="searchPosts(keyword)" />
       </div>
 
       <!-- 스크롤 박스 -->
@@ -41,8 +41,11 @@
             </div>
 
             <!-- 제목 + 내용 -->
-            <p class="post-title mb-1">{{ post.tbTitle }}</p>
-            <p class="post-content mb-2">{{ post.tbContent }}</p>
+            <p class="post-title mb-1" v-html="highlightText(post.tbTitle, keyword)"></p>
+            <p class="post-content mb-2" v-html="highlightText(post.tbContent, keyword)"></p>
+
+            <!-- <p class="post-title mb-1">{{ post.tbTitle }}</p>
+            <p class="post-content mb-2">{{ post.tbContent }}</p> -->
 
             <!-- 좋아요 + 댓글 보기 -->
             <div class="d-flex justify-content-between align-items-center mt-2">
@@ -154,6 +157,25 @@ import ThreadBoardEdit from "./ThreadBoardEdit.vue";
 
 const showEditModal = ref(false);
 const selectedPost = ref(null);
+
+const searchPosts = async (e) => {
+  const response = await threadboardApi.searchThreadBoards(e);
+
+  console.log("검색어:", response.data.data);
+  try {
+    if (response.data.result === "success") {
+      posts.value = response.data.data.map(p => ({
+        ...p,
+        showComments: false,
+      }));
+    } else {
+      alert("검색 실패" + response.data.message);
+      return;
+    }
+  } catch (error) {
+    console.error("검색 중 오류 발생:", error);
+  }
+};
 
 const editPost = (post) => {
   selectedPost.value = { ...post }; // 선택한 게시글 복사
@@ -274,24 +296,30 @@ const deleteReply = async (post, reply) => {
   }
 }
 
+const highlightText = (text, keyword) => {
+  if (!keyword) return text;
+  const regex = new RegExp(`(${keyword})`, "gi");
+  return text.replace(regex, match => `<mark>${match}</mark>`);
+};
+
 const saveReplyEdit = async (post, reply) => {
   const newContent = reply.tempContent?.trim();
-  if(!newContent) {alert("댓글 내용을 입력해주세요."); return }
-  
-  try{
+  if (!newContent) { alert("댓글 내용을 입력해주세요."); return }
+
+  try {
     const response = await threadboardApi.updateBoardReply({
       brNo: reply.brNo,
       brContent: newContent
     });
     console.log("response ", response.data);
-    if(response.data.result === "success"){
+    if (response.data.result === "success") {
       reply.brContent = newContent;
       reply.editing = false;
       alert("댓글 수정성공.");
     } else {
       alert("댓글 수정에 실패했습니다.");
     }
-  } catch(err){
+  } catch (err) {
     console.error("댓글 수정 실패:", err);
     return;
   }
@@ -419,4 +447,13 @@ onMounted(loadPosts);
 .form-control-sm::placeholder {
   color: var(--color-text-muted) !important;
 }
+
+mark {
+  background: none !important; /* ✅ 배경 제거 */
+  color: var(--color-accent);  /* ✅ 강조 색상 (테마 색과 어울리게) */
+  font-weight: 700;            /* ✅ 굵게 */
+  padding: 0;                  /* ✅ 여백 제거 */
+  border-radius: 0;            /* ✅ 둥근 배경 제거 */
+}
+
 </style>

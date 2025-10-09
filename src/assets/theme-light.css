@@ -83,6 +83,12 @@
   border-color: var(--color-border);
 }
 
+[data-theme="light"] mark {
+  background: none !important;
+  color: #e60000; /* 라이트 테마에서는 진한 포인트 컬러 */
+  font-weight: 700;
+}
+
 /* ✅ 로그인 화면은 전역 테마 예외 처리 */
 /* .light .login-wrapper,
 .light .login-wrapper * {
