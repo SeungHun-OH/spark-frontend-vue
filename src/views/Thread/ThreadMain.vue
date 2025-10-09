@@ -4,7 +4,11 @@
 
       <!-- 헤더 -->
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>🌱 Writing App (Community)</h4>
+
+        <!-- <h4>🌱 Writing App (Community)</h4> -->
+        <div class="d-flex align-items-center">
+          <ThreadTagList :keywords="['연애', '고민', '이상형', '연락', '장거리', '썸']" @select="onTagSelect" />
+        </div>
         <button class="btn btn-primary btn-sm" @click="showForm = !showForm">✍️ 글쓰기</button>
       </div>
 
@@ -133,6 +137,8 @@
           </div>
         </div>
 
+       
+
         <!-- 로딩 -->
         <div v-if="loading" class="text-center py-3">
           <div class="spinner-border"></div>
@@ -150,13 +156,19 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import ThreadPost from "@/components/Thread/ThreadPost.vue";
+import ThreadPost from "@/views/Thread/ThreadPost.vue";
 import threadboardApi from "@/apis/threadboardApi";
 import { useStore } from "vuex";
 import ThreadBoardEdit from "./ThreadBoardEdit.vue";
+import ThreadTagList from "./ThreadTagList.vue";
 
 const showEditModal = ref(false);
 const selectedPost = ref(null);
+
+const onTagSelect = async (tag) => {
+  keyword.value = tag; // ✅ 선택된 태그를 keyword로 세팅
+  await searchPosts(tag); // ✅ 검색 API 호출 (하이라이트용)
+};
 
 const searchPosts = async (e) => {
   const response = await threadboardApi.searchThreadBoards(e);
@@ -175,6 +187,12 @@ const searchPosts = async (e) => {
   } catch (error) {
     console.error("검색 중 오류 발생:", error);
   }
+};
+
+const highlightText = (text, keyword) => {
+  if (!keyword) return text;
+  const regex = new RegExp(`(${keyword})`, "gi");
+  return text.replace(regex, match => `<mark>${match}</mark>`);
 };
 
 const editPost = (post) => {
@@ -295,12 +313,6 @@ const deleteReply = async (post, reply) => {
     console.error("댓글 삭제 실패:", err);
   }
 }
-
-const highlightText = (text, keyword) => {
-  if (!keyword) return text;
-  const regex = new RegExp(`(${keyword})`, "gi");
-  return text.replace(regex, match => `<mark>${match}</mark>`);
-};
 
 const saveReplyEdit = async (post, reply) => {
   const newContent = reply.tempContent?.trim();
@@ -449,11 +461,42 @@ onMounted(loadPosts);
 }
 
 mark {
-  background: none !important; /* ✅ 배경 제거 */
-  color: var(--color-accent);  /* ✅ 강조 색상 (테마 색과 어울리게) */
-  font-weight: 700;            /* ✅ 굵게 */
-  padding: 0;                  /* ✅ 여백 제거 */
-  border-radius: 0;            /* ✅ 둥근 배경 제거 */
+  background: none !important;
+  /* ✅ 배경 제거 */
+  color: var(--color-accent);
+  /* ✅ 강조 색상 (테마 색과 어울리게) */
+  font-weight: 700;
+  /* ✅ 굵게 */
+  padding: 0;
+  /* ✅ 여백 제거 */
+  border-radius: 0;
+  /* ✅ 둥근 배경 제거 */
 }
 
+/* 🔥 키워드 영역 (Writing App 자리에 들어간 경우) */
+.thread-keyword-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  background-color: transparent;
+  padding: 6px 0;
+}
+
+/* 키워드 태그 스타일 (ThreadTagList 안쪽에서 적용해도 무방) */
+.thread-keyword-bar button {
+  background-color: var(--color-bg-card);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.thread-keyword-bar button:hover {
+  background-color: var(--color-accent);
+  color: #fff;
+}
 </style>
