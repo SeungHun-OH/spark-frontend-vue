@@ -10,10 +10,12 @@ function createMatching(h_no) {
     return axios.post("/matching/", h_no);
 }
 
-function getMatching(mt_no) {
-    return axios.get("/matching/", {
-        params : {mt_no}
-    });
+function getMatching() {
+    return axios.get("/matching/");
+}
+
+function postLike(partnerUuid){
+    axios.post("/matching/like", partnerUuid, {headers: { 'Content-Type': 'text/plain' }});
 }
 
 function deleteMatching(mt_no) {
@@ -25,7 +27,8 @@ function deleteMatching(mt_no) {
 const MatchingApi = {
     createMatching,
     getMatching,
-    deleteMatching
+    deleteMatching,
+    postLike
 };
 
 export default MatchingApi;
