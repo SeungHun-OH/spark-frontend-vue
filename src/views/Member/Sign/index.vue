@@ -157,20 +157,14 @@ const handleSubmit = async () => {
     });
 
     if (LoginResponse.data.result === "success") {
-
       alert(LoginResponse.data.message);
       console.log(LoginResponse.data);
 
       const mNo = LoginResponse.data.data.mNo;
 
       // dispatch login vuex에 로그인 정보 저장
-      store.dispatch("member/saveAuth", {
-        // m_id: LoginResponse.data.m_id,
-        // m_name: LoginResponse.data.m_name,
-        // m_no: LoginResponse.data.m_no,
-
+      store.dispatch("member/saveAuth", {        
         ...LoginResponse.data.data,
-
         jwt: LoginResponse.data.jwt,
       });
 

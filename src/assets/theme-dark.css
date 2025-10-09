@@ -1,0 +1,118 @@
+/* ==========================
+   🌙 Dark Theme for Spark
+   ========================== */
+.dark {
+  --color-bg: #121212;
+  --color-bg-card: #1e1e1e;
+  --color-bg-hover: #2a2a2a;
+  --color-text: #f1f1f1;
+  --color-text-muted: #ffffff;
+  --color-border: #333;
+  --color-accent: #80bfff;
+}
+
+/* 🌙 다크모드 전용 텍스트 색상 보정 */
+.dark,
+.dark * {
+  color: var(--color-text) !important;
+}
+
+
+/* :placeholder-shown */
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: var(--color-text-muted) !important;
+}
+
+/* muted, secondary, small 텍스트 회색 보정 */
+.dark .text-muted,
+.dark .text-secondary,
+.dark small {
+  color: var(--color-text-muted) !important;
+}
+
+/* 전체 배경 */
+.dark body, 
+.dark #app, 
+.dark .app-shell {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* 카드, 패널, 입력창 */
+.dark .card,
+.dark .content-box,
+.dark .modal-content,
+.dark .form-control {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border) !important;
+}
+
+/* d-flex 다크모드 */
+.dark .d-flex,
+.dark .flex-column,
+.dark .flex-grow-1,
+.dark .topbar,
+.dark .content {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text) !important;
+}
+
+/* 버튼 */
+.dark button, 
+.dark .btn {
+  background-color: var(--color-bg-hover);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.dark button:hover, 
+.dark .btn:hover {
+  background-color: var(--color-accent);
+  color: #000;
+}
+
+/* 모달박스 컬러 */
+.app-shell.dark .modal-box,
+.app-shell.dark .form-control,
+.app-shell.dark textarea {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border) !important;
+}
+
+/* 🌙 완전한 전체 배경 어둡게 (스크롤 생겨도 끝까지) */
+html, body {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text) !important;
+  min-height: 100%;
+}
+
+/* ✅ 스크롤 생겨도 하단 흰색 안 남게 */
+body {
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#app {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text) !important;
+  min-height: 100vh;
+}
+
+.app-shell.dark,
+.app-shell.dark main,
+.app-shell.dark .auth-container,
+.app-shell.dark .content {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text) !important;
+}
+
+/* ✅ 로그인 화면은 전역 테마 예외 처리 */
+/* .dark .login-wrapper,
+.dark .login-wrapper * {
+  all: revert !important;
+} */

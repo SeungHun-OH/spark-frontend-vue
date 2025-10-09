@@ -29,11 +29,11 @@ function logOut()
   alert("로그아웃");
   store.dispatch("member/logOut");
   store.commit("memberCategory/resetState");
+  window.location.href = "/";
 }
 
 function logIn(){
   router.push("/Member/Login")
-
 }
 
 </script>
