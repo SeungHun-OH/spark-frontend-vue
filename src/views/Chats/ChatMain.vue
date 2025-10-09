@@ -95,11 +95,15 @@ onMounted(async () => {
 
   document.addEventListener("status-event", (e) => {
     const payload = e.detail;
+    console.log(JSON.stringify(payload) + "00000000000");
+    console.log(chatRoomList.value);
     const chatRoom = chatRoomList.value.find(
       (c) => c.opponentUuid === payload.memberUuid
     );
-    if (payload.memberUuid === chatRoom.opponentUuid) {
-      chatRoom.status = payload.memberStatus;
+    if (chatRoom) {
+      if (payload.memberUuid === chatRoom.opponentUuid) {
+        chatRoom.status = payload.memberStatus;
+      }
     }
   });
 

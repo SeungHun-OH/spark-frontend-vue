@@ -6,8 +6,8 @@ let subscriptions = {};
 let isConnecting = false; // 연결 시도 중 여부
 let statusSubscribed = false; // /sub/status 중복 구독 방지
 
-
-const jwtToken = "eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng";
+const jwtToken = localStorage.getItem("token");
+console.log(jwtToken);
 
 function isConnected() {
   return !!client && client.connected === true;

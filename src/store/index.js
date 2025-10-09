@@ -3,6 +3,7 @@ import feed from './feed';
 import member from './member';
 import memberCategory from './memberCategory';
 import memberStatus from './memberStatus';
+import auth from './auth';
 
 export default createStore({
   state: {
@@ -23,7 +24,8 @@ export default createStore({
     },
     setJwt(state, payload) {
       state.jwt = payload;
-    }
+    },
+    
   },
   actions: {
   },
@@ -31,6 +33,7 @@ export default createStore({
     feed : feed,
     member : member,
     memberCategory : memberCategory,
-    memberStatus
+    memberStatus,
+    auth
   }
 })

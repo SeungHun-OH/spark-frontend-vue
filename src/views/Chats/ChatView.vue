@@ -59,6 +59,7 @@ import chatApi from "@/apis/chatApi";
 import { onMounted, ref, onUnmounted, onUpdated, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import stompClient from "@/sockets/stompClient";
+import { useStore } from "vuex";
 
 const router = useRouter();
 const route = useRoute();
@@ -66,12 +67,15 @@ const input = ref("");
 const messages = ref([]);
 const chatContainer = ref(null);
 const currentRoomId = ref(null);
+const store = useStore();
+const myUuid = store.getters["auth/getmemberUuid"];
+
 const partner = ref({
   name: "로딩중...",
   age: " ",
   profileImg: "https://placehold.co/50x50",
   opponentUuid: null,
-  status: "OFFLINE",
+  status: "OFFLINE"
 });
 const isLoading = ref(true);
 
@@ -79,9 +83,10 @@ let statusListenerAdded = false;
 
 function handleMessage(msg) {
   const parsed = { ...msg, cmDateObj: new Date(msg.cmDate) };
-  if (!parsed.cmNo || messages.value.every((m) => m.cmNo !== parsed.cmNo)) {
+  if(myUuid != parsed.cmSendMemberUuid){
     messages.value.push(parsed);
   }
+  // }
   chatApi.updateLastMessage(parsed.cmNo);
 }
 
@@ -145,6 +150,7 @@ function handleSend() {
   stompClient.sendMessage(route.params.chatRoomBaseUuid, {
     cmMessage: input.value,
     cmOpponentUuid: partner.value.opponentUuid,
+    cmSendMemberUuid: myUuid
   });
 
   input.value = "";
