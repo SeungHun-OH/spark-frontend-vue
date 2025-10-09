@@ -26,8 +26,14 @@
 
       <!-- 하단 링크 -->
       <div class="text-center mt-3">
+
         <a href="#" class="text-decoration-none me-3">비밀번호 찾기</a>
-        <a href="/Member/Sign" class="text-decoration-none">회원가입</a>
+
+        <a href="#" class="text-decoration-none" @click.prevent="goToSignUp"> 회원가입 </a>
+
+        <!-- <a href="/Member/Sign" class="text-decoration-none">회원가입</a> -->
+        <!-- <a href="#" class="text-decoration-none" @click.prevent="$emit('open-signup')">회원가입 </a> -->
+
       </div>
     </div>
   </div>
@@ -39,6 +45,11 @@ import axios from "axios";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+
+function goToSignUp() {
+  console.log("회원가입 클릭됨");
+  router.push('/Member/Sign') // ✅ App.vue의 RouterView가 Sign 컴포넌트로 자동 변경됨
+}
 
 const store = useStore();
 const router = useRouter();
@@ -82,7 +93,7 @@ async function handleLogin() {
           mAttachData: photoRes.data.data.mpAttachData
         });
       }
-      
+
       window.location.href = "/";
 
     } else {
@@ -96,9 +107,7 @@ async function handleLogin() {
 </script>
 
 <style scoped>
-
 body {
   background-color: #f8f9fa;
 }
-
 </style>

@@ -17,6 +17,7 @@
   color: var(--color-text) !important;
 }
 
+
 /* :placeholder-shown */
 .dark input::placeholder,
 .dark textarea::placeholder {
@@ -80,6 +81,34 @@
   background-color: var(--color-bg-card) !important;
   color: var(--color-text) !important;
   border-color: var(--color-border) !important;
+}
+
+/* 🌙 완전한 전체 배경 어둡게 (스크롤 생겨도 끝까지) */
+html, body {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text) !important;
+  min-height: 100%;
+}
+
+/* ✅ 스크롤 생겨도 하단 흰색 안 남게 */
+body {
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#app {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text) !important;
+  min-height: 100vh;
+}
+
+.app-shell.dark,
+.app-shell.dark main,
+.app-shell.dark .auth-container,
+.app-shell.dark .content {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text) !important;
 }
 
 /* ✅ 로그인 화면은 전역 테마 예외 처리 */

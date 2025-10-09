@@ -140,19 +140,6 @@ const member = {
       context.commit("setJwt", localStorage.getItem("jwt") || "");
       context.commit("setToken", localStorage.getItem("token") || "");
       context.commit("setMAttachData", localStorage.getItem("mAttachData") || "");
-
-      // const mId = localStorage.getItem("mId") || "";
-      // const mNo = localStorage.getItem("mNo") || "";
-      // const mName = localStorage.getItem("mName") || "";
-      // const jwt = localStorage.getItem("jwt") || "";
-      // const mAttachData = localStorage.getItem("mAttachData") || "";
-
-      // context.commit("setMId", mId);
-      // context.commit("setMNo", mNo);
-      // context.commit("setMName", mName);
-      // context.commit("setJwt", jwt);
-      // context.commit("setToken", localStorage.getItem("token") || "");
-      // context.commit("setMAttachData", mAttachData);
     },
 
     logOut(context) {
