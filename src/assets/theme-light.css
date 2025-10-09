@@ -82,3 +82,9 @@
   color: var(--color-text);
   border-color: var(--color-border);
 }
+
+/* ✅ 로그인 화면은 전역 테마 예외 처리 */
+/* .light .login-wrapper,
+.light .login-wrapper * {
+  all: revert !important;
+} */

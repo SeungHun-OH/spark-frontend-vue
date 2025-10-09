@@ -65,12 +65,12 @@ async function handleLogin() {
       console.log("로그인 성공, Jwt는?:", response.data.jwt);
 
       axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.jwt;
-      // addAuthHeader(response.data.jwt);
 
       // dispatch login vuex에 로그인 정보 저장
       store.dispatch("member/saveAuth", {
         ...response.data.data,
         jwt: response.data.jwt,
+        token: response.data.token
       });
 
       // dispatch Login Photo vuex에 로그인 정보 저장
@@ -82,6 +82,7 @@ async function handleLogin() {
           mAttachData: photoRes.data.data.mpAttachData
         });
       }
+      
       window.location.href = "/";
 
     } else {
@@ -95,7 +96,9 @@ async function handleLogin() {
 </script>
 
 <style scoped>
+
 body {
   background-color: #f8f9fa;
 }
+
 </style>

@@ -4,13 +4,14 @@
     <template v-if="isLoggedIn">
       <Sidebar />
       <div class="d-flex flex-column flex-grow-1">
+        
         <header class="topbar d-flex justify-content-between align-items-center p-3">
           <div class="fw-bold">Dating App (Community)</div>
           <div>
             <button class="btn btn-outline-secondary btn-sm me-2" @click="toggleTheme">
               {{ isDarkMode ? '☀️ Light' : '🌙 Dark' }}
             </button>
-            <button v-if="isLoggedIn" class="btn btn-primary btn-sm">공유하기</button>
+            <!-- <button v-if="isLoggedIn" class="btn btn-primary btn-sm">공유하기</button> -->
           </div>
         </header>
 
@@ -22,14 +23,24 @@
 
     <!-- ❌ 로그아웃 상태 (헤더 제외 전체 중앙 배치) -->
     <template v-else>
-      <div
-        style="
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
-          width: 100%;">
-        <login />
+      <div class="d-flex flex-column flex-grow-1">
+
+        <header class="topbar d-flex justify-content-between align-items-center p-3">
+          <div class="fw-bold">Dating App (Community)</div>
+          <div>
+            <button class="btn btn-outline-secondary btn-sm me-2" @click="toggleTheme">
+              {{ isDarkMode ? '☀️ Light' : '🌙 Dark' }}
+            </button>
+            <button v-if="isLoggedIn" class="btn btn-primary btn-sm">공유하기</button>
+          </div>
+        </header>
+
+        <div style="margin-top: 100px;"></div>
+
+        <div class="login-wrapper">
+          <login />
+        </div>
+
       </div>
     </template>
   </div>
@@ -67,7 +78,6 @@ window.addEventListener('storage', () => {
   isLoggedIn.value = !!localStorage.getItem('jwt');
 });
 
-
 </script>
 
 <style>
@@ -78,6 +88,17 @@ html,
   padding: 0;
   height: 100%;
 }
+
+.login-wrapper {
+display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 80px) !important;
+  margin-top: 40px;
+  width: 100%;
+  flex: none; /* ✅ 부모 flex 영향 차단 */
+}
+
 </style>
 
 

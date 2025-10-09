@@ -16,8 +16,10 @@ const member = {
     mBio: "",
     mMbti: "",
     mActive: "T",
+    mAttachData: "",   // 프로필 사진 Base64
+    
     jwt: "",
-    mAttachData: ""   // 프로필 사진 Base64
+    token: "",
   },
 
   getters: {
@@ -36,9 +38,11 @@ const member = {
     getMBio: (state) => state.mBio,
     getMMbti: (state) => state.mMbti,
     getMActive: (state) => state.mActive,
-    getJwt: (state) => state.jwt,
     getMAttachData: (state) => state.mAttachData,
-    getIsLogin: (state) => !!state.jwt
+    getIsLogin: (state) => !!state.jwt,
+
+    getJwt: (state) => state.jwt,
+    getToken: (state) => state.token,
   },
 
   mutations: {
@@ -61,8 +65,10 @@ const member = {
       mBio: payload.mBio,
       mMbti: payload.mMbti,
       mActive: payload.mActive,
+      mAttachData: payload.mAttachData,
+
       jwt: payload.jwt,
-      mAttachData: payload.mAttachData
+      token: payload.token
     };
     Object.assign(state, clean);
     },
@@ -81,8 +87,10 @@ const member = {
     setMBio(state, payload) { state.mBio = payload; },
     setMMbti(state, payload) { state.mMbti = payload; },
     setMActive(state, payload) { state.mActive = payload; },
+    
+    setMAttachData(state, payload) { state.mAttachData = payload; },
     setJwt(state, payload) { state.jwt = payload; },
-    setMAttachData(state, payload) { state.mAttachData = payload; }
+    setToken(state, payload) { state.token = payload; }
   },
 
   actions: {
@@ -101,13 +109,16 @@ const member = {
       context.commit("setMName", payload.mName);
       context.commit("setJwt", payload.jwt);
       context.commit("setMAttachData", payload.mAttachData);
+      context.commit("setToken", payload.token);
 
       // 로컬스토리지 개별 필드 저장
       localStorage.setItem("mId", payload.mId);
       localStorage.setItem("mNo", payload.mNo);
       localStorage.setItem("mName", payload.mName);
-      localStorage.setItem("jwt", payload.jwt);
+      
       localStorage.setItem("mAttachData", payload.mAttachData);
+      localStorage.setItem("jwt", payload.jwt);
+      localStorage.setItem("token", payload.token);
     },
 
     savePhoto(context, payload) {
@@ -123,17 +134,25 @@ const member = {
 
       context.commit("setMember", payload);
 
-      const mId = localStorage.getItem("mId") || "";
-      const mNo = localStorage.getItem("mNo") || "";
-      const mName = localStorage.getItem("mName") || "";
-      const jwt = localStorage.getItem("jwt") || "";
-      const mAttachData = localStorage.getItem("mAttachData") || "";
+      context.commit("setMId", localStorage.getItem("mId") || "");
+      context.commit("setMNo", localStorage.getItem("mNo") || "");
+      context.commit("setMName", localStorage.getItem("mName") || "");
+      context.commit("setJwt", localStorage.getItem("jwt") || "");
+      context.commit("setToken", localStorage.getItem("token") || "");
+      context.commit("setMAttachData", localStorage.getItem("mAttachData") || "");
 
-      context.commit("setMId", mId);
-      context.commit("setMNo", mNo);
-      context.commit("setMName", mName);
-      context.commit("setJwt", jwt);
-      context.commit("setMAttachData", mAttachData);
+      // const mId = localStorage.getItem("mId") || "";
+      // const mNo = localStorage.getItem("mNo") || "";
+      // const mName = localStorage.getItem("mName") || "";
+      // const jwt = localStorage.getItem("jwt") || "";
+      // const mAttachData = localStorage.getItem("mAttachData") || "";
+
+      // context.commit("setMId", mId);
+      // context.commit("setMNo", mNo);
+      // context.commit("setMName", mName);
+      // context.commit("setJwt", jwt);
+      // context.commit("setToken", localStorage.getItem("token") || "");
+      // context.commit("setMAttachData", mAttachData);
     },
 
     logOut(context) {
@@ -153,7 +172,8 @@ const member = {
         mMbti: "",
         mActive: "T",
         jwt: "",
-        mAttachData: ""
+        mAttachData: "",
+        token: ""
       });
 
       localStorage.clear();
