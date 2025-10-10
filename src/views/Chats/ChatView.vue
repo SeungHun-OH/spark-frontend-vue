@@ -15,6 +15,16 @@
         <div>
           <h5 class="mb-0">{{ partner.name }}, {{ partner.age }}</h5>
         </div>
+        <!-- 삼점 버튼 (메뉴 열기) -->
+        <div class="ms-auto position-relative">
+          <button class="btn btn-link p-0" @click="toggleMenu">
+            <i class="bi bi-three-dots-vertical fs-4"></i>
+          </button>
+          <!-- 메뉴 (채팅방 나가기) -->
+          <div v-if="showMenu" class="dropdown-menu show" style="position: absolute; right: 0;">
+            <button class="dropdown-item" @click="leaveChatRoom">채팅방 나가기</button>
+          </div>
+        </div>
       </div>
 
       <!-- 메시지 -->
@@ -61,7 +71,6 @@ import { useRoute, useRouter } from "vue-router";
 import stompClient from "@/sockets/stompClient";
 import { useStore } from "vuex";
 
-
 const router = useRouter();
 const route = useRoute();
 const input = ref("");
@@ -81,6 +90,7 @@ const partner = ref({
 const isLoading = ref(true);
 
 let statusListenerAdded = false;
+const showMenu = ref(false); // 삼점 메뉴의 보이기 상태
 
 function handleMessage(msg) {
   const parsed = { ...msg, cmDateObj: new Date(msg.cmDate) };
@@ -88,7 +98,10 @@ function handleMessage(msg) {
     messages.value.push(parsed);
     chatApi.updateLastMessage(parsed.cmNo);
   }
-  // }
+}
+
+function toggleMenu() {
+  showMenu.value = !showMenu.value;
 }
 
 // 라우트 감시: 구독만 교체
@@ -109,14 +122,12 @@ watch(
 onMounted(() => {
   const roomId = route.params.chatRoomBaseUuid;
 
-  // 마운트 시 한 번만 connect
   stompClient.connect(() => {
     if (roomId) {
       stompClient.subscribeRoom(roomId, handleMessage);
       getChattingMessageList(roomId);
     }
 
-    // 전역 상태 이벤트 리스너는 한 번만 등록
     if (!statusListenerAdded) {
       document.addEventListener("status-event", (e) => {
         const payload = e.detail;
@@ -133,8 +144,6 @@ onUnmounted(() => {
   if (currentRoomId.value) {
     stompClient.unsubscribeRoom(currentRoomId.value);
   }
-  // 필요 시 전체 연결 종료
-  // stompClient.disconnect();
 });
 
 function handleSend() {
@@ -167,7 +176,6 @@ async function getChattingMessageList(roomId) {
     partner.value = {
       name: profile.name,
       age: profile.age,
-      nickName: profile.nickName,
       profileImg: profile.mpBase64Data || partner.value.profileImg,
       opponentUuid: profile.opponentUuid,
       status: profile.status,
@@ -216,6 +224,13 @@ onUpdated(() => {
     chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
   }
 });
+
+// 채팅방 나가기 함수
+function leaveChatRoom() {
+  // 채팅방 나가기 로직 추가
+  chatApi.leaveChatRoom(currentRoomId.value)
+  router.push("/chat"); // 예시로 채팅 리스트 페이지로 이동; // 예시로 채팅 리스트 페이지로 이동
+}
 </script>
 
 <style scoped>
@@ -244,5 +259,28 @@ onUpdated(() => {
 }
 .status-indicator.offline {
   background-color: #6c757d;
+}
+
+/* 메뉴(삼점버튼) */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1050;
+  display: block;
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+
+.dropdown-item {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
 }
 </style>

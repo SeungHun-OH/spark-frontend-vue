@@ -1,17 +1,21 @@
 import axios from "./axiosConfig"
 
 function getChatList() {
-    
-    return axios.get("/chat/list",{ headers : {
-        // Authorization:"Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng"
-    }});
+
+  return axios.get("/chat/list", {
+    headers: {
+      // Authorization:"Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng"
+    }
+  });
 }
 
 function getChattingMessageList(path) {
 
-    return axios.get("/chat/chatting/"+path,{ headers : {
-        // Authorization:"Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng"
-    }});
+  return axios.get("/chat/chatting/" + path, {
+    headers: {
+      // Authorization:"Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng"
+    }
+  });
 }
 
 function updateLastMessage(lastMessageNo) {
@@ -19,7 +23,7 @@ function updateLastMessage(lastMessageNo) {
     `/chat/message/read`,
     lastMessageNo,
     {
-        headers: {
+      headers: {
         "Content-Type": "application/json",
         // Authorization: "Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng"
       }
@@ -27,11 +31,16 @@ function updateLastMessage(lastMessageNo) {
   );
 }
 
+function leaveChatRoom(destination) {
+  console.log(destination);
+  axios.delete(`/chat/${destination}/leave`);
+}
 
 const chatApi = {
   getChatList,
   getChattingMessageList,
-  updateLastMessage
+  updateLastMessage,
+  leaveChatRoom
 };
 
 export default chatApi;

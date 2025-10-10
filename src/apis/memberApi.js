@@ -68,8 +68,8 @@ function memberGetJwt(jwt) {
   })
 }
 
-async function getMemberInfoByToken() {
-  return await axios.get("/api/myInfo");
+function getMemberInfoByToken() {
+  return axios.get("/api/myInfo");
 }
 
 const memberApi = {

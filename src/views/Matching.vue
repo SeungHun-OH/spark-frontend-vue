@@ -102,7 +102,6 @@ const progressPercent = computed(() => {
   return (progressIndex.value / initialProfileCount.value) * 100;
 });
 
-
 // 카드 스타일
 const dragX = ref(0);
 const isDragging = ref(false);
@@ -228,12 +227,10 @@ async function fetchData() {
 
     // 여기에서 전체 개수 저장!
     initialProfileCount.value = profiles.value.length;
-
   } catch (err) {
     console.error("매칭 데이터 불러오기 실패", err);
   }
 }
-
 
 onMounted(() => {
   fetchData();
@@ -257,11 +254,11 @@ onMounted(() => {
 }
 
 .profile-card {
-  width: 420px;
-  border-radius: 20px;
+  width: 350px; /* 카드 너비 줄이기 */
+  border-radius: 15px; /* 카드 모서리 반경 조정 */
   overflow: hidden;
   position: relative;
-  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.15); /* 그림자 크기 줄이기 */
   display: flex;
   flex-direction: column;
 }
@@ -269,10 +266,10 @@ onMounted(() => {
 .profile-img-wrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 4 / 5; /* 이미지 비율 줄이기 */
   overflow: hidden;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+  border-top-left-radius: 15px; /* 이미지 모서리 반경 조정 */
+  border-top-right-radius: 15px;
   background: #000;
 }
 
@@ -300,38 +297,38 @@ onMounted(() => {
 .profile-info {
   flex: 1;
   background: #fff;
-  padding: 16px;
+  padding: 12px 16px; /* 패딩 줄이기 */
   color: #333;
 }
 
 .profile-info h2 {
   margin: 0;
-  font-size: 22px;
-  font-weight: 800;
+  font-size: 18px; /* 제목 크기 줄이기 */
+  font-weight: 700;
 }
 
 .sub-info {
-  font-size: 13px;
+  font-size: 12px; /* 하위 정보 크기 줄이기 */
   color: #666;
 }
 
 .bio {
   margin-top: 8px;
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 14px; /* 자기소개 글씨 크기 줄이기 */
+  line-height: 1.4;
 }
 
 .tags {
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .tag {
   display: inline-block;
   background: #f1f1f1;
-  padding: 5px 10px;
+  padding: 4px 8px; /* 태그 크기 줄이기 */
   border-radius: 14px;
   margin-right: 6px;
-  font-size: 12px;
+  font-size: 10px; /* 태그 글씨 크기 줄이기 */
   color: #333;
 }
 
@@ -340,9 +337,9 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 22px;
-  margin-top: 18px;
-  margin-bottom: 24px;
+  gap: 16px; /* 버튼 간격 줄이기 */
+  margin-top: 12px;
+  margin-bottom: 20px; /* 버튼 상하 간격 줄이기 */
 }
 
 .btn-circle {
@@ -357,15 +354,15 @@ onMounted(() => {
 
 .btn-x,
 .btn-heart {
-  width: 72px;
-  height: 72px;
-  font-size: 28px;
+  width: 60px; /* 버튼 크기 줄이기 */
+  height: 60px;
+  font-size: 24px; /* 버튼 글씨 크기 줄이기 */
 }
 
 .btn-refresh {
-  width: 56px;
-  height: 56px;
-  font-size: 22px;
+  width: 50px; /* 버튼 크기 줄이기 */
+  height: 50px;
+  font-size: 20px; /* 버튼 글씨 크기 줄이기 */
 }
 
 .icon-x {
@@ -383,14 +380,14 @@ onMounted(() => {
 
 /* 프로그레스바 */
 .progress-wrap {
-  width: 420px;
+  width: 350px; /* 프로그레스바 크기 줄이기 */
   margin-top: 10px;
   text-align: center;
 }
 
 .progress-bar {
   width: 100%;
-  height: 8px;
+  height: 6px; /* 프로그레스바 높이 줄이기 */
   background: #e5e7eb;
   border-radius: 4px;
   overflow: hidden;
@@ -404,7 +401,7 @@ onMounted(() => {
 }
 
 .progress-text {
-  font-size: 13px;
+  font-size: 12px; /* 프로그레스바 텍스트 크기 줄이기 */
   color: #6b7280;
 }
 
