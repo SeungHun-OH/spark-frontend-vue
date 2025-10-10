@@ -42,7 +42,9 @@ function memberInsert(member) {
 }
 
 function memberInsertPicture(formdata) {
-  return axios.post("/member/picture", formdata)
+  return axios.post("/member/picture", formdata, {
+    headers: { "Content-Type" : "multipart/form-data"},
+  })
 }
 
 function getMemberPicture(m_nickname) {
