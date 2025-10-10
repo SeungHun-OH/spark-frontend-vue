@@ -15,9 +15,13 @@
           </div>
         </header>
 
+        <!-- ✅ 스크롤 가능한 컨텐츠 -->
         <main class="content">
-          <router-view />
+          <div class="content-scroll">
+            <router-view />
+          </div>
         </main>
+
       </div>
     </template>
 
@@ -158,6 +162,19 @@ html,
   /* 외부 스크롤 제거 */
   height: calc(100vh - 80px);
 }
+
+.content-scroll {
+  overflow-y: auto;       /* 세로 스크롤 허용 */
+  height: calc(100vh - 80px); /* 헤더 높이(대략 80px) 제외한 나머지 */
+  padding: 1rem;
+}
+
+.auth-scroll {
+  overflow-y: auto;
+  height: calc(100vh - 80px);
+  padding: 1rem;
+}
+
 
 .auth-scroll::-webkit-scrollbar {
   width: 0px;

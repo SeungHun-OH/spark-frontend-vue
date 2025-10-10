@@ -92,8 +92,8 @@ async function handleLogin() {
           mAttachData: photoRes.data.data.mpAttachData
         });
       }
-
-      window.location.href = "/";
+      // window.location.href = "/";
+      router.push("/");
 
     } else {
       alert(response.data.message);

@@ -28,7 +28,6 @@ const routes = [
   { path: '/create-post', component: CreatePost },
   { path: '/edit-post/:fNo', component: EditPost, props: true },
 
-
   {
     path: '/about',
     name: 'about',
