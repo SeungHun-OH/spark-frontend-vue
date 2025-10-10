@@ -1,6 +1,14 @@
 <template>
+  <div class="banner">
+      <div class="banner-left">
+        <div>
+          <h2>Matching</h2>
+          <small class="text-muted">Manage your posts and profile</small>
+        </div>
+      </div>
+    </div>
   <div class="match-container">
-    <!-- 카드 -->
+    <!-- 카드 -->    
     <div
       v-if="currentProfile"
       class="profile-card"
