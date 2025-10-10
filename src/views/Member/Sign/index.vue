@@ -154,6 +154,9 @@ const handleSubmit = async () => {
     // 성향 카테고리 Login 기본경로 통과
     store.commit('member/setIsSigned', true);
 
+    store.commit('member/setMId', member.value.mId);
+    store.commit('member/setMPassword', member.value.mPassword);
+
     const LoginResponse = await memberApi.memberLogin({
       mId: member.value.mId,
       mPassword: member.value.mPassword

@@ -59,15 +59,19 @@ import { useStore } from 'vuex';
 
 
 // ✅ 테마 CSS 불러오기
-import './assets/theme-light.css';
+
 import './assets/theme-dark.css';
+import './assets/theme-light.css';
 
 const store = useStore();
 const router = useRouter();
 const route = useRoute();
 
+// ✅ 라이트모드 상태
+// const isDarkMode = ref(localStorage.getItem('theme') === 'dark');
+
 // ✅ 다크모드 상태
-const isDarkMode = ref(localStorage.getItem('theme') === 'dark');
+const isDarkMode = ref(localStorage.getItem('theme') !== 'light');
 
 const isLoggedIn = computed(() => !!store.state.member.jwt);
 
@@ -136,6 +140,11 @@ html,
   flex-grow: 1;
   background-color: var(--color-bg);
   color: var(--color-text);
+
+  /* max-width: 1600px !important; */
+  width: 100% !important;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
 .auth-container {
@@ -158,11 +167,17 @@ html,
 
 .auth-scroll {
   width: 100%;
-  max-width: 600px;
+  max-width: 1000px;
   height: 100%;
   overflow-y: auto;
   /* 내부만 세로 스크롤 */
-  padding: 40px 20px;
+  padding: 40px 40px;
+}
+
+.container-fluid {
+  max-width: 1500px !important;
+  margin: 0 auto;
+  width: 100%;
 }
 
 /* 다크 모드 배경 고정 */

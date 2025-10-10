@@ -69,8 +69,9 @@ async function insertMemberCategories() {
     alert("선택된 카테고리가 없습니다")
   }
   else {
+    const resdelete = await memberCategoryApi.deleteCategoriesByMemberWho(request.memberNo, request.memberWho);
+   
     const response = await memberCategoryApi.insertMemberCategories(request);
-
     console.log(request);
 
     if (response.data.result === "success") {
@@ -81,6 +82,19 @@ async function insertMemberCategories() {
     else {
       alert(response.data.message);
     }
+
+     // if (resdelete.data.result === "success") {
+    //   alert(resdelete.data.message);
+    //   const response = await memberCategoryApi.insertMemberCategories(request);
+    //   if (response.data.result === "success") {
+    //     alert(response.data.message);
+    //     router.push("/Member/CategorySurvey/PartnerPreference");
+    //     store.commit("memberCategory/clearSelectCategories");
+    //   }
+    //   else {
+    //     alert(response.data.message);
+    //   }
+    // }
   }
 }
 

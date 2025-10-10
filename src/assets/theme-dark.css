@@ -118,6 +118,12 @@ body {
   font-weight: 700;
 }
 
+/* 이걸로 기본 다크모드 설정 */
+/* body[data-theme='dark'] {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+} */
+
 
 /* ✅ 로그인 화면은 전역 테마 예외 처리 */
 /* .dark .login-wrapper,
