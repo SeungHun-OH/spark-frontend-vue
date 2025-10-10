@@ -8,6 +8,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './assets/styles.css';
 import axios from 'axios';
 
+
+
 createApp(App).use(store).use(router).mount('#app')
 store.dispatch("member/loadAuth");
 

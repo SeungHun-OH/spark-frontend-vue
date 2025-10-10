@@ -1,39 +1,37 @@
 import axios from "./axiosConfig"
 
-/**
- * URL 뒤에 붙일 쿼리 파라미터 : params
- * 헤더(header)를 바꾸고 싶으면 :  headers
- * 타입아웃 같은 설정 : timeout
- */
-
-// function createFeed(feed, files) {
-//     return axios.post("/feed/", feed, files);
-// }
-
-// function getFeed(f_no) {
-//     return axios.get("/feed/list", {
-//         params : {f_no}
-//     });
-// }
-
 function getChatList() {
     
     return axios.get("/chat/list",{ headers : {
-        Authorization:"Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5MjE4NzgzLCJleHAiOjE3NTk1Nzg3ODN9.vcr-ZbZf0ChGAvgcbueIcF-e6Ekb_msDxAUxs9RhjwMIPMBTcZyFmhk6DxmdfI8tsoHvbYfyCgbvp5PuDS410g"
+        // Authorization:"Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng"
     }});
 }
 
 function getChattingMessageList(path) {
 
     return axios.get("/chat/chatting/"+path,{ headers : {
-        Authorization:"Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5MjE4NzgzLCJleHAiOjE3NTk1Nzg3ODN9.vcr-ZbZf0ChGAvgcbueIcF-e6Ekb_msDxAUxs9RhjwMIPMBTcZyFmhk6DxmdfI8tsoHvbYfyCgbvp5PuDS410g"
+        // Authorization:"Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng"
     }});
+}
+
+function updateLastMessage(lastMessageNo) {
+  return axios.post(
+    `/chat/message/read`,
+    lastMessageNo,
+    {
+        headers: {
+        "Content-Type": "application/json",
+        // Authorization: "Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng"
+      }
+    }
+  );
 }
 
 
 const chatApi = {
   getChatList,
-  getChattingMessageList
+  getChattingMessageList,
+  updateLastMessage
 };
 
 export default chatApi;

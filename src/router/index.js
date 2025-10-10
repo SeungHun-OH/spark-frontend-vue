@@ -9,7 +9,7 @@ import Member from './Member'
 import Category from './Category'
 import Profile from '@/views/Profile.vue';
 import Thread from './Thread';
-
+import login from './Login';
 import chats from './Chats';
 
 import Preferences from '@/views/Preferences.vue';
@@ -28,11 +28,7 @@ const routes = [
   { path: '/create-post', component: CreatePost },
   { path: '/edit-post/:fNo', component: EditPost, props: true },
 
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView
-  },
+
   {
     path: '/about',
     name: 'about',
@@ -44,8 +40,8 @@ const routes = [
   ...Member,
   ...Category,
   ...chats,
-  ...Category,
-  ...Thread
+  ...Thread,
+  ...login
 ]
 
 const router = createRouter({
