@@ -118,6 +118,171 @@ body {
   font-weight: 700;
 }
 
+/* ==========================
+   🌙 Dark Theme Fix - Likes Tab
+   ========================== */
+.dark .custom-tab-inner {
+  background-color: var(--color-bg-card) !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+.dark .custom-tab-button {
+  color: var(--color-text-muted) !important;
+  background: transparent !important;
+}
+
+.dark .custom-tab-button.active {
+  background-color: var(--color-bg-hover) !important;
+  color: var(--color-accent) !important;
+  box-shadow: 0 0 6px rgba(128, 191, 255, 0.4);
+}
+
+.dark .count-badge {
+  background-color: var(--color-bg-hover) !important;
+  color: var(--color-text) !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+
+/* ==========================
+   🌙 Dark Theme Fix - Chat Room List
+   ========================== */
+.dark .banner {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text) !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+.dark .chat-item {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text) !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+.dark .chat-item:hover {
+  background-color: var(--color-bg-hover) !important;
+}
+
+.dark .text-muted {
+  color: var(--color-text-muted) !important;
+}
+
+.dark .unread-badge {
+  background-color: #ff4d4f !important; /* 유지 */
+  color: #fff !important;
+}
+
+.dark .status-indicator {
+  border-color: var(--color-bg-card) !important; /* 흰색 테두리 → 카드색으로 변경 */
+}
+
+
+/* ==========================
+   🌙 Dark Theme Fix - Matching
+   ========================== */
+
+/* 카드 배경 */
+.dark .profile-card {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text) !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+/* 프로필 정보 영역 */
+.dark .profile-info {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text) !important;
+}
+
+/* 태그 */
+.dark .tag {
+  background-color: var(--color-bg-hover) !important;
+  color: var(--color-text) !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+/* 버튼 공통 */
+.dark .btn-circle {
+  background-color: var(--color-bg-hover) !important;
+  color: var(--color-text) !important;
+  box-shadow: 0 6px 14px rgba(255, 255, 255, 0.08) !important;
+}
+
+/* 하트 버튼만 빨간색 유지 */
+.dark .btn-heart {
+  background-color: #ff4d4f !important;
+  color: #fff !important;
+}
+
+/* 엑스 버튼 */
+.dark .icon-x {
+  color: #ff4d4f !important;
+}
+
+/* 새로고침 버튼 */
+.dark .icon-refresh {
+  color: #80bfff !important;
+}
+
+/* 프로그레스바 */
+.dark .progress-bar {
+  background-color: var(--color-bg-hover) !important;
+}
+
+.dark .progress-fill {
+  background-color: #ff4d4f !important;
+}
+
+.dark .progress-text {
+  color: var(--color-text-muted) !important;
+}
+
+/* 배너 */
+.dark .banner {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text) !important;
+}
+
+
+/* ==========================
+   🌙 Dark Mode Scrollbar (Transparent)
+   ========================== */
+
+/* Webkit 기반 (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 10px; /* 스크롤 두께 */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* 트랙 완전 투명 */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15); /* 반투명한 밝은 회색 */
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35); /* hover 시 조금 더 보이게 */
+}
+
+/* Firefox 지원용 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+/* 다크모드 활성화 시 조금 더 어둡게 */
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(200, 200, 200, 0.1);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+
 /* 이걸로 기본 다크모드 설정 */
 /* body[data-theme='dark'] {
   background-color: var(--bg-color);
@@ -125,8 +290,4 @@ body {
 } */
 
 
-/* ✅ 로그인 화면은 전역 테마 예외 처리 */
-/* .dark .login-wrapper,
-.dark .login-wrapper * {
-  all: revert !important;
-} */
+
