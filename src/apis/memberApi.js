@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios from  "./axiosConfig";
 
 function memberLogin(member) {
-  return axios.post("http://localhost:8040/member/login", member)
+  return axios.post("/member/login", member)
 }
 
 function memberCreate(formdata) {
@@ -17,44 +17,40 @@ function memberCreate(formdata) {
   };
   reader.readAsText(formdata.get("member"));
 
-  return axios.post("http://localhost:8040/member/create", formdata)
+  return axios.post("/member/create", formdata)
 }
 
 function memberUpdate(member) {
   console.log("memberUpdataApis호출" + JSON.stringify(member));
-  return axios.put("http://localhost:8040/member", member)
+  return axios.put("/member", member)
 }
 
 function memberGet(mId) {
-  return axios.get("http://localhost:8040/member", {
+  return axios.get("/member", {
     params: { mId: mId }
   });
 }
 
 function memberPictureGet(mNo) {
-  return axios.get("http://localhost:8040/member/picture", {
+  return axios.get("/member/picture", {
     params: { mNo: mNo }
   });
 }
 
 function memberInsert(member) {
-  return axios.post("http://localhost:8040/member", member)
+  return axios.post("/member", member)
 }
 
 function memberInsertPicture(formdata) {
-  return axios.post("http://localhost:8040/member/picture", formdata)
+  return axios.post("/member/picture", formdata)
 }
 
 function getMemberPicture(m_nickname) {
-  return axios.get(`/member/memberPicture/${encodeURIComponent(m_nickname)}`, {
-    headers: { Authorization: "Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng" }
-  })
+  return axios.get(`/member/memberPicture/${encodeURIComponent(m_nickname)}`)
 }
 
 function selectMemberByMno() {
-  return axios.get("/member/info", {
-    headers: { Authorization: "Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng" }
-  });
+  return axios.get("/member/info");
 }
 
 function getRandomMembersExceptMe(myNo, count) {
@@ -65,17 +61,22 @@ function getRandomMembersExceptMe(myNo, count) {
 
 
 function memberGetJwt(jwt) {
-  return axios.get("http://localhost:8040/member/getjwt", {
+  return axios.get("/member/getjwt", {
     headers: {
       Authorization : "Bearer " + jwt
     }
   })
 }
 
+function getMemberInfoByToken() {
+  return axios.get("/api/myInfo");
+}
+
 const memberApi = {
   memberLogin,
   memberCreate,
-  //memberUpdate,
+  memberUpdate,
+
   memberPictureGet,
   memberGet,
 
@@ -85,7 +86,8 @@ const memberApi = {
   getMemberPicture,
   selectMemberByMno,
   getRandomMembersExceptMe,
-  memberGetJwt
+  memberGetJwt,
+  getMemberInfoByToken
 };
 
 export default memberApi;

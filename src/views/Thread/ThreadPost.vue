@@ -83,7 +83,9 @@ const autoResize = (e) => {
 };
 </script>
 
-<style scoped>
+
+<style>
+/* ✅ 모달 전체 영역 (백그라운드 반투명) */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -94,9 +96,33 @@ const autoResize = (e) => {
   z-index: 9999;
 }
 
+/* ✅ 모달 박스 */
 .modal-box {
   width: 500px;
   max-width: 90%;
+  background-color: var(--color-bg-card);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+}
+
+/* ✅ 입력창 */
+.form-control,
+.auto-textarea {
+  background-color: var(--color-bg-hover);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.form-control::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* ✅ 버튼 스타일 */
+.btn-outline-secondary,
+.btn-outline-danger,
+.btn-primary {
+  transition: all 0.2s ease;
 }
 
 .cursor-pointer {
@@ -109,10 +135,12 @@ const autoResize = (e) => {
   font-size: 1rem;
 }
 
+/* ✅ 프로필 이미지 */
 .profile-img {
-  width: 40px;   /* 원하는 크기 */
-  height: 40px;  /* 정사각형으로 맞춤 */
-  object-fit: cover; /* 이미지가 영역 안에서 잘리더라도 비율 유지 */
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 </style>
 

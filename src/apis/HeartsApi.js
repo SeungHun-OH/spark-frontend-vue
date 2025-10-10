@@ -6,26 +6,22 @@ import axios from "./axiosConfig"
  * 타입아웃 같은 설정 : timeout
  */
 
-function createHearts(hearts) {
-    return axios.post("/hearts/", hearts);
+function acceptHeart(heartsNo) {
+    return axios.post(`/hearts/${heartsNo}/accept`);
 }
 
-function getHearts(h_requestchanel) {
-    return axios.get("/hearts/", {
-        params : {h_requestchanel}
-    });
+function getHearts() {
+    return axios.get("/hearts/");
 }
 
-function deleteHearts(h_no) {
-    return axios.delete("/hearts/", {
-        params : {h_no}
-    });
+function rejectHeartReqeust(heartsNo) {
+    axios.delete(`/hearts/${heartsNo}/reject`);
 }
 
 const HeartsApi = {
-    createHearts,
+    acceptHeart,
     getHearts,
-    deleteHearts
+    rejectHeartReqeust
 };
 
 export default HeartsApi;

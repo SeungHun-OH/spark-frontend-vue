@@ -23,7 +23,7 @@
     <!-- 저장 버튼 -->
     <div class="d-flex justify-content-between mt-4">
       <button class="btn btn-outline-secondary">Cancel</button>
-      <button class="btn btn-outline-secondary" @click="getAllcategoryStatic()">카테고리불러오기</button>
+      <!-- <button class="btn btn-outline-secondary" @click="getAllcategoryStatic()">카테고리불러오기</button> -->
       <button class="btn btn-dark" @click="insertMemberCategories()"> 저장하기 </button>
     </div>
 
@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import Hobbies from "./Hobbies.vue";
 import memberCategoryApi from "@/apis/memberCategoryApi";
@@ -41,6 +41,13 @@ const store = useStore();
 const router = useRouter();
 
 const uniqueTypes = computed(() => store.getters["memberCategory/getUniqueTypes"]);
+
+watch(uniqueTypes, (newVal) => {
+  if (newVal && newVal.length > 0 && !activeTab.value) {
+    activeTab.value = newVal[0];
+  }
+});
+
 const activeTab = ref("");
 
 // 첫 번째 탭 자동 선택
@@ -49,7 +56,6 @@ if (uniqueTypes.value.length > 0) {
 }
 
 async function insertMemberCategories() {
-
   const request = {
     memberNo: store.getters["member/getMNo"],
     memberWho: "S",
@@ -64,9 +70,8 @@ async function insertMemberCategories() {
   }
   else {
     const resdelete = await memberCategoryApi.deleteCategoriesByMemberWho(request.memberNo, request.memberWho);
-    
+   
     const response = await memberCategoryApi.insertMemberCategories(request);
-
     console.log(request);
 
     if (response.data.result === "success") {
@@ -77,6 +82,19 @@ async function insertMemberCategories() {
     else {
       alert(response.data.message);
     }
+
+     // if (resdelete.data.result === "success") {
+    //   alert(resdelete.data.message);
+    //   const response = await memberCategoryApi.insertMemberCategories(request);
+    //   if (response.data.result === "success") {
+    //     alert(response.data.message);
+    //     router.push("/Member/CategorySurvey/PartnerPreference");
+    //     store.commit("memberCategory/clearSelectCategories");
+    //   }
+    //   else {
+    //     alert(response.data.message);
+    //   }
+    // }
   }
 }
 
@@ -87,6 +105,9 @@ async function getAllcategoryStatic() {
 }
 
 onMounted(async () => {
+
+  getAllcategoryStatic();
+
   const mno = (store.getters["member/getMNo"]);
   if (mno !== null) {
     const response = await memberCategoryApi.getPreferenceByMemberNo(mno);

@@ -26,8 +26,14 @@
 
       <!-- 하단 링크 -->
       <div class="text-center mt-3">
+
         <a href="#" class="text-decoration-none me-3">비밀번호 찾기</a>
-        <a href="/Member/Sign" class="text-decoration-none">회원가입</a>
+
+        <a href="#" class="text-decoration-none" @click.prevent="goToSignUp"> 회원가입 </a>
+
+        <!-- <a href="/Member/Sign" class="text-decoration-none">회원가입</a> -->
+        <!-- <a href="#" class="text-decoration-none" @click.prevent="$emit('open-signup')">회원가입 </a> -->
+
       </div>
     </div>
   </div>
@@ -35,9 +41,15 @@
 
 <script setup>
 import memberApi from "@/apis/memberApi";
+import axios from "axios";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+
+function goToSignUp() {
+  console.log("회원가입 클릭됨");
+  router.push('/Member/Sign') // ✅ App.vue의 RouterView가 Sign 컴포넌트로 자동 변경됨
+}
 
 const store = useStore();
 const router = useRouter();
@@ -61,27 +73,33 @@ async function handleLogin() {
 
       const mNo = response.data.data.mNo;
 
+      console.log("로그인 성공, Jwt는?:", response.data.jwt);
+
+      axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.jwt;
+
       // dispatch login vuex에 로그인 정보 저장
       store.dispatch("member/saveAuth", {
         ...response.data.data,
         jwt: response.data.jwt,
+        token: response.data.token
       });
 
       // dispatch Login Photo vuex에 로그인 정보 저장
       const photoRes = await memberApi.memberPictureGet(mNo);
-      console.log(photoRes.data);
-
-      if (photoRes.data) {
+      console.log(JSON.stringify(photoRes.data));
+      if (photoRes.data.data) {
         store.dispatch("member/savePhoto", {
           mAttachData: photoRes.data.data.mpAttachData
         });
       }
 
-      await router.push("/");
+      window.location.href = "/";
+
     } else {
       alert(response.data.message);
     }
   } catch (error) {
+    console.error("로그인 실패:", error);
     alert("로그인 실패: " + error);
   }
 }
