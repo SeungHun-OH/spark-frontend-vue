@@ -4,7 +4,11 @@
 
       <!-- 헤더 -->
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>🌱 Writing App (Community)</h4>
+
+        <!-- <h4>🌱 Writing App (Community)</h4> -->
+        <div class="d-flex align-items-center">
+          <ThreadTagList :keywords="['연애', '고민', '이상형', '연락', '장거리', '썸']" @select="onTagSelect" />
+        </div>
         <button class="btn btn-primary btn-sm" @click="showForm = !showForm">✍️ 글쓰기</button>
       </div>
 
@@ -13,7 +17,7 @@
 
       <!-- 검색창 -->
       <div class="mb-3">
-        <input v-model="keyword" type="text" placeholder="검색어 입력..." class="form-control" @keyup.enter="searchPosts" />
+        <input v-model="keyword" type="text" placeholder="검색어 입력..." class="form-control" @keyup.enter="searchPosts(keyword)" />
       </div>
 
       <!-- 스크롤 박스 -->
@@ -41,8 +45,11 @@
             </div>
 
             <!-- 제목 + 내용 -->
-            <p class="post-title mb-1">{{ post.tbTitle }}</p>
-            <p class="post-content mb-2">{{ post.tbContent }}</p>
+            <p class="post-title mb-1" v-html="highlightText(post.tbTitle, keyword)"></p>
+            <p class="post-content mb-2" v-html="highlightText(post.tbContent, keyword)"></p>
+
+            <!-- <p class="post-title mb-1">{{ post.tbTitle }}</p>
+            <p class="post-content mb-2">{{ post.tbContent }}</p> -->
 
             <!-- 좋아요 + 댓글 보기 -->
             <div class="d-flex justify-content-between align-items-center mt-2">
@@ -130,6 +137,8 @@
           </div>
         </div>
 
+       
+
         <!-- 로딩 -->
         <div v-if="loading" class="text-center py-3">
           <div class="spinner-border"></div>
@@ -147,13 +156,44 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import ThreadPost from "@/components/Thread/ThreadPost.vue";
+import ThreadPost from "@/views/Thread/ThreadPost.vue";
 import threadboardApi from "@/apis/threadboardApi";
 import { useStore } from "vuex";
 import ThreadBoardEdit from "./ThreadBoardEdit.vue";
+import ThreadTagList from "./ThreadTagList.vue";
 
 const showEditModal = ref(false);
 const selectedPost = ref(null);
+
+const onTagSelect = async (tag) => {
+  keyword.value = tag; // ✅ 선택된 태그를 keyword로 세팅
+  await searchPosts(tag); // ✅ 검색 API 호출 (하이라이트용)
+};
+
+const searchPosts = async (e) => {
+  const response = await threadboardApi.searchThreadBoards(e);
+
+  console.log("검색어:", response.data.data);
+  try {
+    if (response.data.result === "success") {
+      posts.value = response.data.data.map(p => ({
+        ...p,
+        showComments: false,
+      }));
+    } else {
+      alert("검색 실패" + response.data.message);
+      return;
+    }
+  } catch (error) {
+    console.error("검색 중 오류 발생:", error);
+  }
+};
+
+const highlightText = (text, keyword) => {
+  if (!keyword) return text;
+  const regex = new RegExp(`(${keyword})`, "gi");
+  return text.replace(regex, match => `<mark>${match}</mark>`);
+};
 
 const editPost = (post) => {
   selectedPost.value = { ...post }; // 선택한 게시글 복사
@@ -276,22 +316,22 @@ const deleteReply = async (post, reply) => {
 
 const saveReplyEdit = async (post, reply) => {
   const newContent = reply.tempContent?.trim();
-  if(!newContent) {alert("댓글 내용을 입력해주세요."); return }
-  
-  try{
+  if (!newContent) { alert("댓글 내용을 입력해주세요."); return }
+
+  try {
     const response = await threadboardApi.updateBoardReply({
       brNo: reply.brNo,
       brContent: newContent
     });
     console.log("response ", response.data);
-    if(response.data.result === "success"){
+    if (response.data.result === "success") {
       reply.brContent = newContent;
       reply.editing = false;
       alert("댓글 수정성공.");
     } else {
       alert("댓글 수정에 실패했습니다.");
     }
-  } catch(err){
+  } catch (err) {
     console.error("댓글 수정 실패:", err);
     return;
   }
@@ -418,5 +458,45 @@ onMounted(loadPosts);
 
 .form-control-sm::placeholder {
   color: var(--color-text-muted) !important;
+}
+
+mark {
+  background: none !important;
+  /* ✅ 배경 제거 */
+  color: var(--color-accent);
+  /* ✅ 강조 색상 (테마 색과 어울리게) */
+  font-weight: 700;
+  /* ✅ 굵게 */
+  padding: 0;
+  /* ✅ 여백 제거 */
+  border-radius: 0;
+  /* ✅ 둥근 배경 제거 */
+}
+
+/* 🔥 키워드 영역 (Writing App 자리에 들어간 경우) */
+.thread-keyword-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  background-color: transparent;
+  padding: 6px 0;
+}
+
+/* 키워드 태그 스타일 (ThreadTagList 안쪽에서 적용해도 무방) */
+.thread-keyword-bar button {
+  background-color: var(--color-bg-card);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.thread-keyword-bar button:hover {
+  background-color: var(--color-accent);
+  color: #fff;
 }
 </style>
