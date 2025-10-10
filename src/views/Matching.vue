@@ -1,12 +1,12 @@
 <template>
   <div class="banner">
-      <div class="banner-left">
-        <div>
-          <h2>Matching</h2>
-          <small class="text-muted">Manage your posts and profile</small>
-        </div>
+    <div class="banner-left">
+      <div>
+        <h2>Matching</h2>
+        <small class="text-muted">Manage your posts and profile</small>
       </div>
     </div>
+  </div>
   <div class="match-container">
     <!-- 카드 -->    
     <div
@@ -66,9 +66,9 @@
     <!-- 프로그레스바 -->
     <div v-if="totalProfiles > 0" class="progress-wrap">
       <div class="progress-bar">
-        <div class="progress-fill" :style="{ width: ((currentIndex + 1) / totalProfiles * 100) + '%' }"></div>
+        <div class="progress-fill" :style="{ width: progressPercent + '%' }"></div>
       </div>
-      <span class="progress-text">Profile {{ currentIndex + 1 }} of {{ totalProfiles }}</span>
+      <span class="progress-text">Profile {{ progressIndex }} of {{ totalProfiles }}</span>
     </div>
 
     <!-- 카드 없음 -->
@@ -77,137 +77,145 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from "vue"
-import MatchingApi from "@/apis/MatchingApi"
+import { ref, computed, onMounted, watch } from "vue";
+import MatchingApi from "@/apis/MatchingApi";
 
-// 상태
-const profiles = ref([])
-const currentIndex = ref(0)
-const removedStack = ref([])
-const likedList = ref([])
-const defaultTags = ["hiking", "coffee", "photography", "travel"]
-const isImageLoading = ref(true) // ✅ 이미지 로딩 상태
+const profiles = ref([]);
+const currentIndex = ref(0);
+const removedStack = ref([]);
+const likedList = ref([]);
+const defaultTags = ["hiking", "coffee", "photography", "travel"];
+const isImageLoading = ref(true);
+const initialProfileCount = ref(0); // 처음 총 개수 저장
 
-// 현재 프로필
-const currentProfile = computed(() => profiles.value[currentIndex.value])
-const totalProfiles = computed(() => profiles.value.length)
+const currentProfile = computed(() => profiles.value[currentIndex.value]);
+const totalProfiles = computed(() => profiles.value.length);
+
+// 프로그레스바 - 1부터 시작하게 인덱스 조정
+const progressIndex = computed(() => {
+  return initialProfileCount.value === 0 ? 0 : initialProfileCount.value - profiles.value.length + 1;
+});
+
+// 고정된 전체 개수로 나눔
+const progressPercent = computed(() => {
+  if (initialProfileCount.value === 0) return 0;
+  return (progressIndex.value / initialProfileCount.value) * 100;
+});
+
 
 // 카드 스타일
-const dragX = ref(0)
-const isDragging = ref(false)
-const threshold = 35
-const opacity = ref(1)
+const dragX = ref(0);
+const isDragging = ref(false);
+const threshold = 35;
+const opacity = ref(1);
 
 const cardStyle = computed(() => ({
   transform: `translateX(${dragX.value}px)`,
   opacity: opacity.value,
   transition: isDragging.value ? "none" : "transform 0.3s ease, opacity 0.3s ease",
   background: "#fff",
-}))
+}));
 
-// 좋아요 / 거절 / 복원
 function dislike() {
-  if (!currentProfile.value) return
+  if (!currentProfile.value) return;
 
-  removedStack.value.push({ profile: currentProfile.value, index: currentIndex.value })
-  profiles.value.splice(currentIndex.value, 1)
+  removedStack.value.push({ profile: currentProfile.value, index: currentIndex.value });
+  profiles.value.splice(currentIndex.value, 1);
 
   if (currentIndex.value >= profiles.value.length) {
-    currentIndex.value = profiles.value.length - 1
+    currentIndex.value = profiles.value.length - 1;
   }
 
-  resetDrag()
+  resetDrag();
 }
 
 async function like() {
-  if (!currentProfile.value) return
+  if (!currentProfile.value) return;
 
   try {
-    await MatchingApi.postLike(currentProfile.value.uuid)
-    likedList.value.push(currentProfile.value)
-    profiles.value.splice(currentIndex.value, 1)
+    await MatchingApi.postLike(currentProfile.value.uuid);
+    likedList.value.push(currentProfile.value);
+    profiles.value.splice(currentIndex.value, 1);
 
     if (currentIndex.value >= profiles.value.length) {
-      currentIndex.value = profiles.value.length - 1
+      currentIndex.value = profiles.value.length - 1;
     }
 
-    resetDrag()
+    resetDrag();
   } catch (error) {
-    console.error("좋아요 처리 실패:", error)
+    console.error("좋아요 처리 실패:", error);
   }
 }
 
 function restore() {
-  const last = removedStack.value.pop()
-  if (!last) return
+  const last = removedStack.value.pop();
+  if (!last) return;
 
-  profiles.value.splice(last.index, 0, last.profile)
-  currentIndex.value = last.index
+  profiles.value.splice(last.index, 0, last.profile);
+  currentIndex.value = last.index;
 }
 
 // 애니메이션
 function animateLike() {
-  dragX.value = 200
-  opacity.value = 0
-  setTimeout(() => like(), 200)
+  dragX.value = 200;
+  opacity.value = 0;
+  setTimeout(() => like(), 200);
 }
 
 function animateDislike() {
-  dragX.value = -200
-  opacity.value = 0
-  setTimeout(() => dislike(), 200)
+  dragX.value = -200;
+  opacity.value = 0;
+  setTimeout(() => dislike(), 200);
 }
 
-// 스와이프
-let startX = 0
+// 스와이프 이벤트
+let startX = 0;
 function onPointerDown(e) {
-  isDragging.value = true
-  startX = e.clientX
+  isDragging.value = true;
+  startX = e.clientX;
 }
 function onPointerMove(e) {
-  if (!isDragging.value) return
-  dragX.value = e.clientX - startX
-  opacity.value = 1 - Math.min(Math.abs(dragX.value) / 200, 0.5)
+  if (!isDragging.value) return;
+  dragX.value = e.clientX - startX;
+  opacity.value = 1 - Math.min(Math.abs(dragX.value) / 200, 0.5);
 }
 function onPointerUp() {
-  if (!isDragging.value) return
-  isDragging.value = false
+  if (!isDragging.value) return;
+  isDragging.value = false;
 
   if (dragX.value > threshold) {
-    animateLike()
+    animateLike();
   } else if (dragX.value < -threshold) {
-    animateDislike()
+    animateDislike();
   } else {
-    resetDrag()
+    resetDrag();
   }
 }
 function onPointerCancel() {
-  isDragging.value = false
-  resetDrag()
+  isDragging.value = false;
+  resetDrag();
 }
 function resetDrag() {
-  dragX.value = 0
-  opacity.value = 1
+  dragX.value = 0;
+  opacity.value = 1;
 }
 
 // 이미지 로딩 이벤트
 function onImageLoad() {
-  isImageLoading.value = false
+  isImageLoading.value = false;
 }
 function onImageError() {
-  isImageLoading.value = false
-  console.error("이미지 로딩 실패")
+  isImageLoading.value = false;
+  console.error("이미지 로딩 실패");
 }
 
-// 이미지 변경될 때 로딩 상태 초기화
 watch(currentProfile, () => {
-  isImageLoading.value = true
-})
+  isImageLoading.value = true;
+});
 
-// API 호출
 async function fetchData() {
   try {
-    const response = await MatchingApi.getMatching()
+    const response = await MatchingApi.getMatching();
     profiles.value = response.data.data.map((item) => ({
       name: item.name,
       age: item.age,
@@ -216,15 +224,20 @@ async function fetchData() {
       uuid: item.uuid,
       url: item.url,
       tags: item.tags ?? defaultTags,
-    }))
+    }));
+
+    // 여기에서 전체 개수 저장!
+    initialProfileCount.value = profiles.value.length;
+
   } catch (err) {
-    console.error("매칭 데이터 불러오기 실패", err)
+    console.error("매칭 데이터 불러오기 실패", err);
   }
 }
 
+
 onMounted(() => {
-  fetchData()
-})
+  fetchData();
+});
 </script>
 
 <style scoped>
@@ -270,7 +283,7 @@ onMounted(() => {
   display: block;
 }
 
-/* ✅ 이미지 로딩 오버레이 */
+/* 이미지 로딩 오버레이 */
 .img-loading-overlay {
   position: absolute;
   top: 0;

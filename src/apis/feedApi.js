@@ -7,22 +7,18 @@ import axios from "./axiosConfig"
  */
 
 function createFeed(formdata) {
-    return axios.post("/feed/", formdata, {
-        headers: { Authorization: "Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng" }
-    });
+    return axios.post("/feed/", formdata);
 }
 
 function getFeed(f_no) {
     return axios.get("/feed/", {
-        params: { f_no },
-        headers: { Authorization: "Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng" }
+        params: { f_no }
     });
 }
 
 function getMyFeedList(page_no) {
     return axios.get("/feed/myfeed", {
-        params: { page_no },
-        headers: { Authorization: "Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng" }
+        params: { page_no }
     });
 }
 
@@ -33,16 +29,12 @@ function getFeedList(m_nickname, page_no) {
 }
 
 function updateFeed(formdata) {
-    return axios.put("/feed/", formdata, {
-        headers: { Authorization: "Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng" }
-    });
+    return axios.put("/feed/", formdata);
 }
 
 function deleteFeed(f_no) {
     return axios.delete("/feed/", {
-        params: { f_no },
-        headers: { Authorization: "Bearer eyJhbGciOiJIUzUxMiJ9.eyJtZW1iZXJObyI6MSwiaWF0IjoxNzU5NTc5MTAyLCJleHAiOjE3NjA2NTkxMDJ9.bXe7xLBaMxPaucazjBAtSLCZqxdKDaDvGfxfm07z2AcLeRez8o8BwF_X7hNEqyDi7kY7D6JuYXYtcx8WI2w_Ng" }
-    });
+        params: { f_no }});
 }
 
 const feedApi = {

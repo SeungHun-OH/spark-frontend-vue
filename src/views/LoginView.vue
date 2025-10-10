@@ -67,7 +67,6 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import loginApi from '@/apis/login'
-import { loginSuccess } from '@/apis/axiosConfig'
 
 const store = useStore()
 const router = useRouter()
@@ -124,7 +123,7 @@ async function handleLogin() {
 
     store.commit("auth/setMemberUuid", memberInfo.memberUuid)
     store.commit("auth/setJwtToken", memberInfo.jwtToken)
-    loginSuccess(memberInfo.jwtToken)
+    // loginSuccess(memberInfo.jwtToken)
 
     isFadingOut.value = true
     setTimeout(() => {
@@ -132,7 +131,7 @@ async function handleLogin() {
     }, 600)
   } catch (error) {
     loginError.value = true
-    console.log("로그인 실패:", error.response?.data?.message || error.message)
+    console.log("로그인 실패1234:", error.response?.data?.message || error.message)
   } finally {
     isLoading.value = false
   }

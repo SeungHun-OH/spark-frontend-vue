@@ -10,25 +10,29 @@
     </div>
 
     <ul class="list-group">
-      <router-link v-for="(chatRoom, i) in chatRoomList" :key="i" :to="`/chat/chatting/${chatRoom.encodedUUID}`"
+      <!-- 채팅방이 없을 때 메시지 -->
+      <div v-if="chatRoomList.length === 0" class="text-center text-muted py-5">
+        <i class="bi bi-emoji-frown fs-1 mb-3 d-block"></i>
+        채팅방이 없습니다.
+      </div>
+
+      <!-- 채팅방 리스트 -->
+      <router-link v-else v-for="(chatRoom, i) in chatRoomList" :key="i" :to="`/chat/chatting/${chatRoom.encodedUUID}`"
         class="list-group-item d-flex justify-content-between align-items-center chat-item">
-        <!-- 좌측 -->
+        <!-- ✅ 좌측 -->
         <div class="d-flex align-items-center">
-          <!-- ✅ 프로필 이미지 + 상태 표시 -->
           <div class="position-relative me-3" style="width: 50px; height: 50px;">
             <img :src="chatRoom.imgData || 'https://placehold.co/50x50'" alt="profile" class="rounded-circle"
               style="width: 50px; height: 50px;" />
-            <!-- 상태 인디케이터 -->
             <span class="status-indicator" :class="chatRoom.status === 'ONLINE' ? 'online' : 'offline'"></span>
           </div>
-
           <div>
             <strong>{{ chatRoom.chatRoomName }}</strong>, <small>{{ chatRoom.age }}</small><br />
             <small class="text-muted">{{ chatRoom.lastMessage }}</small>
           </div>
         </div>
 
-        <!-- 우측 -->
+        <!-- ✅ 우측 -->
         <div class="chat-right">
           <small class="text-muted">{{ formatTime(chatRoom.date) }}</small>
           <span v-if="chatRoom.unreadCount > 0" class="unread-badge">
@@ -37,6 +41,7 @@
         </div>
       </router-link>
     </ul>
+
   </div>
 </template>
 

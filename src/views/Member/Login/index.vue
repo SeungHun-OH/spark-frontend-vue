@@ -86,9 +86,8 @@ async function handleLogin() {
 
       // dispatch Login Photo vuex에 로그인 정보 저장
       const photoRes = await memberApi.memberPictureGet(mNo);
-      console.log(photoRes.data);
-
-      if (photoRes.data) {
+      console.log(JSON.stringify(photoRes.data));
+      if (photoRes.data.data) {
         store.dispatch("member/savePhoto", {
           mAttachData: photoRes.data.data.mpAttachData
         });
