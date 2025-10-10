@@ -1,0 +1,96 @@
+/* ==========================
+   🌞 Light Theme for Spark
+   ========================== */
+.light {
+  --color-bg: #ffffff;
+  --color-bg-card: #f9f9f9;
+  --color-bg-hover: #efefef;
+  --color-text: #000000;
+  --color-text-muted: #555555;
+  --color-border: #ddd;
+  --color-accent: #007bff;
+}
+
+/* 🌞 라이트모드 전용 텍스트 색상 보정 */
+.light,
+.light * {
+  color: var(--color-text) !important;
+}
+
+/* placeholder */
+.light input::placeholder,
+.light textarea::placeholder {
+  color: var(--color-text-muted) !important;
+}
+
+/* muted, secondary, small */
+.light .text-muted,
+.light .text-secondary,
+.light small {
+  color: var(--color-text-muted) !important;
+}
+
+/* 전체 배경 */
+.light body, 
+.light #app, 
+.light .app-shell {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* 카드, 패널, 입력창 */
+.light .card,
+.light .content-box,
+.light .modal-content,
+.light .form-control {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border) !important;
+}
+
+/* d-flex 라이트모드 */
+.light .d-flex,
+.light .flex-column,
+.light .flex-grow-1,
+.light .topbar,
+.light .content {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text) !important;
+}
+
+/* 버튼 */
+.light button, 
+.light .btn {
+  background-color: var(--color-bg-hover);
+  color: var(--color-text);
+  border-color: var(--color-border);
+  transition: background-color 0.2s;
+}
+
+.light button:hover, 
+.light .btn:hover {
+  background-color: var(--color-accent);
+  color: #fff;
+}
+
+/* 모달박스 컬러 */
+.app-shell .modal-box,
+.app-shell .form-control,
+.app-shell textarea {
+  background-color: var(--color-bg-card);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+[data-theme="light"] mark {
+  background: none !important;
+  color: #e60000; /* 라이트 테마에서는 진한 포인트 컬러 */
+  font-weight: 700;
+}
+
+/* ✅ 로그인 화면은 전역 테마 예외 처리 */
+/* .light .login-wrapper,
+.light .login-wrapper * {
+  all: revert !important;
+} */

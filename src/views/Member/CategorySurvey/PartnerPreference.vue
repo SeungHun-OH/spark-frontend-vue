@@ -1,9 +1,9 @@
 <template>
-  <div class="container py-4">
+  <div class="container-fluid py-4">
 
     <!-- 상단 헤더 -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h3 class="fw-bold">Partner Preferences</h3>
+      <h2 class="fw-bold">상대방 선호 성향</h2>
     </div>
 
     <!-- 탭 네비게이션 -->
@@ -22,8 +22,8 @@
 
     <!-- 저장 버튼 -->
     <div class="d-flex justify-content-between mt-4">
-      <button class="btn btn-outline-secondary">Cancel</button>
-      <button class="btn btn-outline-secondary" @click="getAllcategoryStatic()">카테고리불러오기</button>
+      <button v-if="store.getters['member/getIsLogin']" class="btn btn-outline-secondary" @click="router.push('/')">취소하기</button>
+      <!-- <button class="btn btn-outline-secondary" @click="getAllcategoryStatic()">카테고리불러오기</button> -->
       <button class="btn btn-dark" @click="insertMemberCategories()"> 저장하기 </button>
     </div>
 
@@ -31,16 +31,24 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import Hobbies from "./Hobbies.vue";
 import memberCategoryApi from "@/apis/memberCategoryApi";
 import { useRouter } from "vue-router";
+import memberApi from "@/apis/memberApi";
 
 const store = useStore();
 const router = useRouter();
 
 const uniqueTypes = computed(() => store.getters["memberCategory/getUniqueTypes"]);
+
+watch(uniqueTypes, (newVal) => {
+  if (newVal && newVal.length > 0 && !activeTab.value) {
+    activeTab.value = newVal[0];
+  }
+});
+
 const activeTab = ref("");
 
 // 첫 번째 탭 자동 선택
@@ -63,13 +71,47 @@ async function insertMemberCategories() {
     alert("선택된 카테고리가 없습니다")
   }
   else {
+    //선택 카테고리 insert 전 이전 카테고리 다삭제
     const resdelete = await memberCategoryApi.deleteCategoriesByMemberWho(request.memberNo, request.memberWho);
-    
+
     const response = await memberCategoryApi.insertMemberCategories(request);
     if (response.data.result === "success") {
+
+
+
+      const LoginResponse = await memberApi.memberLogin({
+        mId: store.getters['member/getMId'],
+        mPassword: store.getters['member/getMPassword']
+      });
+
+      if (LoginResponse.data.result === "success") {
+        alert(LoginResponse.data.message);
+        console.log(LoginResponse.data);
+
+        const mNo = LoginResponse.data.data.mNo;
+        store.commit('member/setMNo', mNo);
+
+        // dispatch login vuex에 로그인 정보 저장
+        store.dispatch("member/saveAuth", {
+          ...LoginResponse.data.data,
+          jwt: LoginResponse.data.jwt,
+        });
+
+        // dispatch Login Photo vuex에 로그인 정보 저장
+        const photoRes = await memberApi.memberPictureGet(mNo);
+
+        if (photoRes.data) {
+          store.dispatch("member/savePhoto", {
+            mAttachData: photoRes.data.data.mpAttachData
+          });
+        }
+      }
+      else {
+        console.log(LoginResponse.data.message);
+      }
+
       alert(response.data.message);
       router.push("/")
-
       store.commit("memberCategory/clearSelectCategories");
     }
     else {
@@ -84,6 +126,9 @@ async function getAllcategoryStatic() {
 }
 
 onMounted(async () => {
+
+  getAllcategoryStatic();
+
   const mno = (store.getters["member/getMNo"]);
   if (mno !== null) {
     const response = await memberCategoryApi.getPreferenceByMemberNo(mno);

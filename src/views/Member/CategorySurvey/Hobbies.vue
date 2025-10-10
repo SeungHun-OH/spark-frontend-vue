@@ -59,7 +59,7 @@ onMounted(() => {
 
 <template>
   <div class="card shadow-sm p-4 mb-4">
-    <h4 class="mb-3">{{ meta.title }}</h4>
+    <!-- <h4 class="mb-3">{{ meta.title }}</h4> -->
     <p class="text-muted">{{ meta.description }}</p>
     <!-- 선택된 항목 -->
     <div class="mb-3">
@@ -70,7 +70,7 @@ onMounted(() => {
         <button class="btn-close btn-close-white ms-2" @click="removeItem(item)">remove</button>
       </span>
     </div>
-    <h6 class="fw-bold mb-2">Popular {{ props.type }}</h6>
+    <!-- <h6 class="fw-bold mb-2">Popular {{ props.type }}</h6> -->
     <div class="d-flex flex-wrap gap-2">
 
       <button v-for="item in options" :key="item.pcNo" class="btn btn-sm" :class="selectedItems.some(selected => selected.pcNo === item.pcNo)
@@ -82,10 +82,10 @@ onMounted(() => {
     <!-- :class="selectedItems.includes(item)  -->
 
     <!-- 입력 -->
-    <div class="input-group mb-3">
+    <!-- <div class="input-group mb-3">
       <input v-model="customInput" :placeholder="`Enter a custom ${props.type.toLowerCase()}...`" class="form-control" @keyup.enter="addCustom" />
       <button class="btn btn-outline-dark" @click="addCustom">+</button>
-    </div>
+    </div> -->
 
     <!-- 옵션 -->
 

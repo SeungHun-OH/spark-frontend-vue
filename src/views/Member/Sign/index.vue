@@ -149,7 +149,13 @@ const handleSubmit = async () => {
   const response = await memberApi.memberCreate(formdata);
 
   if (response.data.result === "success") {
+
     alert("회원가입 성공" + response.data.message);
+    // 성향 카테고리 Login 기본경로 통과
+    store.commit('member/setIsSigned', true);
+
+    store.commit('member/setMId', member.value.mId);
+    store.commit('member/setMPassword', member.value.mPassword);
 
     const LoginResponse = await memberApi.memberLogin({
       mId: member.value.mId,
@@ -157,22 +163,17 @@ const handleSubmit = async () => {
     });
 
     if (LoginResponse.data.result === "success") {
-
       alert(LoginResponse.data.message);
       console.log(LoginResponse.data);
 
       const mNo = LoginResponse.data.data.mNo;
+      store.commit('member/setMNo', mNo);
 
       // dispatch login vuex에 로그인 정보 저장
-      store.dispatch("member/saveAuth", {
-        // m_id: LoginResponse.data.m_id,
-        // m_name: LoginResponse.data.m_name,
-        // m_no: LoginResponse.data.m_no,
-
-        ...LoginResponse.data.data,
-
-        jwt: LoginResponse.data.jwt,
-      });
+      // store.dispatch("member/saveAuth", {
+      //   ...LoginResponse.data.data,
+      //   jwt: LoginResponse.data.jwt,
+      // });
 
       // dispatch Login Photo vuex에 로그인 정보 저장
       const photoRes = await memberApi.memberPictureGet(mNo);
@@ -181,7 +182,10 @@ const handleSubmit = async () => {
         store.dispatch("member/savePhoto", {
           mAttachData: photoRes.data.data.mpAttachData
         });
+        // 최초 카테고리 설정하기 위함
+        // localStorage.removeItem('jwt');
         alert("나의 성향을 선택해주세요")
+
         router.push("/Member/CategorySurvey/Preference")
       }
     }
