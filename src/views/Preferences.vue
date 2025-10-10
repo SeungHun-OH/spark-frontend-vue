@@ -49,8 +49,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import BaseCard from '@/components/member/BaseCard.vue';
+import memberCategoryApi from '@/apis/memberCategoryApi';
 
 const profile = ref({
   bio: 'I love hiking, photography, and cozy coffee shops.',
@@ -58,11 +59,11 @@ const profile = ref({
 });
 
 const preferences = ref({
-  Hobbies: ['Photography', 'Hiking', 'Coffee', 'Travel', 'Art', 'Gaming', 'Movies', 'Yoga'],
-  Traits: ['Empathetic', 'Curious', 'Spontaneous', 'Funny', 'Kind', 'Creative'],
-  Food: ['Sushi', 'Pizza', 'Tteokbokki', 'Ramen', 'Steak', 'Salad'],
-  DatePlace: ['Cafe', 'Beach', 'Bookstore', 'Gallery', 'Park', 'Mountain'],
-  IdealType: ['Adventurous', 'Creative', 'Empathetic']
+  Hobbies: [],
+  Traits: [],
+  Food: [],
+  DatePlace: [],
+  IdealType: []
 });
 
 const leftColumn = computed(() => ({
@@ -75,10 +76,19 @@ const rightColumn = computed(() => ({
   DatePlace: preferences.value.DatePlace,
   IdealType: preferences.value.IdealType
 }));
+
+async function getPreferences() {
+  const response = memberCategoryApi.getPreferenceByMemberNo();
+  console.log(response.data);
+
+}
+
+onMounted(async () => {
+  await getPreferences();
+});
 </script>
 
 <style scoped>
-/* 카드와 뱃지 디자인 조금 더 자연스럽게 */
 .badge {
   background-color: #f8f9fa;
   border: 1px solid #e9ecef;
