@@ -98,12 +98,14 @@ watchEffect(() => {
 // })
 
 onMounted(() => {
+
   const savedJwt = localStorage.getItem('jwt');
   if (savedJwt && !store.state.member.jwt) {
     store.commit('member/setJwt', savedJwt);
-    console.log('✅ 새로고침 후 JWT 복원 완료');
+    console.log('✅ 새로고침 후 JWT 복원 완료 Sign?' + store.state.member.isSigned);
   }
-  if (!isLoggedIn.value && route.path !== '/Member/Login') {
+
+  if (!store.getters['member/getIsSigned'] && !isLoggedIn.value && route.path !== '/Member/Login') {
     router.replace('/Member/Login')
   }
 })

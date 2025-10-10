@@ -20,6 +20,8 @@ const member = {
     
     jwt: "",
     token: "",
+
+    isSigned: false, //회원 가입 여부
   },
 
   getters: {
@@ -39,10 +41,13 @@ const member = {
     getMMbti: (state) => state.mMbti,
     getMActive: (state) => state.mActive,
     getMAttachData: (state) => state.mAttachData,
+
     getIsLogin: (state) => !!state.jwt,
 
     getJwt: (state) => state.jwt,
     getToken: (state) => state.token,
+
+    getIsSigned: (state) => state.isSigned,
   },
 
   mutations: {
@@ -90,7 +95,9 @@ const member = {
     
     setMAttachData(state, payload) { state.mAttachData = payload; },
     setJwt(state, payload) { state.jwt = payload; },
-    setToken(state, payload) { state.token = payload; }
+    setToken(state, payload) { state.token = payload; },
+
+    setIsSigned(state, value) { state.isSigned = value; },
   },
 
   actions: {

@@ -23,7 +23,7 @@
     <!-- 저장 버튼 -->
     <div class="d-flex justify-content-between mt-4">
       <button class="btn btn-outline-secondary">Cancel</button>
-      <button class="btn btn-outline-secondary" @click="getAllcategoryStatic()">카테고리불러오기</button>
+      <!-- <button class="btn btn-outline-secondary" @click="getAllcategoryStatic()">카테고리불러오기</button> -->
       <button class="btn btn-dark" @click="insertMemberCategories()"> 저장하기 </button>
     </div>
 
@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import Hobbies from "./Hobbies.vue";
 import memberCategoryApi from "@/apis/memberCategoryApi";
@@ -41,6 +41,13 @@ const store = useStore();
 const router = useRouter();
 
 const uniqueTypes = computed(() => store.getters["memberCategory/getUniqueTypes"]);
+
+watch(uniqueTypes, (newVal) => {
+  if (newVal && newVal.length > 0 && !activeTab.value) {
+    activeTab.value = newVal[0];
+  }
+});
+
 const activeTab = ref("");
 
 // 첫 번째 탭 자동 선택
@@ -49,7 +56,6 @@ if (uniqueTypes.value.length > 0) {
 }
 
 async function insertMemberCategories() {
-
   const request = {
     memberNo: store.getters["member/getMNo"],
     memberWho: "S",
@@ -63,8 +69,6 @@ async function insertMemberCategories() {
     alert("선택된 카테고리가 없습니다")
   }
   else {
-    const resdelete = await memberCategoryApi.deleteCategoriesByMemberWho(request.memberNo, request.memberWho);
-    
     const response = await memberCategoryApi.insertMemberCategories(request);
 
     console.log(request);
@@ -87,6 +91,9 @@ async function getAllcategoryStatic() {
 }
 
 onMounted(async () => {
+
+  getAllcategoryStatic();
+
   const mno = (store.getters["member/getMNo"]);
   if (mno !== null) {
     const response = await memberCategoryApi.getPreferenceByMemberNo(mno);
