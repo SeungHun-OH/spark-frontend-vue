@@ -61,6 +61,7 @@ import { useRoute, useRouter } from "vue-router";
 import stompClient from "@/sockets/stompClient";
 import { useStore } from "vuex";
 
+
 const router = useRouter();
 const route = useRoute();
 const input = ref("");
@@ -85,9 +86,9 @@ function handleMessage(msg) {
   const parsed = { ...msg, cmDateObj: new Date(msg.cmDate) };
   if(myUuid != parsed.cmSendMemberUuid){
     messages.value.push(parsed);
+    chatApi.updateLastMessage(parsed.cmNo);
   }
   // }
-  chatApi.updateLastMessage(parsed.cmNo);
 }
 
 // 라우트 감시: 구독만 교체

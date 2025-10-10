@@ -62,6 +62,7 @@ import { useStore } from 'vuex';
 
 import './assets/theme-dark.css';
 import './assets/theme-light.css';
+import memberApi from './apis/memberApi';
 
 const store = useStore();
 const router = useRouter();
