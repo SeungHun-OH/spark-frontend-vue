@@ -10,10 +10,12 @@
           <ThreadTagList :keywords="['연애', '고민', '이상형', '연락', '장거리', '썸']" @select="onTagSelect" />
         </div>
         <button class="btn btn-primary btn-sm" @click="showForm = !showForm">✍️ 글쓰기</button>
+        <button class="btn btn-primary btn-sm" @click="showFormAi = !showFormAi">✍️ AI연애상담</button>
       </div>
 
       <!-- 글쓰기 폼 -->
       <ThreadPost :show="showForm" @post-added="addPost" @close="showForm = false" />
+      <ThreadAiQuetion :show="showFormAi" @post-added="addPost" @close="showFormAi = false" />
 
       <!-- 검색창 -->
       <div class="mb-3">
@@ -161,6 +163,7 @@ import threadboardApi from "@/apis/threadboardApi";
 import { useStore } from "vuex";
 import ThreadBoardEdit from "./ThreadBoardEdit.vue";
 import ThreadTagList from "./ThreadTagList.vue";
+import ThreadAiQuetion from "./ThreadAiQuetion.vue";
 
 const showEditModal = ref(false);
 const selectedPost = ref(null);
@@ -213,6 +216,7 @@ const loading = ref(false);
 const keyword = ref("");
 const newComment = ref("");
 const showForm = ref(false);
+const showFormAi = ref(false);
 const store = useStore();
 
 const userProfile = computed(() =>

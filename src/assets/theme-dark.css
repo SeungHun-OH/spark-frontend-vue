@@ -283,6 +283,31 @@ body {
 }
 
 
+/* dark.css */
+.dark .modal-content {
+  background-color: #2c2c2c !important;
+  color: #f1f1f1 !important;
+}
+
+.dark textarea,
+.dark .form-control {
+  background-color: #3a3a3a !important;
+  color: #fff !important;
+  border: 1px solid #555 !important;
+}
+
+.dark .btn-primary {
+  background-color: #6a5acd !important;
+  border-color: #6a5acd !important;
+}
+
+/* threadAIQuestion black */
+.dark .bg-light {
+  background-color: #1e1e1e !important;
+  color: #f1f1f1 !important;
+}
+
+
 /* 이걸로 기본 다크모드 설정 */
 /* body[data-theme='dark'] {
   background-color: var(--bg-color);
