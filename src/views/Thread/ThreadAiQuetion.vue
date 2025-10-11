@@ -1,13 +1,11 @@
 <template>
-  <!-- ✅ 모달 오버레이 -->
+
   <div v-if="show" class="modal-overlay">
     <div class="modal-content">
       <h4 class="mb-3">💬 AI 고민상담</h4>
 
-      <!-- 입력창 -->
       <textarea v-model="question" class="form-control mb-3" rows="4" placeholder="고민을 입력해주세요..."></textarea>
 
-      <!-- 버튼 -->
       <div class="d-flex justify-content-end">
         <button class="btn btn-secondary me-2" @click="$emit('close')">
           닫기
@@ -17,7 +15,6 @@
         </button>
       </div>
 
-      <!-- 결과 -->
       <div v-if="answer" class="mt-3 p-3 bg-light rounded">
         <h6 class="fw-bold mb-2">🧠 추출된 키워드</h6>
         <div class="d-flex flex-wrap gap-2 mb-3">
@@ -27,18 +24,14 @@
         </div>
 
         <h6 class="fw-bold mb-2">🤖 AI의 상담 결과</h6>
-        <!-- <p style="white-space: pre-line;">{{ answer }}</p> -->
-        <!-- 아직 답변이 없을 때 -->
         <p v-if="!answer && !loading" class="text-muted mb-0">
           💬 아직 AI의 응답이 없습니다. 고민을 입력하고 상담을 받아보세요.
         </p>
 
-        <!-- 로딩 중일 때 -->
         <p v-if="loading" class="text-secondary fst-italic mb-0">
           ⏳ AI가 답변을 준비 중이에요...
         </p>
 
-        <!-- AI 답변이 도착했을 때 -->
         <p v-if="answer" class="mb-0" style="white-space: pre-line;">
           {{ answer }}
         </p>
@@ -63,6 +56,7 @@ const props = defineProps({
 });
 const question = ref("");
 const answer = ref("Ai 답변을 받아보아요");
+const keywords = ref([]);
 const loading = ref(false);
 
 const askAI = async () => {
@@ -72,9 +66,10 @@ const askAI = async () => {
 
   try {
     const response = await aiGenerate.generateAnswerBoardQuestion(question.value);
-    answer.value = response.data;
+    answer.value = response.data.answer;
+    keywords.value = response.data.keywords;
 
-    console.log("질문" + question.value + "\n AI연애상담 답변" + response.data)
+    console.log("질문" + question.value + "\n\n AI연애상담 답변" + response.data. answer + "\n\n 검색 키워드" + response.data.keywords + "\n\n 참고 게시판" + response.data.boards)
   } catch (err) {
     console.error(err);
     answer.value = "AI 서버 연결에 문제가 있습니다.";
@@ -87,15 +82,13 @@ const askAI = async () => {
 <style>
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  inset: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
-  z-index: 9999;
+  align-items: flex-start; /* ✅ 상단 정렬로 변경 */
+  overflow-y: auto;        /* ✅ 모달 전체 스크롤 가능 */
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2rem 0;
 }
 
 .modal-content {
@@ -103,11 +96,26 @@ const askAI = async () => {
   border-radius: 10px;
   padding: 20px;
   width: 800px;
-  max-height: 120vh;
-  overflow-y: auto;
+  max-height: 80vh;          /* ✅ 세로 최대 크기 고정 */
+  display: flex;
+  flex-direction: column;
 }
 
-/* 🌙 다크모드 강제 반영 */
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 100px;
+  max-height: 60vh;          /* 실제 스크롤이 생기는 높이 */
+  padding-right: 8px;
+}
+
+.bg-light.rounded {
+  max-height: 60vh; /* 화면 높이의 60%까지만 표시 */
+  overflow-y: auto; /* 내부에서 스크롤 가능하게 */
+  overflow-x: hidden;
+  padding-right: 8px; /* 스크롤 생겨도 글자 안 잘리게 */
+}
+
 :deep(.dark) .modal-content {
   background-color: #2c2c2c !important;
   color: #f1f1f1 !important;

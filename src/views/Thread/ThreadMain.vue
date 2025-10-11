@@ -11,6 +11,8 @@
         </div>
         <button class="btn btn-primary btn-sm" @click="showForm = !showForm">✍️ 글쓰기</button>
         <button class="btn btn-primary btn-sm" @click="showFormAi = !showFormAi">✍️ AI연애상담</button>
+        <!-- <button class="btn btn-primary btn-sm" @click = "$router.push('/Thread/ThreadAiQuetion')">✍️ AI연애상담</button> -->
+
       </div>
 
       <!-- 글쓰기 폼 -->
