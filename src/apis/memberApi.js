@@ -70,6 +70,10 @@ function memberGetJwt(jwt) {
   })
 }
 
+function getMemberInfoByToken() {
+  return axios.get("/api/myInfo");
+}
+
 const memberApi = {
   memberLogin,
   memberCreate,
@@ -84,7 +88,8 @@ const memberApi = {
   getMemberPicture,
   selectMemberByMno,
   getRandomMembersExceptMe,
-  memberGetJwt
+  memberGetJwt,
+  getMemberInfoByToken
 };
 
 export default memberApi;

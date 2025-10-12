@@ -1,17 +1,28 @@
 <template>
   <div class="container py-5">
+    <!-- 헤더 -->
+    <!-- <div class="hidden md:block p-4 xl:p-6 border-b">
+      <div class="flex items-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart w-6 h-6 xl:w-7 xl:h-7 text-red-500" aria-hidden="true">
+          <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"></path>
+        </svg>
+        <h1 class="text-xl xl:text-2xl">Hearts</h1>
+      </div>
+      <p class="text-muted-foreground">People who liked you</p>
+    </div> -->
+
     <!-- 탭 -->
     <div class="custom-tab-container mb-4">
-      <div class="custom-tab-inner" style="width: 360px;">
+      <div class="custom-tab-inner">
         <button class="custom-tab-button" :class="{ active: activeTab === 'M' }" @click="activeTab = 'M'">
           <i class="bi bi-people me-1"></i>
           매칭 좋아요
-          <span class="count-badge">{{ matchingLikes.length }}</span>
+          <span class="count-badge"> {{ matchingLikes.length }}</span>
         </button>
         <button class="custom-tab-button" :class="{ active: activeTab === 'F' }" @click="activeTab = 'F'">
           <i class="bi bi-pencil-square me-1"></i>
           피드 좋아요
-          <span class="count-badge">{{ feedLikes.length }}</span>
+          <span class="count-badge"> {{ feedLikes.length }}</span>
         </button>
       </div>
     </div>
@@ -163,39 +174,36 @@ onMounted(() => {
   border-radius: 12px;
   display: flex;
   overflow: hidden;
-  width: 360px;
+  width: 100%;
 }
 .custom-tab-button {
   flex: 1;
   border: none;
-  background: transparent;
+  background: #ececf0; /* 버튼 배경색을 하얀색으로 설정 */
   padding: 12px 0;
   font-size: 15px;
   font-weight: 500;
-  color: #555;
+  color: #333; /* 글자를 검정색으로 설정 */
   text-align: center;
   cursor: pointer;
   transition: 0.2s ease;
 }
 .custom-tab-button.active {
-  background-color: white;
-  color: #000;
+  background-color: #ff4d4f; /* 활성화된 버튼의 배경색을 빨강색으로 설정 */
+  color: white;
   font-weight: 600;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 .count-badge {
-  background-color: #d8dbe0;
   color: #333;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 20px;
   margin-left: 6px;
 }
 
 /* 카드 */
 .like-card {
-  width: 280px;
+  width: 250px; /* 카드 크기 조정 */
   transition: all 0.3s ease;
   margin: 0 auto;
   position: relative;
@@ -204,8 +212,8 @@ onMounted(() => {
   transform: translateY(-4px);
 }
 .img-area {
-  height: 220px;
-  min-height: 220px;
+  height: 200px;
+  min-height: 200px;
   position: relative;
 }
 .no-image {
@@ -265,15 +273,13 @@ onMounted(() => {
 }
 
 .btn-reject:hover {
-  background-color: #ffffff; /* 흰색 유지 */
-  color: #ff4d4f; /* 빨강 유지 */
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  color: #ff4d4f;
 }
 
 .btn-accept:hover {
-  background-color: #ff4d4f; /* 빨강 유지 */
-  color: #ffffff; /* 흰색 유지 */
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  background-color: #ff4d4f;
+  color: #ffffff;
 }
 
 .btn-reject {
@@ -334,7 +340,5 @@ onMounted(() => {
     height: 52px;
     font-size: 22px;
   }
-
-  
 }
 </style>

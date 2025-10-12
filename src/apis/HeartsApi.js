@@ -15,7 +15,7 @@ function getHearts() {
 }
 
 function rejectHeartReqeust(heartsNo) {
-    return axios.delete(`/hearts/${heartsNo}/reject`);
+    axios.delete(`/hearts/${heartsNo}/reject`);
 }
 
 const HeartsApi = {

@@ -27,7 +27,6 @@ function  getHobbyCategoriesByMemberNo() {
 }
 
 
-
 const memberCategoryApi = {
   getAllcategoryStatic, 
   insertMemberCategories,
