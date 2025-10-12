@@ -307,6 +307,13 @@ body {
   color: #f1f1f1 !important;
 }
 
+/* 🌙 Dark mode override for Bootstrap alerts */
+.dark .alert-info {
+  background-color: #2b3035 !important; /* 어두운 배경 */
+  color: #e0e0e0 !important;           /* 밝은 글자 */
+  border-color: #3c4348 !important;    /* 테두리 색 */
+}
+
 
 /* 이걸로 기본 다크모드 설정 */
 /* body[data-theme='dark'] {

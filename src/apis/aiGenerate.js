@@ -6,8 +6,16 @@ async function generateAnswerBoardQuestion(question) {
   });
 }
 
+async function AiGenerateBoards(count) {
+  return axios.get("/Ai/BoardGenerate/List",{
+    params: {count : count}
+  });
+}
+
+
 const aiGenerate = {
-  generateAnswerBoardQuestion
+  generateAnswerBoardQuestion,
+  AiGenerateBoards
 };
 
 export default aiGenerate;

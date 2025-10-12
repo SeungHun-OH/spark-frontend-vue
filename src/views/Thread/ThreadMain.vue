@@ -9,10 +9,10 @@
         <div class="d-flex align-items-center">
           <ThreadTagList :keywords="['연애', '고민', '이상형', '연락', '장거리', '썸']" @select="onTagSelect" />
         </div>
-        <button class="btn btn-primary btn-sm" @click="showForm = !showForm">✍️ 글쓰기</button>
-        <button class="btn btn-primary btn-sm" @click="showFormAi = !showFormAi">✍️ AI연애상담</button>
-        <!-- <button class="btn btn-primary btn-sm" @click = "$router.push('/Thread/ThreadAiQuetion')">✍️ AI연애상담</button> -->
-
+        <div>
+          <button class="btn btn-primary btn-sm me-2" @click="showForm = !showForm">✍️ 글쓰기</button>
+          <button class="btn btn-primary btn-sm" @click="showFormAi = !showFormAi">✍️ AI연애상담</button>
+        </div>
       </div>
 
       <!-- 글쓰기 폼 -->
@@ -42,7 +42,7 @@
 
               <!-- 로그인한 유저 == 글쓴이일 때만 수정/삭제 버튼 -->
               <!-- <div v-if="isMyPost(post)"> -->
-              <div v-if="store.getters['member/getMNo'] == post.tbMemberNo">
+              <div v-if="store.getters['member/getMNo'] == post.tbMemberNo || store.getters['getAdmin'] == true">
                 <button class="btn btn-outline-secondary btn-sm me-2" @click="editPost(post)">✏️ 수정</button>
                 <button class="btn btn-outline-danger btn-sm" @click="deletePost(post)">🗑 삭제</button>
               </div>
@@ -141,7 +141,7 @@
           </div>
         </div>
 
-       
+
 
         <!-- 로딩 -->
         <div v-if="loading" class="text-center py-3">
