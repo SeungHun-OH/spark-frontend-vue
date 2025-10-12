@@ -18,6 +18,10 @@ function getThreadBoardList() {
   return axios.get("/thread/boardList")
 }
 
+function getThreadBoardListByReplyCount() {
+  return axios.get("/thread/boardList/ByReplyCount")
+}
+
 function searchThreadBoards(keyword) {
   return axios.get("/thread/boardsearch", {
     params: { keyword: keyword }
@@ -34,6 +38,10 @@ function deleteBoardReply(brNo) {
   });
 }
 
+function deleteBoardReplyAll(brNo) {
+  return axios.delete("/thread/deleteBoardReplyAll");
+}
+
 function updateBoardReply(boardreply) {
   return axios.put("/thread/boardreply", boardreply);
 }
@@ -42,8 +50,10 @@ const threadboardApi = {
   insertThreadBoard,
   getThreadBoardList,
   searchThreadBoards,
+  getThreadBoardListByReplyCount,
   
   deleteThreadBoard,
+  deleteBoardReplyAll,
   updateThreadBoard,
   
   insertBoardReply,

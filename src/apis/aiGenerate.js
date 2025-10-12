@@ -12,10 +12,14 @@ async function AiGenerateBoards(count) {
   });
 }
 
+async function aiBoardReplyGenerate(count) {
+  return axios.post(`/Ai/BoardReplyGenerate?count=${count}`);
+}
 
 const aiGenerate = {
   generateAnswerBoardQuestion,
-  AiGenerateBoards
+  AiGenerateBoards,
+  aiBoardReplyGenerate
 };
 
 export default aiGenerate;

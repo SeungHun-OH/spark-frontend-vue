@@ -24,6 +24,11 @@
         <input v-model="keyword" type="text" placeholder="검색어 입력..." class="form-control" @keyup.enter="searchPosts(keyword)" />
       </div>
 
+      <div class="d-flex justify-content mb-3 gap-2">
+        <button class="btn btn-outline-light btn-sm" @click="sortPosts('latest')">🕓 최신순</button>
+        <button class="btn btn-outline-light btn-sm" @click="sortPosts('reply')">💬 댓글순</button>
+      </div>
+
       <!-- 스크롤 박스 -->
       <div class="scroll-box" @scroll="handleScroll">
         <div v-for="post in posts" :key="post.tbNo" class="card mb-3">
@@ -141,11 +146,10 @@
           </div>
         </div>
 
-
-
-        <!-- 로딩 -->
-        <div v-if="loading" class="text-center py-3">
-          <div class="spinner-border"></div>
+        <!-- ✅ 로딩 스피너를 scroll-box 바깥으로 이동 -->
+        <div v-if="loading" class="loading-overlay">
+          <div class="spinner-border text-light" role="status"></div>
+          <p class="text-light mt-2">불러오는 중...</p>
         </div>
       </div>
 
@@ -242,6 +246,25 @@ const loadPosts = async () => {
     loading.value = false;
   }
 };
+
+const sortType = ref('latest');
+const sortPosts = async (type) => {
+  sortType.value = type
+  if (!posts.value.length) return
+
+  loading.value = true
+  setTimeout(() => { // 살짝 딜레이 주면 스피너 렌더링됨
+    if (type === 'latest') {
+      posts.value.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      console.log("최신순 정렬" + posts.value);
+    } else if (type === 'reply') {
+      posts.value.sort((a, b) => (b.boardReplys?.length || 0) - (a.boardReplys?.length || 0))
+      console.log("댓글순 정렬" + posts.value);
+    }
+    loading.value = false
+  }, 200)
+  loadPosts();
+}
 
 // 🔹 삭제 버튼 클릭
 const deletePost = async (post) => {
@@ -504,5 +527,17 @@ mark {
 .thread-keyword-bar button:hover {
   background-color: var(--color-accent);
   color: #fff;
+}
+
+/* ✅ 로딩창 항상 화면 중앙에 표시되게 */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }
 </style>

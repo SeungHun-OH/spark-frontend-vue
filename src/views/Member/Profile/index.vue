@@ -11,15 +11,11 @@
         <BaseCard>
           <div class="text-center">
             <img :src="picture" alt="profile" class="rounded img-fluid mb-2" style="max-height: 250px; object-fit: cover;" />
-            <button class="btn btn-outline-secondary btn-sm" @click="editPhoto()">
-              <i class="bi bi-camera"></i> Edit Photo
-            </button>
+            <label class="btn btn-outline-danger btn-sm mt-2">
+              <i class="bi bi-upload me-1"></i> 사진 편집
+              <input type="file" @change="handleFileUpload" accept="image/*" hidden />
+            </label>
           </div>
-
-          <label class="btn btn-outline-danger btn-sm mt-2">
-            <i class="bi bi-upload me-1"></i> 사진 추가
-            <input type="file" @change="handleFileUpload" accept="image/*" hidden />
-          </label>
         </BaseCard>
 
         <!-- 기본 정보 카드 -->
@@ -180,7 +176,7 @@ const handleFileUpload = async (event) => {
         store.commit('member/setMAttachData', base64Data);
       };
       reader.readAsDataURL(file);
-      
+
     }
     else {
       console.log("프로필 사진 업데이트 실패" + response.data.message);

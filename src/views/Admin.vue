@@ -19,26 +19,41 @@
       <h5>🧹 DB 전체 삭제</h5>
       <p class="small text-muted">테스트용 데이터 및 모든 테이블 삭제 (주의)</p>
       <button class="btn btn-danger" @click="deleteAllData">⚠️ 전체 삭제</button>
+      <button class="btn btn-danger" @click="deleteBoardReplyAll">⚠️ 댓글 삭제</button>
     </div>
 
     <hr />
 
-    <!-- AI 게시글 생성 -->
-    <div class="mb-3">
-      <h5>🤖 AI 게시글 생성기</h5>
-      <p class="small text-muted">AI로 자동 게시글 생성 (ThreadBoard 테스트용)</p>
+    <h5>🤖 AI 게시글, 댓글 생성기</h5>
 
 
-      <div class="d-flex align-items-center gap-2 mb-2">
-        <input type="number" v-model="count" min="1" class="form-control" placeholder="생성할 게시글 수" style="width: 150px" />
-        <button class="btn btn-primary" @click="generateAIBoard">✨ 게시글 생성</button>
+    <div class="d-flex gap-4 align-items-start">
+      <!-- AI 게시글 생성 -->
+      <div class="mb-3">
+        <p class="small text-muted">AI 게시글 생성 (ThreadBoard 테스트용)</p>
+
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <input type="number" v-model="count" min="1" class="form-control" placeholder="생성할 게시글 수" style="width: 150px" />
+          <button class="btn btn-primary" @click="generateAiBoard">✨ 게시글 생성</button>
+        </div>
       </div>
+      <!-- AI 게시글 생성 -->
+      <div class="mb-3">
+        <p class="small text-muted">AI 댓글 생성 (ThreadBoard 테스트용)</p>
+
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <input type="number" v-model="countReply" min="1" class="form-control" placeholder="생성할 게시글 수" style="width: 150px" />
+          <button class="btn btn-primary" @click="generateAiBoardReply">✨ 댓글 생성</button>
+        </div>
+      </div>
+
     </div>
 
     <!-- 결과 메시지 -->
     <div v-if="message" class="alert alert-info mt-4">
       {{ message }}
     </div>
+
   </div>
 </template>
 
@@ -46,10 +61,12 @@
 import { ref } from "vue";
 import axios from "axios";
 import aiGenerate from "@/apis/aiGenerate";
+import threadboardApi from "@/apis/threadboardApi";
 
 const isMaster = ref(false);
 const message = ref("result message");
 const count = ref("");
+const countReply = ref("");
 
 // ✅ 마스터 모드 토글
 const toggleMaster = () => {
@@ -73,21 +90,51 @@ const deleteAllData = async () => {
   }
 };
 
+const deleteBoardReplyAll = async () => {
+  try {
+    const response = await threadboardApi.deleteBoardReplyAll();
+    if(response.data.result == "success"){
+      alert(response.data.message);
+    }else{
+      alert(response.data.message);
+    }
+  }
+  catch (err) {
+    console.log("전체 댓글 삭제 실패" + err);
+  }
+}
+
 // ✅ AI 게시글 생성
-const generateAIBoard = async () => {
+const generateAiBoard = async () => {
   try {
     message.value = "AI 게시글 생성중";
     const response = await aiGenerate.AiGenerateBoards(count.value)
     if (response.data.result === "success") {
       message.value = "AI 게시글 생성 완료: " + response.data.message;
     }
-    else{
+    else {
       message.value = "AI 게시글 생성 실패: " + response.data.message;
     }
   } catch (err) {
     message.value = "게시글 생성 네트워크 오류 실패: " + err.message;
   }
 };
+
+const generateAiBoardReply = async () => {
+  try {
+    message.value = "AI 댓글 생성중";
+    const response = await aiGenerate.aiBoardReplyGenerate(countReply.value)
+    if (response.data.result === "success") {
+      message.value = "AI 댓글 생성 완료: " + response.data.data;
+    }
+    else {
+      message.value = "AI 댓글 생성 실패: " + response.data.message;
+    }
+  } catch (err) {
+    message.value = "게시글 댓글 네트워크 오류 실패: " + err.message;
+  }
+};
+
 </script>
 
 <style scoped>
