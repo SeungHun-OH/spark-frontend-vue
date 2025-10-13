@@ -14,14 +14,14 @@ function getHearts() {
     return axios.get("/hearts/");
 }
 
-function rejectHeartReqeust(heartsNo) {
+function rejectHeartRequest(heartsNo) {
     axios.delete(`/hearts/${heartsNo}/reject`);
 }
 
 const HeartsApi = {
     acceptHeart,
     getHearts,
-    rejectHeartReqeust
+    rejectHeartRequest
 };
 
 export default HeartsApi;

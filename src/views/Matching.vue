@@ -117,7 +117,6 @@ const cardStyle = computed(() => ({
 
 function dislike() {
   if (!currentProfile.value) return;
-
   removedStack.value.push({ profile: currentProfile.value, index: currentIndex.value });
   profiles.value.splice(currentIndex.value, 1);
 
@@ -225,6 +224,8 @@ async function fetchData() {
       tags: item.tags ?? defaultTags,
     }));
 
+
+       
     // 여기에서 전체 개수 저장!
     initialProfileCount.value = profiles.value.length;
   } catch (err) {

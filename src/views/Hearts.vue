@@ -43,7 +43,7 @@
           <div class="position-relative img-area">
             <img
               v-if="req.mpNo"
-              :src="`/matching/file/${req.uuid}`"
+              :src="`http://localhost:8040/matching/picture/${req.mpNo}`"
               class="w-100 h-100"
               alt="profile"
               style="object-fit: cover;"
@@ -84,7 +84,7 @@
             <p class="card-text text-muted small mb-2">
               {{ timeAgo(req.requestDate) }} ·
               <span class="badge channel-badge">
-                {{ getChannelText(req.reqeustChannel) }}
+                {{ getChannelText(req.requestChannel) }}
               </span>
             </p>
           </div>
@@ -103,15 +103,15 @@ const requests = ref([])
 const activeTab = ref('M')
 
 const filteredLikes = computed(() =>
-  requests.value.filter(req => req.reqeustChannel === activeTab.value)
+  requests.value.filter(req => req.requestChannel === activeTab.value)
 )
 
 const matchingLikes = computed(() =>
-  requests.value.filter(req => req.reqeustChannel === 'M')
+  requests.value.filter(req => req.requestChannel === 'M')
 )
 
 const feedLikes = computed(() =>
-  requests.value.filter(req => req.reqeustChannel === 'F')
+  requests.value.filter(req => req.requestChannel === 'F')
 )
 
 function getChannelText(code) {
@@ -151,7 +151,7 @@ async function accept(no) {
 
 async function reject(no) {
   try {
-    await HeartsApi.rejectHeartReqeust(no)
+    await HeartsApi.rejectHeartRequest(no)
     requests.value = requests.value.filter(r => r.no !== no)
   } catch (e) {
     console.error('거절 실패', e)
