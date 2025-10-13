@@ -77,7 +77,7 @@
 </template>
 
 <script setup>
-import matchingApi from "@/apis/matchingApi";
+import matchingApi from "@/apis/MatchingApi";
 import { ref, computed, onMounted, watch } from "vue";
 
 const profiles = ref([]);
@@ -225,7 +225,7 @@ async function fetchData() {
     }));
 
 
-       
+
     // 여기에서 전체 개수 저장!
     initialProfileCount.value = profiles.value.length;
   } catch (err) {
