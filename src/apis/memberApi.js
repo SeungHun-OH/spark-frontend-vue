@@ -42,15 +42,19 @@ function memberInsert(member) {
 }
 
 function memberInsertPicture(formdata) {
-  return axios.post("/member/picture", formdata)
+  return axios.post("/member/picture", formdata, {
+    headers: { "Content-Type" : "multipart/form-data"},
+  })
 }
 
 function getMemberPicture(m_nickname) {
   return axios.get(`/member/memberPicture/${encodeURIComponent(m_nickname)}`)
 }
 
-function selectMemberByMno() {
-  return axios.get("/member/info");
+function selectMemberByMno(m_no) {
+  const params = m_no? {m_no} : {}; //m_no가 있으면 param에 넣기
+  
+  return axios.get("/member/info", {params});
 }
 
 function getRandomMembersExceptMe(myNo, count) {
@@ -58,7 +62,6 @@ function getRandomMembersExceptMe(myNo, count) {
     params: { mNo: myNo, count: count }
   });
 }
-
 
 function memberGetJwt(jwt) {
   return axios.get("/member/getjwt", {

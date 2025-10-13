@@ -77,8 +77,8 @@
 </template>
 
 <script setup>
+import matchingApi from "@/apis/matchingApi";
 import { ref, computed, onMounted, watch } from "vue";
-import MatchingApi from "@/apis/MatchingApi";
 
 const profiles = ref([]);
 const currentIndex = ref(0);
@@ -131,7 +131,7 @@ async function like() {
   if (!currentProfile.value) return;
 
   try {
-    await MatchingApi.postLike(currentProfile.value.uuid);
+    await matchingApi.postLike(currentProfile.value.uuid);
     likedList.value.push(currentProfile.value);
     profiles.value.splice(currentIndex.value, 1);
 
@@ -213,7 +213,7 @@ watch(currentProfile, () => {
 
 async function fetchData() {
   try {
-    const response = await MatchingApi.getMatching();
+    const response = await matchingApi.getMatching();
     profiles.value = response.data.data.map((item) => ({
       name: item.name,
       age: item.age,

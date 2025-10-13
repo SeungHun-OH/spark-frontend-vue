@@ -9,15 +9,24 @@
         <div class="d-flex align-items-center">
           <ThreadTagList :keywords="['연애', '고민', '이상형', '연락', '장거리', '썸']" @select="onTagSelect" />
         </div>
-        <button class="btn btn-primary btn-sm" @click="showForm = !showForm">✍️ 글쓰기</button>
+        <div>
+          <button class="btn btn-primary btn-sm me-2" @click="showForm = !showForm">✍️ 글쓰기</button>
+          <button class="btn btn-primary btn-sm" @click="showFormAi = !showFormAi">✍️ AI연애상담</button>
+        </div>
       </div>
 
       <!-- 글쓰기 폼 -->
       <ThreadPost :show="showForm" @post-added="addPost" @close="showForm = false" />
+      <ThreadAiQuetion :show="showFormAi" @post-added="addPost" @close="showFormAi = false" />
 
       <!-- 검색창 -->
       <div class="mb-3">
         <input v-model="keyword" type="text" placeholder="검색어 입력..." class="form-control" @keyup.enter="searchPosts(keyword)" />
+      </div>
+
+      <div class="d-flex justify-content mb-3 gap-2">
+        <button class="btn btn-outline btn-sm" @click="sortPosts('latest')">🕓 최신순</button>
+        <button class="btn btn-outline btn-sm" @click="sortPosts('reply')">💬 댓글순</button>
       </div>
 
       <!-- 스크롤 박스 -->
@@ -38,7 +47,7 @@
 
               <!-- 로그인한 유저 == 글쓴이일 때만 수정/삭제 버튼 -->
               <!-- <div v-if="isMyPost(post)"> -->
-              <div v-if="store.getters['member/getMNo'] == post.tbMemberNo">
+              <div v-if="store.getters['member/getMNo'] == post.tbMemberNo || store.getters['getAdmin'] == true">
                 <button class="btn btn-outline-secondary btn-sm me-2" @click="editPost(post)">✏️ 수정</button>
                 <button class="btn btn-outline-danger btn-sm" @click="deletePost(post)">🗑 삭제</button>
               </div>
@@ -137,11 +146,10 @@
           </div>
         </div>
 
-       
-
-        <!-- 로딩 -->
-        <div v-if="loading" class="text-center py-3">
-          <div class="spinner-border"></div>
+        <!-- ✅ 로딩 스피너를 scroll-box 바깥으로 이동 -->
+        <div v-if="loading" class="loading-overlay">
+          <div class="spinner-border text-light" role="status"></div>
+          <p class="text-light mt-2">불러오는 중...</p>
         </div>
       </div>
 
@@ -161,6 +169,7 @@ import threadboardApi from "@/apis/threadboardApi";
 import { useStore } from "vuex";
 import ThreadBoardEdit from "./ThreadBoardEdit.vue";
 import ThreadTagList from "./ThreadTagList.vue";
+import ThreadAiQuetion from "./ThreadAiQuetion.vue";
 
 const showEditModal = ref(false);
 const selectedPost = ref(null);
@@ -213,6 +222,7 @@ const loading = ref(false);
 const keyword = ref("");
 const newComment = ref("");
 const showForm = ref(false);
+const showFormAi = ref(false);
 const store = useStore();
 
 const userProfile = computed(() =>
@@ -236,6 +246,25 @@ const loadPosts = async () => {
     loading.value = false;
   }
 };
+
+const sortType = ref('latest');
+const sortPosts = async (type) => {
+  sortType.value = type
+  if (!posts.value.length) return
+
+  loading.value = true
+  setTimeout(() => { // 살짝 딜레이 주면 스피너 렌더링됨
+    if (type === 'latest') {
+      posts.value.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      console.log("최신순 정렬" + posts.value);
+    } else if (type === 'reply') {
+      posts.value.sort((a, b) => (b.boardReplys?.length || 0) - (a.boardReplys?.length || 0))
+      console.log("댓글순 정렬" + posts.value);
+    }
+    loading.value = false
+  }, 200)
+  loadPosts();
+}
 
 // 🔹 삭제 버튼 클릭
 const deletePost = async (post) => {
@@ -498,5 +527,17 @@ mark {
 .thread-keyword-bar button:hover {
   background-color: var(--color-accent);
   color: #fff;
+}
+
+/* ✅ 로딩창 항상 화면 중앙에 표시되게 */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }
 </style>

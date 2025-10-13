@@ -11,9 +11,10 @@
         <BaseCard>
           <div class="text-center">
             <img :src="picture" alt="profile" class="rounded img-fluid mb-2" style="max-height: 250px; object-fit: cover;" />
-            <button class="btn btn-outline-secondary btn-sm">
-              <i class="bi bi-camera"></i> Add Photo
-            </button>
+            <label class="btn btn-outline-danger btn-sm mt-2">
+              <i class="bi bi-upload me-1"></i> 사진 편집
+              <input type="file" @change="handleFileUpload" accept="image/*" hidden />
+            </label>
           </div>
         </BaseCard>
 
@@ -156,6 +157,43 @@ const editState = ref({
   about: false,
 });
 
+const handleFileUpload = async (event) => {
+
+  const formdata = new FormData();
+  formdata.append("mNo", store.getters['member/getMNo']);
+  formdata.append("file", event.target.files[0]);
+
+  try {
+    const response = await memberApi.memberInsertPicture(formdata);
+    if (response.data.result === "success") {
+      alert("프로필 사진 업데이트 성공");
+
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const base64Data = reader.result.split(",")[1]; // "data:image/png;base64," 부분 제거
+        store.commit('member/setMAttachData', base64Data);
+      };
+      reader.readAsDataURL(file);
+
+    }
+    else {
+      console.log("프로필 사진 업데이트 실패" + response.data.message);
+    }
+  }
+  catch (error) {
+    console.log("프로필 사진 업데이트 서버 에러" + error);
+  }
+
+  // const file = event.target.files[0];
+  // if (file) {
+  //   image.value = file; // File 객체 그대로 저장
+  //   picture.value = URL.createObjectURL(file);
+  //   console.log("프로필 사진 저장 Vue에서 저장 완료")
+  // }
+};
+
 const memberEdit = ref({ ...store.getters["member/getMember"] })
 
 function toggleEdit(section) {
@@ -166,11 +204,11 @@ function cancelEdit(section) {
   editState.value[section] = false;
 }
 
-function routePreference(state){
-  if(state === 'self'){
+function routePreference(state) {
+  if (state === 'self') {
     router.push("/Member/CategorySurvey/Preference")
   }
-  else{
+  else {
     router.push("/Member/CategorySurvey/PartnerPreference")
   }
 }
