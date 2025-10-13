@@ -37,6 +37,7 @@ import Hobbies from "./Hobbies.vue";
 import memberCategoryApi from "@/apis/memberCategoryApi";
 import { useRouter } from "vue-router";
 import memberApi from "@/apis/memberApi";
+import axios from "axios";
 
 const store = useStore();
 const router = useRouter();
@@ -77,8 +78,6 @@ async function insertMemberCategories() {
     const response = await memberCategoryApi.insertMemberCategories(request);
     if (response.data.result === "success") {
 
-
-
       const LoginResponse = await memberApi.memberLogin({
         mId: store.getters['member/getMId'],
         mPassword: store.getters['member/getMPassword']
@@ -88,13 +87,15 @@ async function insertMemberCategories() {
         alert(LoginResponse.data.message);
         console.log(LoginResponse.data);
 
-        const mNo = LoginResponse.data.data.mNo;
+        const mNo = LoginResponse.data.mNo;
         store.commit('member/setMNo', mNo);
+        axios.defaults.headers.common["Authorization"] = "Bearer " + LoginResponse.data.token;
 
         // dispatch login vuex에 로그인 정보 저장
         store.dispatch("member/saveAuth", {
           ...LoginResponse.data.data,
           jwt: LoginResponse.data.jwt,
+          token: response.data.token
         });
 
         // dispatch Login Photo vuex에 로그인 정보 저장

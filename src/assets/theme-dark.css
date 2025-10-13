@@ -32,8 +32,8 @@
 }
 
 /* 전체 배경 */
-.dark body, 
-.dark #app, 
+.dark body,
+.dark #app,
 .dark .app-shell {
   background-color: var(--color-bg) !important;
   color: var(--color-text);
@@ -61,14 +61,14 @@
 }
 
 /* 버튼 */
-.dark button, 
+.dark button,
 .dark .btn {
   background-color: var(--color-bg-hover);
   color: var(--color-text);
   border-color: var(--color-border);
 }
 
-.dark button:hover, 
+.dark button:hover,
 .dark .btn:hover {
   background-color: var(--color-accent);
   color: #000;
@@ -84,7 +84,8 @@
 }
 
 /* 🌙 완전한 전체 배경 어둡게 (스크롤 생겨도 끝까지) */
-html, body {
+html,
+body {
   background-color: var(--color-bg) !important;
   color: var(--color-text) !important;
   min-height: 100%;
@@ -168,12 +169,14 @@ body {
 }
 
 .dark .unread-badge {
-  background-color: #ff4d4f !important; /* 유지 */
+  background-color: #ff4d4f !important;
+  /* 유지 */
   color: #fff !important;
 }
 
 .dark .status-indicator {
-  border-color: var(--color-bg-card) !important; /* 흰색 테두리 → 카드색으로 변경 */
+  border-color: var(--color-bg-card) !important;
+  /* 흰색 테두리 → 카드색으로 변경 */
 }
 
 
@@ -250,21 +253,25 @@ body {
 
 /* Webkit 기반 (Chrome, Edge, Safari) */
 ::-webkit-scrollbar {
-  width: 10px; /* 스크롤 두께 */
+  width: 10px;
+  /* 스크롤 두께 */
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent; /* 트랙 완전 투명 */
+  background: transparent;
+  /* 트랙 완전 투명 */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15); /* 반투명한 밝은 회색 */
+  background: rgba(255, 255, 255, 0.15);
+  /* 반투명한 밝은 회색 */
   border-radius: 10px;
   transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.35); /* hover 시 조금 더 보이게 */
+  background: rgba(255, 255, 255, 0.35);
+  /* hover 시 조금 더 보이게 */
 }
 
 /* Firefox 지원용 */
@@ -309,9 +316,12 @@ body {
 
 /* 🌙 Dark mode override for Bootstrap alerts */
 .dark .alert-info {
-  background-color: #2b3035 !important; /* 어두운 배경 */
-  color: #e0e0e0 !important;           /* 밝은 글자 */
-  border-color: #3c4348 !important;    /* 테두리 색 */
+  background-color: #2b3035 !important;
+  /* 어두운 배경 */
+  color: #e0e0e0 !important;
+  /* 밝은 글자 */
+  border-color: #3c4348 !important;
+  /* 테두리 색 */
 }
 
 /* 채팅 배경 검은색 */
@@ -332,7 +342,8 @@ body {
 
 /* ✅ 메시지 말풍선(상대방쪽 - bg-white)도 보기 좋게 */
 .dark .bg-white {
-  background-color: #2b2b2b !important; /* 완전 하얀색 대신 어두운 회색으로 */
+  background-color: #2b2b2b !important;
+  /* 완전 하얀색 대신 어두운 회색으로 */
   color: #fff !important;
   border: 1px solid #444 !important;
 }
@@ -350,6 +361,58 @@ body {
   border: 1px solid #444 !important;
 }
 
+/* 🌙 피드 전체 카드 */
+.dark .feed-card {
+  background-color: #1e1e1e !important;
+  /* 어두운 배경 */
+  border: 1px solid #333 !important;
+  color: #eaeaea !important;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+/* 🌙 작성자 이름 */
+.dark .feed-card .fw-bold {
+  color: #fff !important;
+}
+
+/* 🌙 작성 시간 */
+.dark .feed-card .text-muted {
+  color: #aaa !important;
+}
+
+/* 🌙 좋아요/댓글 아이콘 */
+.dark .feed-actions i {
+  color: #ccc !important;
+}
+
+.dark .feed-actions i:hover {
+  color: #fff !important;
+}
+
+/* 🌙 이미지 wrapper 배경 */
+.dark .feed-image-wrapper {
+  background-color: #111 !important;
+}
+
+/* 🌙 점 표시 */
+.dark .dots-indicator span {
+  background-color: #666 !important;
+}
+
+.dark .dots-indicator span.active {
+  background-color: #fff !important;
+}
+
+/* 🌙 좋아요 수, 게시글 텍스트 */
+.dark .feed-stats strong {
+  color: #fff !important;
+}
+
+.dark .feed-stats {
+  color: #ccc !important;
+}
+
 
 
 /* 이걸로 기본 다크모드 설정 */
@@ -357,6 +420,3 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
 } */
-
-
-
