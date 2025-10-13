@@ -2,12 +2,17 @@
   <div id="app" :class="['app-shell', { dark: isDarkMode }]">
     <!-- ✅ 로그인 상태 -->
     <template v-if="isLoggedIn">
-      <Sidebar />
+      <Sidebar v-if="!isAdminPage" />
       <div class="d-flex flex-column flex-grow-1">
 
         <header class="topbar d-flex justify-content-between align-items-center p-3">
           <div class="fw-bold">Dating App (Community)</div>
           <div>
+            <button class="btn btn-outline-secondary btn-sm me-2" :style="{ opacity: isAdmin ? 1 : 0.1 }" @click="toggleAdminMode">
+              {{ isAdmin ? "일반모드" : "관리자모드" }}
+            </button>
+
+
             <button class="btn btn-outline-secondary btn-sm me-2" @click="toggleTheme">
               {{ isDarkMode ? '☀️ Light' : '🌙 Dark' }}
             </button>
@@ -15,9 +20,13 @@
           </div>
         </header>
 
+        <!-- ✅ 스크롤 가능한 컨텐츠 -->
         <main class="content">
-          <router-view />
+          <div class="content-scroll">
+            <router-view />
+          </div>
         </main>
+
       </div>
     </template>
 
@@ -31,7 +40,8 @@
             <button class="btn btn-outline-secondary btn-sm me-2" @click="toggleTheme">
               {{ isDarkMode ? '☀️ Light' : '🌙 Dark' }}
             </button>
-            <button v-if="isLoggedIn" class="btn btn-primary btn-sm">공유하기</button>
+
+            <!-- <button v-if="isLoggedIn" class="btn btn-primary btn-sm">공유하기</button> -->
           </div>
         </header>
 
@@ -50,9 +60,8 @@
 
 
 <script setup>
+import ThreadMain from './views/Thread/ThreadMain.vue';
 import Sidebar from './components/Sidebar.vue';
-import login from './views/Member/Login/index.vue';
-import Sign from './views/Member/Sign/index.vue';
 import { computed, onMounted, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -73,8 +82,23 @@ const route = useRoute();
 
 // ✅ 다크모드 상태
 const isDarkMode = ref(localStorage.getItem('theme') !== 'light');
-
 const isLoggedIn = computed(() => !!store.state.member.jwt);
+const isAdmin = ref(false);
+
+const isAdminPage = computed(() => route.path.startsWith('/admin'));
+
+const toggleAdminMode = () => {
+  isAdmin.value = !isAdmin.value;
+  store.commit('setAdmin', isAdmin.value);
+
+  if (isAdmin.value) {
+    window.open('/admin', 'adminwindow', 'width=1200,height=800,resizable=yes,scrollbars=yes');
+  } else {
+    if (window.adminWindow && !window.adminWindow.closed) {
+      window.adminWindow.close();
+    }
+  }
+}
 
 // ✅ 테마 전환
 const toggleTheme = () => {
@@ -85,11 +109,6 @@ const toggleTheme = () => {
 // ✅ 테마 변경 시 body 속성도 동기화
 watchEffect(() => {
   document.body.setAttribute('data-theme', isDarkMode.value ? 'dark' : 'light');
-});
-
-// ✅ storage 변경 감지 (다른 탭이나 로그아웃 이벤트 반영용)
-window.addEventListener('storage', () => {
-  isLoggedIn.value = !!localStorage.getItem('jwt');
 });
 
 watchEffect(() => {
@@ -160,6 +179,21 @@ html,
   height: calc(100vh - 80px);
 }
 
+.content-scroll {
+  overflow-y: auto;
+  /* 세로 스크롤 허용 */
+  height: calc(100vh - 80px);
+  /* 헤더 높이(대략 80px) 제외한 나머지 */
+  padding: 1rem;
+}
+
+.auth-scroll {
+  overflow-y: auto;
+  height: calc(100vh - 80px);
+  padding: 1rem;
+}
+
+
 .auth-scroll::-webkit-scrollbar {
   width: 0px;
   background: transparent;
@@ -188,6 +222,9 @@ html,
 }
 </style>
 
+<!-- const openAdminPage = () => {
+  window.open('/admin', 'adminwindow', 'width=1200,height=800,resizable=yes,scrollbars=yes');
+}; -->
 
 <!-- <template>
   <div id="app" :class="['app-shell', { dark: isDarkMode }]">

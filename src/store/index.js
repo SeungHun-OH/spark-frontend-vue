@@ -7,6 +7,7 @@ import auth from './auth';
 
 export default createStore({
   state: {
+    admin: false,
     user: "",
     jwt: ""
   },
@@ -16,16 +17,13 @@ export default createStore({
     },
     getJwt: function (state, getters, rootState, rootGetters) {
       return state.jwt;
-    }
+    },
+    getAdmin: (state) => state.admin
   },
   mutations: {
-    setUser(state, payload) {
-      state.user = payload;
-    },
-    setJwt(state, payload) {
-      state.jwt = payload;
-    },
-    
+    setUser(state, payload) { state.user = payload; },
+    setJwt(state, payload) { state.jwt = payload; },
+    setAdmin(state, payload) { state.admin = payload; }
   },
   actions: {
   },

@@ -81,15 +81,19 @@
         </div>
 
         <!-- 자기소개 -->
-        <div class="form-floating mb-3">
-          <textarea class="form-control" id="mbio" v-model="member.mBio" placeholder="자기소개"></textarea>
-          <label for="mbio"><i class="bi bi-chat-left-text me-2"></i>자기소개</label>
+        <div class="mb-3">
+          <label for="mbio" class="form-label">
+            <i class="bi bi-chat-left-text me-2"></i>자기소개
+          </label>
+          <textarea class="form-control" id="mbio" v-model="member.mBio" rows="3"></textarea>
         </div>
 
         <!-- MBTI -->
-        <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="mbti" v-model="member.mMbti" placeholder="MBTI" />
-          <label for="mbti"><i class="bi bi-emoji-smile me-2"></i>MBTI</label>
+        <div class="mb-3">
+          <label for="mbti" class="form-label">
+            <i class="bi bi-emoji-smile me-2"></i>MBTI
+          </label>
+          <input type="text" class="form-control" id="mbti" v-model="member.mMbti" />
         </div>
 
         <!-- 제출 버튼 -->
