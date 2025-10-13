@@ -2,7 +2,7 @@
   <div id="app" :class="['app-shell', { dark: isDarkMode }]">
     <!-- ✅ 로그인 상태 -->
     <template v-if="isLoggedIn">
-      <Sidebar />
+      <Sidebar v-if="!isAdminPage" />
       <div class="d-flex flex-column flex-grow-1">
 
         <header class="topbar d-flex justify-content-between align-items-center p-3">
@@ -84,6 +84,8 @@ const route = useRoute();
 const isDarkMode = ref(localStorage.getItem('theme') !== 'light');
 const isLoggedIn = computed(() => !!store.state.member.jwt);
 const isAdmin = ref(false);
+
+const isAdminPage = computed(() => route.path.startsWith('/admin'));
 
 const toggleAdminMode = () => {
   isAdmin.value = !isAdmin.value;

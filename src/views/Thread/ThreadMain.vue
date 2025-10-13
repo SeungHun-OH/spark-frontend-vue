@@ -25,8 +25,8 @@
       </div>
 
       <div class="d-flex justify-content mb-3 gap-2">
-        <button class="btn btn-outline-light btn-sm" @click="sortPosts('latest')">🕓 최신순</button>
-        <button class="btn btn-outline-light btn-sm" @click="sortPosts('reply')">💬 댓글순</button>
+        <button class="btn btn-outline btn-sm" @click="sortPosts('latest')">🕓 최신순</button>
+        <button class="btn btn-outline btn-sm" @click="sortPosts('reply')">💬 댓글순</button>
       </div>
 
       <!-- 스크롤 박스 -->
