@@ -1,7 +1,9 @@
 export function formatTimeAgo(dateString) {
   const date = new Date(dateString);
   const now = new Date();
-  const diff = (now - date) / 1000; // 초 단위 차이
+
+  // ✅ 한국시간(KST) 보정
+  const diff = (now - date - 9 * 60 * 60 * 1000) / 1000; // 초 단위 차이
 
   if (diff < 60) return "방금 전";
   if (diff < 3600) return Math.floor(diff / 60) + "분 전";

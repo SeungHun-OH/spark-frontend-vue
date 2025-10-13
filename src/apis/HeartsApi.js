@@ -10,6 +10,12 @@ function acceptHeart(heartsNo) {
     return axios.post(`/hearts/${heartsNo}/accept`);
 }
 
+function sendHeart(partnerNo, requestChannel) {
+    return axios.post("/hearts/send", null, {
+        params : {partnerNo, requestChannel}
+    });
+}
+
 function getHearts() {
     return axios.get("/hearts/");
 }
@@ -18,10 +24,11 @@ function rejectHeartReqeust(heartsNo) {
     axios.delete(`/hearts/${heartsNo}/reject`);
 }
 
-const HeartsApi = {
+const heartsApi = {
     acceptHeart,
+    sendHeart,
     getHearts,
     rejectHeartReqeust
 };
 
-export default HeartsApi;
+export default heartsApi;

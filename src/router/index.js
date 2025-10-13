@@ -1,6 +1,6 @@
 import MainFeed from '../views/MainFeed.vue';
 import Matching from '../views/Matching.vue';
-import MyFeed from '../views/OtherFeed.vue';
+import MyFeed from '../views/MyFeed.vue';
 import OtherFeed from '../views/OtherFeed.vue';
 import Hearts from '../views/Hearts.vue';
 import { createRouter, createWebHistory } from 'vue-router'
@@ -20,11 +20,11 @@ const routes = [
   { path: '/', component: MainFeed },
   { path: '/matching', component: Matching },
   { path: '/feed', component: MyFeed },
-  { path: '/otherfeed', component: OtherFeed },
+  { path: '/otherfeed/:mNo', component: OtherFeed, props: true },
   { path: '/hearts', component: Hearts },
   { path: '/Profile', component: Profile },
   
-  { path: '/preferences', component: Preferences },
+  { path: '/preferences/:mNickname', component: Preferences , props: true},
   { path: '/create-post', component: CreatePost },
   { path: '/edit-post/:fNo', component: EditPost, props: true },
 

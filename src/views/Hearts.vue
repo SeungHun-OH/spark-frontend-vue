@@ -97,7 +97,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import HeartsApi from '@/apis/HeartsApi'
+import heartsApi from '@/apis/heartsApi'
 
 const requests = ref([])
 const activeTab = ref('M')
@@ -130,7 +130,7 @@ function timeAgo(dateStr) {
 
 async function fetchRequests() {
   try {
-    const res = await HeartsApi.getHearts()
+    const res = await heartsApi.getHearts()
     requests.value = res.data.data.map(item => ({
       ...item,
       mutual: item.mutual || false
@@ -142,7 +142,7 @@ async function fetchRequests() {
 
 async function accept(no) {
   try {
-    await HeartsApi.acceptHeart(no)
+    await heartsApi.acceptHeart(no)
     requests.value = requests.value.filter(r => r.no !== no)
   } catch (e) {
     console.error('수락 실패', e)
@@ -151,7 +151,7 @@ async function accept(no) {
 
 async function reject(no) {
   try {
-    await HeartsApi.rejectHeartReqeust(no)
+    await heartsApi.rejectHeartReqeust(no)
     requests.value = requests.value.filter(r => r.no !== no)
   } catch (e) {
     console.error('거절 실패', e)

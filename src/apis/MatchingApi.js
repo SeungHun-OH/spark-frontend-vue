@@ -24,11 +24,11 @@ function deleteMatching(mt_no) {
     });
 }
 
-const MatchingApi = {
+const matchingApi = {
     createMatching,
     getMatching,
     deleteMatching,
     postLike
 };
 
-export default MatchingApi;
+export default matchingApi;
