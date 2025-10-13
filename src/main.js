@@ -19,9 +19,11 @@ if (token) {
   axios.defaults.headers.common["Authorization"] = "Bearer " + token;
   console.log("✅ JWT 복원 완료:", token);
   (async()=>{
+    console.log("여기 실행");
     const response = await memberApi.getMemberInfoByToken();
+    console.log(response.data.data.uuid);
     store.commit('auth/setMemberUuid', response.data.data.uuid);
-  })
+  })();
 } else {
   console.log("ℹ️ 저장된 JWT 없음");
 }

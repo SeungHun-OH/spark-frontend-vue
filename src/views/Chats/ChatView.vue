@@ -8,7 +8,7 @@
         </button>
         <!-- 프로필 + 상태 -->
         <div class="position-relative me-3" style="width: 50px; height: 50px;">
-          <img :src="partner.profileImg" alt="profile" class="rounded-circle" style="width: 50px; height: 50px;" />
+          <img :src="'http://localhost:8040/matching/picture/'+`${partner.attachNo}` ||'https://placehold.co/50x50'" alt="profile" class="rounded-circle" style="width: 50px; height: 50px;" />
           <!-- 상태 표시 -->
           <span class="status-indicator" :class="partner.status === 'ONLINE' ? 'online' : 'offline'"></span>
         </div>
@@ -83,7 +83,6 @@ const myUuid = store.getters["auth/getmemberUuid"];
 const partner = ref({
   name: "로딩중...",
   age: " ",
-  profileImg: "https://placehold.co/50x50",
   opponentUuid: null,
   status: "OFFLINE"
 });
@@ -179,6 +178,7 @@ async function getChattingMessageList(roomId) {
       profileImg: profile.mpBase64Data || partner.value.profileImg,
       opponentUuid: profile.opponentUuid,
       status: profile.status,
+      attachNo: profile.attachNo
     };
     messages.value = chatMessages.map((m) => ({
       ...m,
@@ -227,9 +227,14 @@ onUpdated(() => {
 
 // 채팅방 나가기 함수
 function leaveChatRoom() {
-  // 채팅방 나가기 로직 추가
-  chatApi.leaveChatRoom(currentRoomId.value)
-  router.push("/chat"); // 예시로 채팅 리스트 페이지로 이동; // 예시로 채팅 리스트 페이지로 이동
+  try {
+    chatApi.leaveChatRoom(currentRoomId.value);
+    setTimeout(() => {
+      router.push("/chat");
+    }, 300);
+  } catch (error) {
+    console.error("채팅방 나가기 실패:", error);
+  }
 }
 </script>
 
