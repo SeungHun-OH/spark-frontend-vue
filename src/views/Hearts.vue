@@ -151,7 +151,9 @@ async function accept(no) {
 
 async function reject(no) {
   try {
-    await heartsApi.rejectHeartReqeust(no)
+    console.log("여기 "+no);
+    await heartsApi.rejectHeartRequest(no)
+    console.log("여기 ");
     requests.value = requests.value.filter(r => r.no !== no)
   } catch (e) {
     console.error('거절 실패', e)
