@@ -12,7 +12,8 @@
           <!-- 이름 + 하트 같은 줄 -->
           <div class="d-flex align-items-center gap-2 mb-0">
             <h4 class="mt-1 mb-0">{{ profile.mname }}</h4>
-            <i :class="isLiked ? 'bi bi-heart-fill text-danger fs-5' : 'bi bi-heart fs-5'" style="cursor:pointer;"
+            <i :class="isFeedLiked ? 'bi bi-heart-fill text-danger fs-5' : 'bi bi-heart fs-5'" 
+              style="cursor:pointer;"
               @click="feedLike"></i>
           </div>
         </div>
@@ -92,7 +93,7 @@
               </div>
 
               <div class="feed-actions mb-1 d-flex align-items-center">
-                <i :class="isLiked ? 'bi bi-heart-fill text-danger fs-4 me-3' : 'bi bi-heart fs-4 me-3'"
+                <i :class="isModalLiked ? 'bi bi-heart-fill text-danger fs-4 me-3' : 'bi bi-heart fs-4 me-3'"
                   style="cursor:pointer;" @click="toggleLike"></i>
                 <i class="bi bi-chat fs-4" style="cursor:pointer;"></i>
               </div>
@@ -132,6 +133,9 @@ const profile = ref({
 // 피드
 const feedNoList = ref([]);
 const showModal = ref(false);
+
+//하트
+const heartNo = ref(null);
 
 // 모달
 const modalPost = ref({});
@@ -239,13 +243,22 @@ function changeImage(direction) {
 async function feedLike() {
   isFeedLiked.value = !isFeedLiked.value;
   try {
-    console.log(profile.value);
-    //모두 uuid로 변경
-    // await heartsApi.sendHeart(profile.value.muuid || route.params.mUuid, 'F');
-    await heartsApi.sendHeart(profile.value.mno, 'F');
-    console.log("하트 전송 성공");
+    if (isFeedLiked.value) {
+      //하트 전송
+      //await heartsApi.sendHeart(profile.value.muuid || route.params.mUuid, 'F');
+      const heartResponse = await heartsApi.sendHeart(profile.value.mno, 'F');
+      heartNo.value = heartResponse.data.data;
+      isFeedLiked.value = true;
+      console.log("하트 전송 성공");
+      
+    } else {
+      await heartsApi.rejectHeartReqeust(heartNo.value);
+      heartNo.value = null;
+      isFeedLiked.value = false;
+      console.log("하트 삭제 성공");
+    }
   }catch (error) {
-    console.log("하트 전송 실패 : ", error);
+    console.log("하트 처리 실패 : ", error);
   }
 }
 

@@ -7,7 +7,8 @@
       class="card mb-3"
       style="border-radius:12px; padding:22px; display:flex; gap:18px; align-items:center;"
     >
-      <img
+      <img 
+        v-if="profile.mnickname"
         :src="`http://localhost:8040/member/memberPicture/${profile.mnickname}`"
         width="96"
         height="96"
