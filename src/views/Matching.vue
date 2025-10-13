@@ -77,7 +77,7 @@
 </template>
 
 <script setup>
-import matchingApi from "@/apis/MatchingApi";
+import matchingApi from "@/apis/matchingApi";
 import { ref, computed, onMounted, watch } from "vue";
 
 const profiles = ref([]);
