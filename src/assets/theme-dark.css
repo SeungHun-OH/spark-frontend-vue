@@ -314,6 +314,43 @@ body {
   border-color: #3c4348 !important;    /* 테두리 색 */
 }
 
+/* 채팅 배경 검은색 */
+.dark .chat-item {
+  background-color: transparent !important;
+}
+
+/* ✅ 채팅 전체 카드 영역 투명하게 */
+.dark .card {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+/* ✅ 채팅 내용 부분 배경 투명하게 */
+.dark .card-body.chat-box {
+  background-color: transparent !important;
+}
+
+/* ✅ 메시지 말풍선(상대방쪽 - bg-white)도 보기 좋게 */
+.dark .bg-white {
+  background-color: #2b2b2b !important; /* 완전 하얀색 대신 어두운 회색으로 */
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+
+/* ✅ 입력창(card-footer)도 어둡게 통일 */
+.dark .card-footer {
+  background-color: #1e1e1e !important;
+  border-top: 1px solid #333 !important;
+}
+
+/* ✅ 입력창 내부 인풋 */
+.dark .card-footer .form-control {
+  background-color: #2a2a2a !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+
+
 
 /* 이걸로 기본 다크모드 설정 */
 /* body[data-theme='dark'] {
