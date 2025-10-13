@@ -13,8 +13,10 @@ function getFeedPicture(fp_no) {
     });
 }
 
-function getFirstImageofFeed() {
-    return axios.get("/feedPicture/firstImg");
+function getFirstImageofFeed(m_no, page_no = 1) {
+    return axios.get("/feedPicture/firstImg", {
+        params : { m_no, page_no }
+    });
 }
 
 function deleteFeedPicture(fpNo) {

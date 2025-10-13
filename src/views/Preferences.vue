@@ -10,7 +10,6 @@
         <BaseCard v-for="(items, category) in leftColumn" :key="category">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h6 class="fw-bold mb-0">{{ category }}</h6>
-            <i class="bi bi-pencil-square text-muted" role="button"></i>
           </div>
           <div class="d-flex flex-wrap gap-2">
             <span
@@ -30,7 +29,6 @@
         <BaseCard v-for="(items, category) in rightColumn" :key="category">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h6 class="fw-bold mb-0">{{ category }}</h6>
-            <i class="bi bi-pencil-square text-muted" role="button"></i>
           </div>
           <div class="d-flex flex-wrap gap-2">
             <span
@@ -52,11 +50,9 @@
 import { ref, computed, onMounted } from 'vue';
 import BaseCard from '@/components/member/BaseCard.vue';
 import memberCategoryApi from '@/apis/memberCategoryApi';
+import { useRoute } from 'vue-router';
 
-const profile = ref({
-  bio: 'I love hiking, photography, and cozy coffee shops.',
-  mbti: 'ENFP'
-});
+const route = useRoute();
 
 const preferences = ref({
   Hobbies: [],
@@ -78,9 +74,24 @@ const rightColumn = computed(() => ({
 }));
 
 async function getPreferences() {
-  const response = memberCategoryApi.getPreferenceByMemberNo();
-  console.log(response.data);
 
+  const mnickname = route.params.mNickname;
+  const response = await memberCategoryApi.getCategoryByMnickname(mnickname);
+  const selfPrefers = response.data.data.selfPrefers;
+  console.log(selfPrefers);
+  for (let i = 0; i < selfPrefers.length; i++) {
+    if (selfPrefers[i].pcTypeNum === 1) {
+      preferences.value.Hobbies.push(selfPrefers[i].pcName);
+    } else if (selfPrefers[i].pcTypeNum === 2) {
+      preferences.value.Traits.push(selfPrefers[i].pcName);
+    } else if (selfPrefers[i].pcTypeNum === 3) {
+      preferences.value.IdealType.push(selfPrefers[i].pcName);
+    }else if (selfPrefers[i].pcTypeNum === 4) {
+      preferences.value.Food.push(selfPrefers[i].pcName);
+    }else{
+      preferences.value.DatePlace.push(selfPrefers[i].pcName);
+    }
+  }
 }
 
 onMounted(async () => {

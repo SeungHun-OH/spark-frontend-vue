@@ -16,17 +16,29 @@ function getFeed(f_no) {
     });
 }
 
-function getMyFeedList(page_no) {
-    return axios.get("/feed/myfeed", {
-        params: { page_no }
+function getFeedList(m_no = null, page_no) {
+    const params = {page_no}
+
+    if (m_no !== null) {
+        params.m_no = m_no;
+    }
+
+    return axios.get("/feed/list", { params});
+}
+
+function getFeedListExceptMe(m_no, page_no, reset = false) {
+    return axios.get("/feed/main", {
+        params: { m_no, page_no, reset }
     });
 }
 
+/*
 function getFeedList(m_nickname, page_no) {
     return axios.get("/feed/list", {
         params: { m_nickname, page_no },
     });
 }
+*/
 
 function updateFeed(formdata) {
     return axios.put("/feed/", formdata);
@@ -39,9 +51,10 @@ function deleteFeed(f_no) {
 
 const feedApi = {
     createFeed,
-    getMyFeedList,
-    getFeed,
     getFeedList,
+    getFeed,
+    getFeedListExceptMe,
+    // getFeedList,
     updateFeed,
     deleteFeed
 };
