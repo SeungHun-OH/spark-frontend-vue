@@ -2,7 +2,7 @@
 <template>
   <aside class="sidebar">
     <div class="brand">
-      <img src="../assets/logo.png" alt="logo" />
+      <img src="../assets/logo.png" alt="icon" />
       <div>
         <h4 class="mb-0">Spark</h4>
       </div>

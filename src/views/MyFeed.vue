@@ -19,8 +19,7 @@
           <div class="mb-0">
             <h4 class="mt-1">{{ profile.mname }}</h4>
             <small class="text-muted mt-1"
-              >{{ feedNoList.length }} posts · 156 followers · 89 following</small
-            >
+              >{{ feedNoList.length }} posts · 156 followers · 89 following</small>
             <p class="mt-1 text-muted" style="font-size: 15px;">{{ profile.mbio }}</p>
           </div>
         </div>

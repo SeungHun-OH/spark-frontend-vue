@@ -77,7 +77,7 @@
 </template>
 
 <script setup>
-import matchingApi from "@/apis/matchingApi";
+import matchingApi from "@/apis/MatchingApi";
 import { ref, computed, onMounted, watch } from "vue";
 
 const profiles = ref([]);
@@ -117,7 +117,6 @@ const cardStyle = computed(() => ({
 
 function dislike() {
   if (!currentProfile.value) return;
-
   removedStack.value.push({ profile: currentProfile.value, index: currentIndex.value });
   profiles.value.splice(currentIndex.value, 1);
 
@@ -224,6 +223,8 @@ async function fetchData() {
       url: item.url,
       tags: item.tags ?? defaultTags,
     }));
+
+
 
     // 여기에서 전체 개수 저장!
     initialProfileCount.value = profiles.value.length;

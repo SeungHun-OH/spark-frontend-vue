@@ -22,7 +22,7 @@
         <!-- ✅ 좌측 -->
         <div class="d-flex align-items-center">
           <div class="position-relative me-3" style="width: 50px; height: 50px;">
-            <img :src="chatRoom.imgData || 'https://placehold.co/50x50'" alt="profile" class="rounded-circle"
+            <img :src="'http://localhost:8040/matching/picture/'+`${chatRoom.attachNo}` || 'https://placehold.co/50x50'" alt="profile" class="rounded-circle"
               style="width: 50px; height: 50px;" />
             <span class="status-indicator" :class="chatRoom.status === 'ONLINE' ? 'online' : 'offline'"></span>
           </div>
@@ -47,10 +47,12 @@
 
 <script setup>
 import chatApi from "@/apis/chatApi";
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
 import stompClient from "@/sockets/stompClient";
+import { useRoute } from "vue-router";
 
 const chatRoomList = ref([]);
+const route = useRoute();
 
 // ✅ 리스트 불러오기
 async function getChatList() {
@@ -118,6 +120,13 @@ onMounted(async () => {
 onUnmounted(() => {
   stompClient.unsubscribe("/sub/room");
 });
+
+watch(
+  () => route.fullPath,
+  () => {
+    getChatList();
+  }
+);
 </script>
 
 <style scoped>
