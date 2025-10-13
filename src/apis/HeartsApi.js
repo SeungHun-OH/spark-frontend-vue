@@ -24,11 +24,18 @@ function rejectHeartRequest(heartsNo) {
     axios.delete(`/hearts/${heartsNo}/reject`);
 }
 
+function isExistdHearts(partnerNo, requestChannel) {
+    return axios.get("/hearts/isExist", {
+        params : {partnerNo, requestChannel}
+    });
+}
+
 const heartsApi = {
     acceptHeart,
     sendHeart,
     getHearts,
-    rejectHeartRequest
+    rejectHeartRequest,
+    isExistdHearts
 };
 
 export default heartsApi;

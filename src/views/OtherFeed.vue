@@ -12,8 +12,7 @@
           <!-- 이름 + 하트 같은 줄 -->
           <div class="d-flex align-items-center gap-2 mb-0">
             <h4 class="mt-1 mb-0">{{ profile.mname }}</h4>
-            <i :class="isFeedLiked ? 'bi bi-heart-fill text-danger fs-5' : 'bi bi-heart fs-5'" 
-              style="cursor:pointer;"
+            <i :class="isFeedLiked ? 'bi bi-heart-fill text-danger fs-5' : 'bi bi-heart fs-5'" style="cursor:pointer;"
               @click="feedLike"></i>
           </div>
         </div>
@@ -239,6 +238,19 @@ function changeImage(direction) {
     currentImageIndex.value--;
 }
 
+//이미 like를 눌렀는지 확인
+async function checkHeartsExist() {
+  const existResponse = await heartsApi.isExistdHearts(profile.value.mno, 'F');
+  if (existResponse.data.data !== null) {
+    isFeedLiked.value = true;
+    //이미 존재하는 hno를 가지고 와야 함
+    heartNo.value = existResponse.data.data;
+    console.log("이미 하트가 존재합니다.");
+  } else {
+    console.log("하트가 존재하지 않습니다.")
+  }
+}
+
 //피드 라이크
 async function feedLike() {
   isFeedLiked.value = !isFeedLiked.value;
@@ -250,14 +262,13 @@ async function feedLike() {
       heartNo.value = heartResponse.data.data;
       isFeedLiked.value = true;
       console.log("하트 전송 성공");
-      
     } else {
-      await heartsApi.rejectHeartReqeust(heartNo.value);
+      await heartsApi.rejectHeartRequest(heartNo.value);
       heartNo.value = null;
       isFeedLiked.value = false;
       console.log("하트 삭제 성공");
     }
-  }catch (error) {
+  } catch (error) {
     console.log("하트 처리 실패 : ", error);
   }
 }
@@ -275,6 +286,7 @@ function closeModal() {
 
 onMounted(async () => {
   await getProfile();
+  await checkHeartsExist();
   await getPosts();
   window.addEventListener("scroll", handleScroll);
 });
