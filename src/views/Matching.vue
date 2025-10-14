@@ -3,7 +3,7 @@
     <div class="banner-left">
       <div>
         <h2>Matching</h2>
-        <small class="text-muted">Manage your posts and profile</small>
+        <small class="text-muted">Discover people who match your vibe</small>
       </div>
     </div>
   </div>
@@ -214,6 +214,7 @@ watch(currentProfile, () => {
 async function fetchData() {
   try {
     const response = await matchingApi.getMatching();
+    console.log(response.data);
     profiles.value = response.data.data.map((item) => ({
       name: item.name,
       age: item.age,
@@ -223,8 +224,6 @@ async function fetchData() {
       url: item.url,
       tags: item.tags ?? defaultTags,
     }));
-
-
 
     // 여기에서 전체 개수 저장!
     initialProfileCount.value = profiles.value.length;

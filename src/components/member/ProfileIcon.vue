@@ -4,8 +4,8 @@
     <img v-if="profileImage" :src="profileImage" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;" class = "me-2" />
     <!-- <img v-else src="@/assets/profile.png" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;" /> -->
     <div v-if="mId">
-      <div class="fw-bold"> id : {{ mId }}</div>
-      <div class="fw-bold"> na : {{ mName }}</div>
+      <div class="fw-bold"> {{ mName }}</div>
+      <div class="fw-bold" style="color: dimgray;"> {{ mId }}</div>
     </div>
   </div>
 
@@ -19,7 +19,8 @@ import { useStore } from 'vuex';
 const store = useStore();
 
 const mId = computed(() => {
-  return store.getters["member/getMId"]
+  return store.getters["member/getMEmail"]
+  // return store.getters["member/getMId"]
 });
 
 const mName = computed(() => {
@@ -33,4 +34,5 @@ const profileImage = computed(() => {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

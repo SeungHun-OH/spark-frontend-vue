@@ -1,6 +1,13 @@
 <template>
   <div>
-    <h3 class="mb-3">Feed</h3>
+    <div class="banner">
+      <div class="banner-left">
+        <div>
+          <h2>Feed</h2>
+          <small class="text-muted">See what others are sharing</small>
+        </div>
+      </div>
+    </div>
 
     <!-- Profile header -->
     <div class="card mb-3" style="border-radius:12px; padding:22px; display:flex; gap:18px; align-items:center;">

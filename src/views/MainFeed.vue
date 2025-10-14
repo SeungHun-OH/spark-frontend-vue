@@ -4,7 +4,7 @@
     <div class="banner mb-4 d-flex justify-content-between align-items-center">
       <div class="banner-left">
         <div>
-          <h2>Discover</h2>
+          <h2>Discover</h2> 
           <small class="text-muted">Explore posts from others</small>
         </div>
       </div>

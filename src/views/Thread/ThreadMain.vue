@@ -1,4 +1,12 @@
 <template>
+  <div class="banner">
+    <div class="banner-left">
+      <div>
+        <h2>Thread</h2>
+        <small class="text-muted">💭 Keep the conversation going</small>
+      </div>
+    </div>
+  </div>
   <div class="d-flex">
     <div class="flex-grow-1 container py-3">
 

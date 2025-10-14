@@ -8,7 +8,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './assets/styles.css';
 import axios from 'axios';
 import memberApi from './apis/memberApi';
-
+import './assets/main.css'
 
 
 createApp(App).use(store).use(router).mount('#app')

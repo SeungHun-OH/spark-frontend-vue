@@ -1,8 +1,13 @@
 <template>
+  <div class="banner">
+    <div class="banner-left">
+      <div>
+        <h2>My Profile</h2>
+        <small class="text-muted">Manage your dating profile</small>
+      </div>
+    </div>
+  </div>
   <div class="container py-4">
-    <h4 class="mb-1">My Profile</h4>
-    <p class="text-muted">Manage your dating profile</p>
-
     <div class="row">
       <!-- 왼쪽 메인 영역 -->
       <div class="col-md-8">

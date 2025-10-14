@@ -1,25 +1,23 @@
 <template>
   <div>
-    <h3 class="mb-3">My Feed</h3>
+    <div class="banner">
+      <div class="banner-left">
+        <div>
+          <h2>My Feed</h2>
+          <small class="text-muted">Manage your posts and profile</small>
+        </div>
+      </div>
+    </div>
 
     <!-- Profile header -->
-    <div
-      class="card mb-3"
-      style="border-radius:12px; padding:22px; display:flex; gap:18px; align-items:center;"
-    >
-      <img 
-        v-if="profile.mnickname"
-        :src="`http://localhost:8040/member/memberPicture/${profile.mnickname}`"
-        width="96"
-        height="96"
-        style="border-radius:50%;"
-      />
+    <div class="card mb-3" style="border-radius:12px; padding:22px; display:flex; gap:18px; align-items:center;">
+      <img v-if="profile.mnickname" :src="`http://localhost:8040/member/memberPicture/${profile.mnickname}`" width="96"
+        height="96" style="border-radius:50%;" />
       <div style="flex:1;">
         <div class="d-flex align-items-center justify-content-between">
           <div class="mb-0">
             <h4 class="mt-1">{{ profile.mname }}</h4>
-            <small class="text-muted mt-1"
-              >{{ feedNoList.length }} posts · 156 followers · 89 following</small>
+            <small class="text-muted mt-1">{{ feedNoList.length }} posts · 156 followers · 89 following</small>
             <p class="mt-1 text-muted" style="font-size: 15px;">{{ profile.mbio }}</p>
           </div>
         </div>
@@ -45,12 +43,7 @@
 
     <!-- grid -->
     <div class="my-post-grid">
-      <div
-        class="post-item position-relative"
-        v-for="p in feedNoList"
-        :key="p.fNo"
-        @click="openPost(p.fNo)"
-      >
+      <div class="post-item position-relative" v-for="p in feedNoList" :key="p.fNo" @click="openPost(p.fNo)">
         <img :src="`http://localhost:8040/feedPicture/picture/${p.fpNo}`" />
         <div class="hover-actions">
           <button class="btn btn-light btn-sm me-1" @click.stop="editPost(p.fNo)">
@@ -67,78 +60,50 @@
     <div v-if="isLoading" class="text-center mt-3 text-muted">Loading more posts...</div>
 
     <!-- Modal -->
-    <div
-      class="modal fade"
-      tabindex="-1"
-      :class="{ show: showModal }"
-      style="display:block"
-      v-if="showModal"
-    >
+    <div class="modal fade" tabindex="-1" :class="{ show: showModal }" style="display:block" v-if="showModal">
       <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content" style="border-radius:12px;">
           <div class="modal-body p-0 d-flex">
             <!-- 왼쪽: 이미지 -->
             <div style="flex:1; position:relative;">
-              <img
-                v-if="modalPostPictures && modalPostPictures.length > 0"
+              <img v-if="modalPostPictures && modalPostPictures.length > 0"
                 :src="`http://localhost:8040/feedPicture/picture/${modalPostPictures[currentImageIndex].fpNo}`"
-                style="width:100%; height:80vh; object-fit:cover;"
-              />
+                style="width:100%; height:80vh; object-fit:cover;" />
 
               <!-- 좌우 화살표 버튼 -->
-              <button
-                v-if="currentImageIndex > 0"
-                class="arrow-btn left"
-                @click="changeImage('prev')"
-              >
+              <button v-if="currentImageIndex > 0" class="arrow-btn left" @click="changeImage('prev')">
                 <i class="bi bi-chevron-left"></i>
               </button>
-              <button
-                v-if="currentImageIndex < modalPostPictures.length - 1"
-                class="arrow-btn right"
-                @click="changeImage('next')"
-              >
+              <button v-if="currentImageIndex < modalPostPictures.length - 1" class="arrow-btn right"
+                @click="changeImage('next')">
                 <i class="bi bi-chevron-right"></i>
               </button>
 
               <!-- 점 인디케이터 -->
               <div class="dots-indicator modal-dots">
-                <span
-                  v-for="(pic, idx) in modalPostPictures"
-                  :key="idx"
-                  :class="{ active: idx === currentImageIndex }"
-                ></span>
+                <span v-for="(pic, idx) in modalPostPictures" :key="idx"
+                  :class="{ active: idx === currentImageIndex }"></span>
               </div>
             </div>
 
             <!-- 오른쪽: 게시글 -->
             <div style="width:420px; background:#fff; padding:20px;">
               <div class="d-flex align-items-center mb-3">
-                <img
-                  :src="`http://localhost:8040/member/memberPicture/${modalAuthor.mNickname}`"
-                  class="rounded-circle me-2"
-                  width="48"
-                  height="48"
-                />
+                <img :src="`http://localhost:8040/member/memberPicture/${modalAuthor.mNickname}`"
+                  class="rounded-circle me-2" width="48" height="48" />
                 <div>
                   <div class="fw-bold">{{ modalAuthor.mName }}</div>
                   <small class="text-muted">{{ formatTimeAgo(modalPost.feed.fDate) }}</small>
                 </div>
-                <button
-                  class="btn btn-sm btn-outline-secondary ms-auto"
-                  @click="goEditPost(modalPost.feed.fNo)"
-                >
+                <button class="btn btn-sm btn-outline-secondary ms-auto" @click="goEditPost(modalPost.feed.fNo)">
                   <i class="bi bi-pencil"></i>
                 </button>
                 <button class="btn-close ms-2" @click="closeModal()"></button>
               </div>
 
               <div class="feed-actions mb-1 d-flex align-items-center">
-                <i
-                  :class="isLiked ? 'bi bi-heart-fill text-danger fs-4 me-3' : 'bi bi-heart fs-4 me-3'"
-                  style="cursor:pointer;"
-                  @click="toggleLike"
-                ></i>
+                <i :class="isLiked ? 'bi bi-heart-fill text-danger fs-4 me-3' : 'bi bi-heart fs-4 me-3'"
+                  style="cursor:pointer;" @click="toggleLike"></i>
                 <i class="bi bi-chat fs-4" style="cursor:pointer;"></i>
               </div>
               <div class="mb-2">
@@ -330,18 +295,21 @@ onBeforeUnmount(() => {
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
 }
+
 .post-item img {
   width: 100%;
   height: 300px;
   object-fit: cover;
   border-radius: 8px;
 }
+
 .hover-actions {
   position: absolute;
   top: 8px;
   right: 8px;
   display: none;
 }
+
 .post-item:hover .hover-actions {
   display: flex;
 }
@@ -369,12 +337,15 @@ onBeforeUnmount(() => {
   cursor: pointer;
   transition: 0.2s;
 }
+
 .arrow-btn:hover {
   background: rgba(0, 0, 0, 0.6);
 }
+
 .arrow-btn.left {
   left: 12px;
 }
+
 .arrow-btn.right {
   right: 12px;
 }
@@ -388,12 +359,14 @@ onBeforeUnmount(() => {
   display: flex;
   gap: 5px;
 }
+
 .dots-indicator span {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.5);
 }
+
 .dots-indicator span.active {
   background: white;
 }

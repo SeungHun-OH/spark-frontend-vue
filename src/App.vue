@@ -6,7 +6,7 @@
       <div class="d-flex flex-column flex-grow-1">
 
         <header class="topbar d-flex justify-content-between align-items-center p-3">
-          <div class="fw-bold">Dating App (Community)</div>
+          <div class="fw-bold"></div>
           <div>
             <button class="btn btn-outline-secondary btn-sm me-2" :style="{ opacity: isAdmin ? 1 : 0.1 }" @click="toggleAdminMode">
               {{ isAdmin ? "일반모드" : "관리자모드" }}
@@ -35,7 +35,7 @@
       <div class="d-flex flex-column flex-grow-1">
 
         <header class="topbar d-flex justify-content-between align-items-center p-3">
-          <div class="fw-bold">Dating App (Community)</div>
+          <div class="fw-bold"></div>
           <div>
             <button class="btn btn-outline-secondary btn-sm me-2" @click="toggleTheme">
               {{ isDarkMode ? '☀️ Light' : '🌙 Dark' }}
@@ -221,6 +221,7 @@ html,
 .app-shell.dark .auth-scroll {
   background-color: var(--color-bg) !important;
 }
+
 </style>
 
 <!-- const openAdminPage = () => {

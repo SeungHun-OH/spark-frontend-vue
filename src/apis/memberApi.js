@@ -57,6 +57,12 @@ function selectMemberByMno(m_no) {
   return axios.get("/member/info", {params});
 }
 
+function selectMemberByMnickname(m_nickname) {
+  return axios.get("/member/info/nickname", {
+    params: { m_nickname }
+  });
+}
+
 function getRandomMembersExceptMe(myNo, count) {
   return axios.get("/member/randomExceptMe", {
     params: { mNo: myNo, count: count }
@@ -88,6 +94,7 @@ const memberApi = {
   
   getMemberPicture,
   selectMemberByMno,
+  selectMemberByMnickname,
   getRandomMembersExceptMe,
   memberGetJwt,
   getMemberInfoByToken

@@ -1,9 +1,17 @@
 <template>
-  <div class="container py-4">
-    <!-- 상단 헤더 -->
-    <h3 class="fw-bold mb-2">My Preferences</h3>
-    <p class="text-muted mb-4">Customize your dating profile</p>
+  <div class="banner">
+    <div class="banner-left">
+      <button class="btn btn-link text-dark me-3 p-0" @click="goBackToFeed">
+        <i class="bi bi-arrow-left fs-4"></i>
+      </button>
+      <div>
+        <h2>Preferences</h2>
+        <small class="text-muted">interests and style information</small>
+      </div>
+    </div>
+  </div>
 
+  <div class="container py-4">
     <div class="row g-3">
       <!-- 왼쪽 컬럼 -->
       <div class="col-md-6 d-flex flex-column gap-3">
@@ -16,7 +24,7 @@
               v-for="(item, index) in items"
               :key="index"
               class="badge bg-light text-dark px-3 py-2 shadow-sm"
-              style="border-radius: 8px; font-size: 0.9rem;"
+              style="border-radius: 8px; font-size: 0.8rem;"
             >
               {{ item }}
             </span>
@@ -35,7 +43,7 @@
               v-for="(item, index) in items"
               :key="index"
               class="badge bg-light text-dark px-3 py-2 shadow-sm"
-              style="border-radius: 8px; font-size: 0.9rem;"
+              style="border-radius: 8px; font-size: 0.8rem;"
             >
               {{ item }}
             </span>
@@ -51,6 +59,9 @@ import { ref, computed, onMounted } from 'vue';
 import BaseCard from '@/components/member/BaseCard.vue';
 import memberCategoryApi from '@/apis/memberCategoryApi';
 import { useRoute } from 'vue-router';
+import memberApi from '@/apis/memberApi';
+import router from '@/router';
+import store from '@/store';
 
 const route = useRoute();
 
@@ -61,6 +72,8 @@ const preferences = ref({
   DatePlace: [],
   IdealType: []
 });
+
+const mnickname = ref();
 
 const leftColumn = computed(() => ({
   Hobbies: preferences.value.Hobbies,
@@ -75,10 +88,9 @@ const rightColumn = computed(() => ({
 
 async function getPreferences() {
 
-  const mnickname = route.params.mNickname;
-  const response = await memberCategoryApi.getCategoryByMnickname(mnickname);
+  mnickname.value = route.params.mNickname;
+  const response = await memberCategoryApi.getCategoryByMnickname(mnickname.value);
   const selfPrefers = response.data.data.selfPrefers;
-  console.log(selfPrefers);
   for (let i = 0; i < selfPrefers.length; i++) {
     if (selfPrefers[i].pcTypeNum === 1) {
       preferences.value.Hobbies.push(selfPrefers[i].pcName);
@@ -91,6 +103,17 @@ async function getPreferences() {
     }else{
       preferences.value.DatePlace.push(selfPrefers[i].pcName);
     }
+  }
+}
+
+async function goBackToFeed() {
+  if (mnickname.value === store.getters['member/getMNickname']) {
+    //본인일 경우 본인 피드로
+    router.push(`/feed`);
+  } else {
+    //아닐 경우 타인의 피드로
+    const response = await memberApi.selectMemberByMnickname(mnickname.value);
+    router.push(`/otherfeed/${response.data.mNo}`);
   }
 }
 

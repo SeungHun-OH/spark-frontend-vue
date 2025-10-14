@@ -1,0 +1,21 @@
+/* 모든 요소에 강제 적용 */
+* {
+  font-family: 'NanumSquare', 'Nanum Gothic', sans-serif !important;
+}
+
+/* 문서 기본 */
+html, body, #app {
+  line-height: 1.6;
+  letter-spacing: -0.2px;
+  color: #222;
+}
+
+/* 제목은 굵게 */
+h1,h2,h3,h4,h5,h6,strong,b {
+  font-weight: 700;
+}
+
+/* 폼 요소도 상속 */
+button, input, textarea, select {
+  font-family: inherit;
+}
